@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistika Interaktif — Data, Mean, Median & Modus</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Poppins',system-ui,sans-serif;color:#1e293b;background:linear-gradient(135deg,#eef4ff,#fdf4ff 55%,#ecfeff);overflow:hidden}
+button{font-family:inherit}
+
+/* ====== DEKORASI BACKGROUND ====== */
+.bg-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.4;animation:drift 20s ease-in-out infinite alternate}
+.b1{width:420px;height:420px;background:#c7d2fe;top:-130px;left:-110px}
+.b2{width:380px;height:380px;background:#fbcfe8;bottom:-150px;right:-90px;animation-delay:-7s}
+.b3{width:300px;height:300px;background:#a5f3fc;top:42%;left:58%;animation-delay:-13s}
+@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(46px,34px) scale(1.08)}}
+.float-sym{position:absolute;font-weight:800;color:#64748b;opacity:.14;animation:floaty 9s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-26px) rotate(5deg)}}
+
+/* ====== TOPBAR & NAVBAR ====== */
+.topbar{position:fixed;top:0;left:0;right:0;height:58px;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:50;background:rgba(255,255,255,.78);backdrop-filter:blur(10px);border-bottom:1px solid rgba(148,163,184,.25)}
+.logo{font-weight:800;font-size:16.5px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.logo .tagline{font-weight:600;font-size:12px;color:#64748b}
+.progress-wrap{flex:1;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+#progressBar{height:100%;width:0;background:linear-gradient(90deg,#6366f1,#ec4899,#f59e0b);border-radius:99px;transition:width .4s ease}
+.menu-btn{border:2px solid #e2e8f0;background:#fff;border-radius:99px;padding:7px 14px;font-weight:700;font-size:13px;cursor:pointer;color:#334155;transition:.2s;white-space:nowrap}
+.menu-btn:hover{border-color:#6366f1;color:#4f46e5}
+.navbar{position:fixed;bottom:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:blur(10px);border-top:1px solid rgba(148,163,184,.25)}
+.nav-btns{display:flex;gap:10px}
+.btn-nav{border:2px solid #e2e8f0;background:#fff;border-radius:14px;padding:10px 18px;font-weight:700;font-size:14px;color:#334155;cursor:pointer;transition:.2s}
+.btn-nav:hover:not(:disabled){border-color:#6366f1;color:#4f46e5;transform:translateY(-2px)}
+.btn-nav:disabled{opacity:.35;cursor:not-allowed}
+.slide-counter{font-weight:700;color:#475569;font-size:14px;white-space:nowrap}
+
+/* ====== SLIDES ====== */
+.slide{position:fixed;inset:0;padding:76px 22px 84px;display:flex;overflow-y:auto;z-index:1;opacity:0;visibility:hidden;transform:translateX(60px);transition:opacity .45s ease,transform .45s ease,visibility .45s}
+body.nav-back .slide{transform:translateX(-60px)}
+.slide.active{opacity:1;visibility:visible;transform:none;z-index:2}
+.slide-inner{margin:auto;width:100%;max-width:960px}
+.slide.active .slide-inner{animation:fadeUp .55s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+h2{font-size:clamp(24px,4vw,36px);font-weight:800;line-height:1.25;margin-bottom:12px}
+h3{font-size:19px;margin:18px 0 10px}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.hero-title{font-size:clamp(32px,6vw,58px);font-weight:900;line-height:1.14}
+.gradient-text{background:linear-gradient(90deg,#4f46e5,#db2777,#ea580c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{font-size:clamp(15px,2.2vw,19px);color:#475569;font-weight:600}
+.title-emoji{font-size:64px;animation:floaty 5s ease-in-out infinite}
+.big-emoji{font-size:70px;animation:floaty 6s ease-in-out infinite}
+.hero-tags{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.tag{padding:8px 16px;border-radius:99px;font-weight:700;color:#fff;font-size:14px}
+.tag-mean{background:linear-gradient(135deg,#38bdf8,#2563eb)}
+.tag-median{background:linear-gradient(135deg,#34d399,#059669)}
+.tag-modus{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.tag-oly{background:linear-gradient(135deg,#a78bfa,#d946ef)}
+.hint{font-size:13px;color:#64748b}
+.lead{font-size:17px;color:#334155}
+.q{color:#475569;font-style:italic}
+
+/* ====== KOMPONEN ====== */
+.btn{border:none;cursor:pointer;font-weight:700;border-radius:14px;padding:12px 24px;font-size:15px;transition:transform .15s,box-shadow .15s,opacity .2s;color:#fff}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);box-shadow:0 8px 20px rgba(99,102,241,.35)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-lg{padding:15px 34px;font-size:17px}
+.btn-ghost{background:#fff;color:#4f46e5;border:2px solid #c7d2fe}
+.btn-ghost:hover{background:#eef2ff}
+.btn-check{background:linear-gradient(135deg,#4f46e5,#7c3aed);box-shadow:0 6px 16px rgba(79,70,229,.35)}
+.btn-check:hover:not(:disabled){transform:translateY(-2px)}
+.btn-check:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.card{background:#fff;border-radius:20px;padding:20px 24px;box-shadow:0 10px 30px rgba(100,116,139,.13);border:1px solid rgba(148,163,184,.2);margin:12px 0}
+.callout{background:#eef2ff;border-left:6px solid #6366f1;border-radius:14px;padding:13px 18px;margin:14px 0;line-height:1.65;font-size:15px}
+.callout.info{background:#f0f9ff;border-color:#0ea5e9}
+.callout.warn{background:#fefce8;border-color:#eab308}
+.callout.danger{background:#fef2f2;border-color:#ef4444}
+.section-chip{display:inline-block;padding:6px 16px;border-radius:99px;color:#fff;font-weight:700;font-size:13px;margin-bottom:10px}
+.mean-bg{background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+.median-bg{background:linear-gradient(135deg,#10b981,#059669)}
+.modus-bg{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.oly-bg{background:linear-gradient(135deg,#8b5cf6,#d946ef)}
+.accent-mean{color:#0284c7}.accent-median{color:#059669}.accent-modus{color:#d97706}
+.c-modus{color:#d97706}.c-mean{color:#0284c7}.c-median{color:#059669}
+.formula-box{border:2.5px dashed;border-radius:14px;padding:14px 16px;font-weight:700;text-align:center;font-size:clamp(15px,2.4vw,20px);margin:12px 0}
+.f-mean{border-color:#38bdf8;background:#f0f9ff;color:#0369a1}
+.f-median{border-color:#34d399;background:#ecfdf5;color:#047857}
+.f-modus{border-color:#fbbf24;background:#fffbeb;color:#b45309}
+.answer-pill{display:inline-block;padding:10px 22px;border-radius:99px;font-weight:800;color:#fff;margin:8px 0;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.answer-pill.mean{background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+
+.steps{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.step{display:flex;gap:14px;align-items:flex-start;background:#fff;border-radius:16px;padding:13px 16px;box-shadow:0 6px 18px rgba(100,116,139,.1);border:1px solid rgba(148,163,184,.18)}
+.step-num{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff}
+
+.data-chips{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.data-chips span{min-width:46px;padding:9px 11px;text-align:center;background:#fff;border:2px solid #cbd5e1;border-radius:12px;font-weight:800;font-size:17px;box-shadow:0 3px 0 #cbd5e1;transition:.2s}
+#datasetDemo .data-chips span{cursor:pointer}
+#datasetDemo .data-chips span:hover{transform:translateY(-3px);border-color:#818cf8}
+#datasetDemo .data-chips span.picked{background:#4f46e5;color:#fff;border-color:#4f46e5;box-shadow:0 3px 0 #3730a3;transform:translateY(-3px)}
+.data-chips span.mid{background:#d1fae5;border-color:#10b981;color:#047857;box-shadow:0 3px 0 #10b981}
+.sort-arrow{text-align:center;font-weight:700;color:#64748b;margin:2px 0}
+
+.bars{display:flex;align-items:flex-end;gap:16px;height:170px;margin:14px 0 4px;justify-content:center;flex-wrap:wrap}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end}
+.bar{width:54px;border-radius:10px 10px 4px 4px;background:#c7d2fe;display:grid;place-items:center;font-weight:800;color:#3730a3;animation:growBar .9s ease both}
+.bar-col.hl .bar{background:linear-gradient(180deg,#fbbf24,#f59e0b);color:#fff}
+.bar-col span{font-weight:800;color:#475569}
+@keyframes growBar{from{height:0}}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.mini-card{background:#fff;border-radius:16px;padding:16px 14px;text-align:center;box-shadow:0 8px 20px rgba(100,116,139,.12);border:1px solid rgba(148,163,184,.2);font-size:14.5px;line-height:1.6}
+.mean-border{border-top:5px solid #0ea5e9}
+.median-border{border-top:5px solid #10b981}
+.modus-border{border-top:5px solid #f59e0b}
+.oly-border{border-top:5px solid #8b5cf6}
+
+.table-card{padding:10px;overflow-x:auto}
+.compare{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.compare th,.compare td{border:1.5px solid #e2e8f0;padding:10px 12px;text-align:left;vertical-align:top}
+.compare thead th{color:#fff;text-align:center;font-size:15px}
+.compare thead th:first-child{background:#f1f5f9}
+.th-mean{background:#0284c7}.th-median{background:#059669}.th-modus{background:#d97706}
+.compare tbody th{background:#f8fafc;white-space:nowrap}
+.tbl-wrap{overflow-x:auto;margin:10px 0}
+table.freq{border-collapse:collapse;margin:8px auto;background:#fff}
+.freq th,.freq td{border:1.5px solid #cbd5e1;padding:8px 18px;text-align:center}
+.freq th{background:#f1f5f9}
+
+/* ====== SLIDE SOAL ====== */
+.problem-slide{max-width:860px}
+.prob-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.badge{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:99px;font-weight:700;font-size:13.5px;color:#fff}
+.badge.modus{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.badge.mean{background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+.badge.median{background:linear-gradient(135deg,#10b981,#059669)}
+.badge.oly{background:linear-gradient(135deg,#8b5cf6,#d946ef)}
+.badge.soft{background:#f1f5f9;color:#475569}
+.prob-card{margin-top:0}
+.prob-card.modus-card{border-top:6px solid #f59e0b}
+.prob-card.mean-card{border-top:6px solid #0ea5e9}
+.prob-card.median-card{border-top:6px solid #10b981}
+.prob-card.oly-card{border-top:6px solid #8b5cf6}
+.prob-text{font-size:16.5px;line-height:1.75}
+
+.timer-wrap{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.timer-chip{display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #e2e8f0;padding:7px 14px;border-radius:99px;box-shadow:0 4px 12px rgba(100,116,139,.12)}
+.timer-display{font-weight:800;font-size:18px;color:#059669;font-variant-numeric:tabular-nums;min-width:52px;text-align:center}
+.timer-display.warn{color:#d97706}
+.timer-display.danger{color:#dc2626;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.t-btn{width:38px;height:38px;border-radius:50%;border:2px solid #e2e8f0;background:#fff;cursor:pointer;font-size:15px;transition:.2s}
+.t-btn:hover:not(:disabled){border-color:#6366f1}
+.t-btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-plus{background:linear-gradient(135deg,#fbbf24,#f59e0b);border:none;color:#fff;padding:9px 16px;border-radius:99px;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 5px 14px rgba(245,158,11,.4);transition:transform .15s}
+.btn-plus:hover:not(:disabled){transform:translateY(-2px)}
+.btn-plus:disabled{opacity:.4;cursor:not-allowed}
+.btn-plus.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.8)}100%{transform:scale(1)}}
+.timer-bar{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:16px}
+.timer-fill{height:100%;width:100%;background:linear-gradient(90deg,#34d399,#10b981);border-radius:99px;transition:width 1s linear,background .3s}
+.timer-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.timer-fill.danger{background:linear-gradient(90deg,#f87171,#dc2626)}
+
+.answer-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.answer-input{flex:1;min-width:210px;padding:13px 18px;border:2px solid #cbd5e1;border-radius:12px;font:inherit;font-weight:600;font-size:17px;outline:none;transition:.2s}
+.answer-input:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+.answer-input:disabled{background:#f8fafc;color:#334155}
+.shake{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+
+.feedback{margin-top:14px;padding:14px 18px;border-radius:14px;font-weight:600;line-height:1.6;animation:pop .35s ease}
+.feedback.ok{background:#dcfce7;color:#166534;border:2px solid #86efac}
+.feedback.err{background:#fee2e2;color:#991b1b;border:2px solid #fca5a5}
+.feedback.to{background:#fef9c3;color:#854d0e;border:2px solid #fde047}
+.pembahasan{margin-top:14px;background:#f8fafc;border:2px solid #e2e8f0;border-left:6px solid #6366f1;border-radius:14px;padding:15px 20px;line-height:1.8;font-size:15.5px;animation:fadeUp .45s ease both}
+.pemb-title{font-weight:800;color:#4338ca;margin-bottom:6px}
+
+.options{display:grid;gap:10px;margin-top:16px}
+.option{display:flex;align-items:center;gap:14px;text-align:left;padding:12px 16px;background:#fff;border:2px solid #e2e8f0;border-radius:14px;cursor:pointer;font-weight:600;font-size:15.5px;transition:.15s;user-select:none}
+.option:hover:not(:disabled){border-color:#a5b4fc;transform:translateX(5px)}
+.option .key{flex:none;width:36px;height:36px;border-radius:11px;background:#eef2ff;color:#4f46e5;display:grid;place-items:center;font-weight:800}
+.option.selected{border-color:#6366f1;background:#eef2ff}
+.option.correct{border-color:#10b981;background:#d1fae5}
+.option.correct .key{background:#10b981;color:#fff}
+.option.wrong{border-color:#ef4444;background:#fee2e2}
+.option.wrong .key{background:#ef4444;color:#fff}
+.option:disabled{cursor:default}
+
+/* ====== HASIL ====== */
+.score-row{display:flex;align-items:center;justify-content:center;gap:28px;margin:16px 0;flex-wrap:wrap}
+.score-circle{width:175px;height:175px;border-radius:50%;display:grid;place-items:center;position:relative;flex:none;transition:background 1s ease}
+.score-circle::before{content:'';position:absolute;inset:15px;background:#fff;border-radius:50%;box-shadow:inset 0 4px 14px rgba(100,116,139,.15)}
+.score-num{position:relative;font-size:40px;font-weight:900}
+.score-stats{display:flex;flex-direction:column;gap:8px}
+.stat-chip{background:#fff;border:2px solid #e2e8f0;border-radius:12px;padding:9px 16px;font-weight:700;font-size:14.5px;box-shadow:0 4px 10px rgba(100,116,139,.08)}
+.stat-chip.ok{border-color:#86efac;color:#166534}
+.stat-chip.err{border-color:#fca5a5;color:#991b1b}
+.stat-chip.to{border-color:#fde047;color:#854d0e}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.cat-card{background:#fff;border-radius:16px;padding:14px;text-align:center;box-shadow:0 8px 20px rgba(100,116,139,.12);font-size:14px;border-top:5px solid #94a3b8}
+.cat-card.modus{border-top-color:#f59e0b}
+.cat-card.mean{border-top-color:#0ea5e9}
+.cat-card.median{border-top-color:#10b981}
+.cat-score{font-size:24px;font-weight:900;margin-top:4px}
+.table-scroll{overflow-x:auto}
+.result-table{width:100%;border-collapse:collapse;margin-top:6px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 20px rgba(100,116,139,.12);font-size:14.5px;min-width:480px}
+.result-table th{background:#312e81;color:#fff;padding:11px;text-align:left}
+.result-table td{padding:10px 11px;border-bottom:1px solid #eef2f7}
+.st-b{color:#059669;font-weight:800}.st-s{color:#dc2626;font-weight:800}.st-t{color:#d97706;font-weight:800}.st-n{color:#64748b}
+.motivasi{font-size:17.5px;font-weight:700;margin-top:16px;text-align:center}
+
+.rules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0;width:100%}
+.rule-card{background:#fff;border-radius:16px;padding:18px 14px;text-align:center;box-shadow:0 8px 20px rgba(100,116,139,.12);font-size:13.5px;line-height:1.6;border:1px solid rgba(148,163,184,.2)}
+.rule-card b{display:block;font-size:15px;margin:4px 0}
+.rule-card .r-ico{font-size:34px}
+
+/* ====== MENU SLIDE ====== */
+.menu-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:55;opacity:0;visibility:hidden;transition:.3s}
+.menu-backdrop.show{opacity:1;visibility:visible}
+.menu-panel{position:fixed;top:58px;right:0;bottom:64px;width:320px;max-width:86vw;background:#fff;z-index:60;box-shadow:-12px 0 40px rgba(15,23,42,.15);transform:translateX(105%);transition:transform .3s ease;overflow-y:auto;padding:20px;border-radius:20px 0 0 20px}
+.menu-panel.open{transform:none}
+.menu-panel h3{margin:0 0 12px}
+.menu-panel button{display:block;width:100%;text-align:left;padding:11px 14px;margin:5px 0;border:none;background:#f8fafc;border-radius:11px;cursor:pointer;font-weight:600;font-size:13.5px;color:#334155;transition:.15s}
+.menu-panel button:hover{background:#eef2ff;color:#4f46e5;transform:translateX(4px)}
+
+@media(max-width:720px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .rules-grid{grid-template-columns:repeat(2,1fr)}
+  .cat-grid{grid-template-columns:repeat(3,1fr)}
+  .slide{padding:70px 12px 78px}
+  .logo .tagline{display:none}
+  .btn-nav{padding:9px 12px;font-size:13px}
+  .score-row{gap:14px}
+}
+@media(max-width:460px){
+  .rules-grid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:1fr}
+  .logo{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-decor">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <span class="float-sym" style="top:16%;left:6%;font-size:30px">Σ</span>
+  <span class="float-sym" style="top:72%;left:9%;font-size:26px;animation-delay:-2s">x̄</span>
+  <span class="float-sym" style="top:22%;right:7%;font-size:28px;animation-delay:-4s">½</span>
+  <span class="float-sym" style="top:76%;right:11%;font-size:30px;animation-delay:-1s">π</span>
+  <span class="float-sym" style="top:50%;left:47%;font-size:22px;animation-delay:-3s">%</span>
+  <span class="float-sym" style="top:10%;left:42%;font-size:24px;animation-delay:-5s">∞</span>
+</div>
+
+<header class="topbar">
+  <div class="logo">📊 Statistika Fun <span class="tagline">Mean • Median • Modus</span></div>
+  <div class="progress-wrap"><div id="progressBar"></div></div>
+  <button class="menu-btn" id="menuBtn">☰ Daftar Slide</button>
+</header>
+
+<main id="deck">
+
+<!-- ============ SLIDE 1: BERANDA ============ -->
+<section class="slide active" data-menu="🏠 Beranda">
+  <div class="slide-inner center">
+    <div class="title-emoji">📊</div>
+    <h1 class="hero-title">MENGENAL <span class="gradient-text">DATA STATISTIKA</span></h1>
+    <p class="hero-sub">Mean (Rata-rata) • Median (Nilai Tengah) • Modus (Paling Sering Muncul)</p>
+    <div class="hero-tags">
+      <span class="tag tag-mean">➗ Mean x̄</span>
+      <span class="tag tag-median">🎯 Median</span>
+      <span class="tag tag-modus">⭐ Modus</span>
+      <span class="tag tag-oly">🏆 Olimpiade</span>
+    </div>
+    <button class="btn btn-primary btn-lg" onclick="goToSlide(1)">🚀 Mulai Belajar</button>
+    <p class="hint">Gunakan tombol ← → pada keyboard, atau menu ☰ di kanan atas untuk berpindah slide</p>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: APA ITU DATA ============ -->
+<section class="slide" data-menu="1️⃣ Apa itu Data?">
+  <div class="slide-inner">
+    <span class="section-chip oly-bg">Pengenalan</span>
+    <h2>Apa itu <span class="gradient-text">Data</span>? 🤔</h2>
+    <div class="card">
+      <p style="font-size:17px;line-height:1.8"><b>Data</b> adalah kumpulan <b>fakta, angka, atau informasi</b> yang diperoleh dari hasil <b>pengamatan</b>, <b>survei</b>, atau <b>pengukuran</b>. Data adalah "bahan baku" yang diolah menjadi informasi yang berguna.</p>
+    </div>
+    <h3>🌍 Contoh data di sekitar kita:</h3>
+    <div class="grid-4">
+      <div class="mini-card">📝<br><b>Nilai ulangan</b><br>7, 8, 9, 6, 10</div>
+      <div class="mini-card">📏<br><b>Tinggi badan</b><br>130 cm, 135 cm, …</div>
+      <div class="mini-card">🌡️<br><b>Suhu udara</b><br>28°C, 31°C, 30°C</div>
+      <div class="mini-card">⚽<br><b>Jumlah gol</b><br>2, 0, 3, 1, 2</div>
+    </div>
+    <div class="callout">💡 <b>Tahukah kamu?</b> Kata <i>statistika</i> berasal dari bahasa Latin <i>status</i> yang artinya "keadaan". Statistika adalah ilmu tentang cara <b>mengumpulkan, mengolah, menganalisis, dan menyimpulkan</b> data.</div>
+    <div class="callout info">🔑 <b>Kenapa data penting?</b> Dengan data kita bisa mengambil keputusan: guru menentukan siswa yang perlu remedial, dokter memantau kesehatan pasien, bahkan tim e-sports menganalisis statistik pertandingan!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 3: CONTOH DATA INTERAKTIF ============ -->
+<section class="slide" data-menu="🔎 Contoh Data (Interaktif!)">
+  <div class="slide-inner" id="datasetDemo">
+    <span class="section-chip oly-bg">Pengenalan</span>
+    <h2>Data Nilai Ulangan <span class="gradient-text">Kelas 6A</span> 🏫</h2>
+    <p class="lead">Berikut nilai ulangan Matematika dari <b>10 siswa</b>:</p>
+    <div class="card">
+      <div class="data-chips" style="justify-content:center">
+        <span data-v="7">7</span><span data-v="8">8</span><span data-v="6">6</span><span data-v="9">9</span><span data-v="7">7</span>
+        <span data-v="8">8</span><span data-v="7">7</span><span data-v="6">6</span><span data-v="10">10</span><span data-v="7">7</span>
+      </div>
+      <p id="datasetInfo" style="text-align:center;font-weight:600;color:#4f46e5;margin-top:6px">👆 Coba klik salah satu angka untuk melihat berapa kali angka itu muncul!</p>
+    </div>
+    <h3>Dari sekumpulan angka ini, kita bisa mengetahui 3 hal penting:</h3>
+    <div class="grid-3">
+      <div class="mini-card mean-border">➗ <b>Mean</b><br>Berapa <b>rata-rata</b> nilai kelas?</div>
+      <div class="mini-card median-border">🎯 <b>Median</b><br>Berapa nilai <b>tengah</b>-nya?</div>
+      <div class="mini-card modus-border">⭐ <b>Modus</b><br>Nilai apa yang <b>paling sering muncul</b>?</div>
+    </div>
+    <div class="callout">📊 Ketiganya disebut <b>ukuran pemusatan data</b> — satu nilai yang mewakili "pusat" dari sekumpulan data. Kita akan pelajari satu per satu!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 4: MEAN ============ -->
+<section class="slide" data-menu="📘 Materi: Mean">
+  <div class="slide-inner">
+    <span class="section-chip mean-bg">Materi 1</span>
+    <h2><span class="accent-mean">Mean</span> (Rata-rata) ➗</h2>
+    <div class="card">
+      <p style="line-height:1.8"><b>Mean</b> adalah nilai rata-rata: <b>seluruh data dijumlahkan</b>, lalu <b>dibagi rata</b> sebanyak banyak data. Bayangkan membagi kue sama rata untuk semua teman! 🎂</p>
+      <div class="formula-box f-mean">x̄ (mean) = Jumlah seluruh data ÷ Banyak data</div>
+    </div>
+    <h3>📝 Contoh: nilai ulangan Kelas 6A (7, 8, 6, 9, 7, 8, 7, 6, 10, 7)</h3>
+    <div class="steps">
+      <div class="step"><span class="step-num mean-bg">1</span><div>Jumlahkan semua data:<br><b>7 + 8 + 6 + 9 + 7 + 8 + 7 + 6 + 10 + 7 = 75</b></div></div>
+      <div class="step"><span class="step-num mean-bg">2</span><div>Hitung banyak data: ada <b>10</b> siswa</div></div>
+      <div class="step"><span class="step-num mean-bg">3</span><div>Bagi jumlah dengan banyak data: <b>75 ÷ 10 = 7,5</b></div></div>
+    </div>
+    <div class="answer-pill mean">✅ Mean kelas 6A = 7,5</div>
+    <div class="callout info">💡 <b>Pahami lebih dalam:</b> mean sangat "sensitif" — jika ada satu nilai ekstrem (misalnya ada yang mendapat 0), rata-rata bisa bergeser jauh dari keadaan sebenarnya. Karena itu kita juga perlu median dan modus!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 5: MEDIAN ============ -->
+<section class="slide" data-menu="📘 Materi: Median">
+  <div class="slide-inner">
+    <span class="section-chip median-bg">Materi 2</span>
+    <h2><span class="accent-median">Median</span> (Nilai Tengah) 🎯</h2>
+    <div class="card">
+      <p style="line-height:1.8"><b>Median</b> adalah nilai yang berada <b>tepat di tengah</b> setelah data <b>diurutkan</b> dari yang terkecil ke yang terbesar.</p>
+      <div class="formula-box f-median">Median = nilai tengah data yang telah <u>diurutkan</u></div>
+    </div>
+    <h3>🔎 Contoh dengan data Kelas 6A:</h3>
+    <div class="card">
+      <p><b>Data acak:</b></p>
+      <div class="data-chips"><span>7</span><span>8</span><span>6</span><span>9</span><span>7</span><span>8</span><span>7</span><span>6</span><span>10</span><span>7</span></div>
+      <p class="sort-arrow">⬇️ diurutkan ⬇️</p>
+      <p><b>Data terurut</b> (dua nilai tengah ditandai):</p>
+      <div class="data-chips"><span>6</span><span>6</span><span>7</span><span>7</span><span class="mid">7</span><span class="mid">7</span><span>8</span><span>8</span><span>9</span><span>10</span></div>
+      <p style="margin-top:8px">n = 10 (genap) → Median = (data ke-5 + data ke-6) ÷ 2 = (7 + 7) ÷ 2 = <b>7</b></p>
+    </div>
+    <div class="two-col">
+      <div class="mini-card median-border">🔢 <b>Jika banyak data GANJIL</b><br>Data: 3, 8, 5, 9, 4 → urutkan: 3, 4, <b>5</b>, 8, 9<br>Median = data ke-(n+1)÷2 = data ke-3 = <b>5</b></div>
+      <div class="mini-card median-border">🔢 <b>Jika banyak data GENAP</b><br>Ambil 2 nilai tengah, lalu cari rata-ratanya.<br>Contoh di atas: (7 + 7) ÷ 2 = <b>7</b></div>
+    </div>
+    <div class="callout danger">⚠️ <b>Kesalahan umum:</b> lupa mengurutkan data sebelum mencari median! Selalu urutkan dulu!</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 6: MODUS ============ -->
+<section class="slide" data-menu="📘 Materi: Modus">
+  <div class="slide-inner">
+    <span class="section-chip modus-bg">Materi 3</span>
+    <h2><span class="accent-modus">Modus</span> (Nilai Paling Sering Muncul) ⭐</h2>
+    <div class="card">
+      <p style="line-height:1.8"><b>Modus</b> adalah nilai yang <b>paling sering muncul</b> (frekuensinya paling besar). Seperti artis yang paling populer — muncul terus di mana-mana! 🌟</p>
+      <div class="formula-box f-modus">Modus = data dengan frekuensi TERBESAR</div>
+    </div>
+    <h3>🔎 Hitung frekuensi data Kelas 6A:</h3>
+    <div class="bars">
+      <div class="bar-col"><div class="bar" style="height:56px">2</div><span>6</span></div>
+      <div class="bar-col hl"><div class="bar" style="height:112px">4</div><span>7</span></div>
+      <div class="bar-col"><div class="bar" style="height:56px">2</div><span>8</span></div>
+      <div class="bar-col"><div class="bar" style="height:28px">1</div><span>9</span></div>
+      <div class="bar-col"><div class="bar" style="height:28px">1</div><span>10</span></div>
+    </div>
+    <p style="text-align:center;font-weight:700">Angka <b class="c-modus">7</b> muncul <b>4 kali</b> — paling sering! → Modus = <b>7</b></p>
+    <div class="callout">💡 <b>Tahukah kamu?</b> Modus bisa <b>lebih dari satu</b> (jika dua nilai sama-sama paling sering muncul, disebut <i>bimodal</i>), atau bahkan <b>tidak ada</b> (jika semua nilai muncul dengan frekuensi sama).</div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 7: RINGKASAN ============ -->
+<section class="slide" data-menu="📋 Ringkasan">
+  <div class="slide-inner">
+    <span class="section-chip oly-bg">Bahan Belajar</span>
+    <h2>📋 Ringkasan: Mean vs Median vs Modus</h2>
+    <div class="card table-card">
+      <table class="compare">
+        <thead><tr><th></th><th class="th-mean">Mean ➗</th><th class="th-median">Median 🎯</th><th class="th-modus">Modus ⭐</th></tr></thead>
+        <tbody>
+          <tr><th>Arti</th><td>Rata-rata</td><td>Nilai tengah</td><td>Paling sering muncul</td></tr>
+          <tr><th>Cara mencari</th><td>Jumlahkan semua data, lalu ÷ banyak data</td><td>Urutkan dulu → ambil nilai tengah</td><td>Hitung frekuensi, ambil yang terbanyak</td></tr>
+          <tr><th>Hal penting</th><td>Sensitif terhadap nilai ekstrem</td><td>Data genap: rata-rata 2 nilai tengah</td><td>Bisa bimodal / tidak ada</td></tr>
+          <tr><th>Kata kunci soal</th><td>"rata-rata", "rerata"</td><td>"nilai tengah"</td><td>"paling sering / paling banyak"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>🧠 Trik menghafal:</h3>
+    <div class="grid-3">
+      <div class="mini-card mean-border">➗ <b>MEAN</b><br>"me-<b>N</b>" → MEMBAGI rata</div>
+      <div class="mini-card median-border">🛣️ <b>MEDIAN</b><br>Seperti garis tengah jalan → NILAI TENGAH</div>
+      <div class="mini-card modus-border">👗 <b>MODUS</b><br>Seperti "modis" → yang paling POPULER</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 8: DIVIDER LATIHAN ============ -->
+<section class="slide" data-menu="✏️ Divider: Ayo Berlatih">
+  <div class="slide-inner center">
+    <div class="big-emoji">✏️</div>
+    <h2>Ayo <span class="gradient-text">Berlatih</span>!</h2>
+    <p class="lead"><b class="c-modus">3 soal Modus</b> • <b class="c-mean">3 soal Mean</b> • <b class="c-median">3 soal Median</b></p>
+    <div class="rules-grid">
+      <div class="rule-card"><div class="r-ico">⏱️</div><b>Timer 3 Menit</b>Timer mulai otomatis saat soal terbuka.</div>
+      <div class="rule-card"><div class="r-ico">➕</div><b>Tombol +15 Detik</b>Butuh waktu ekstra? Klik untuk menambah 15 detik.</div>
+      <div class="rule-card"><div class="r-ico">✅</div><b>Cek Jawaban</b>Ketik jawabanmu, lalu klik tombol Cek Jawaban.</div>
+      <div class="rule-card"><div class="r-ico">📖</div><b>Pembahasan</b>Setiap soal dilengkapi pembahasan lengkap.</div>
+    </div>
+    <div class="callout warn">⚠️ <b>Perhatian:</b> setiap soal hanya bisa dijawab <b>satu kali</b> — kerjakan dengan teliti! Jawaban desimal boleh ditulis dengan koma atau titik (contoh: 14,5 atau 14.5). Hasilmu akan ditampilkan setelah soal ke-9.</div>
+    <button class="btn btn-primary btn-lg" id="ctaLatihan">✍️ Mulai Soal Pertama</button>
+  </div>
+</section>
+
+<!-- ===== 9 SLIDE LATIHAN DIBANGUN OTOMATIS OLEH JS DI SINI ===== -->
+<div id="anchorLatihan" hidden></div>
+
+<!-- ============ HASIL LATIHAN ============ -->
+<section class="slide" id="slideHasilLatihan" data-menu="📊 Hasil Latihan">
+  <div class="slide-inner">
+    <h2 style="text-align:center">📊 Hasil Latihanmu</h2>
+    <div id="hasilLatihanBox"></div>
+    <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" onclick="location.reload()">🔄 Ulangi Latihan</button></div>
+  </div>
+</section>
+
+<!-- ============ DIVIDER OLIMPIADE ============ -->
+<section class="slide" data-menu="🏆 Divider: Tantangan Olimpiade">
+  <div class="slide-inner center">
+    <div class="big-emoji">🏆</div>
+    <h2>Tantangan <span class="gradient-text">Olimpiade</span>!</h2>
+    <p class="lead"><b>10 soal</b> pilihan ganda tingkat lanjut (<b>HOTS</b>) — Statistika: Mean, Median & Modus</p>
+    <div class="rules-grid">
+      <div class="rule-card"><div class="r-ico">🧠</div><b>Level HOTS</b>Soal penalaran tingkat lanjut.</div>
+      <div class="rule-card"><div class="r-ico">🔘</div><b>Pilihan Ganda</b>Klik opsi A–D, lalu klik Cek Jawaban.</div>
+      <div class="rule-card"><div class="r-ico">📖</div><b>Pembahasan</b>Pembahasan lengkap di setiap soal.</div>
+      <div class="rule-card"><div class="r-ico">⏳</div><b>Tanpa Timer</b>Fokuskan pada penalaranmu!</div>
+    </div>
+    <button class="btn btn-primary btn-lg" id="ctaOly">🏆 Mulai Tantangan</button>
+    <p class="hint">Disusun dari paket: "Soal Latihan Olimpiade Matematika SD — Statistika (Tingkat Lanjut/HOTS)"</p>
+  </div>
+</section>
+
+<!-- ===== 10 SLIDE OLIMPIADE DIBANGUN OTOMATIS OLEH JS DI SINI ===== -->
+<div id="anchorOly" hidden></div>
+
+<!-- ============ HASIL OLIMPIADE ============ -->
+<section class="slide" id="slideHasilOly" data-menu="🏅 Hasil Olimpiade">
+  <div class="slide-inner">
+    <h2 style="text-align:center">🏅 Hasil Tantangan Olimpiade</h2>
+    <div id="hasilOlyBox"></div>
+    <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" onclick="location.reload()">🔄 Coba Lagi</button></div>
+  </div>
+</section>
+
+<!-- ============ PENUTUP ============ -->
+<section class="slide" data-menu="🎓 Penutup">
+  <div class="slide-inner center">
+    <div class="big-emoji">🎓</div>
+    <h2>Kamu Resmi Jadi <span class="gradient-text">Junior Statistician</span>!</h2>
+    <div class="grid-3" style="width:100%">
+      <div class="mini-card mean-border">➗ <b>Mean</b><br>Jumlah semua data ÷ banyak data</div>
+      <div class="mini-card median-border">🎯 <b>Median</b><br>Urutkan dulu, lalu ambil nilai tengah</div>
+      <div class="mini-card modus-border">⭐ <b>Modus</b><br>Nilai yang paling sering muncul</div>
+    </div>
+    <div class="callout">🌍 Statistika ada di mana-mana: ramalan cuaca, statistik pemain bola, tren media sosial, hingga penelitian obat. Teruslah berlatih dan jadilah pencinta data!</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+      <button class="btn btn-ghost" onclick="goToSlide(0)">🏠 Kembali ke Awal</button>
+      <button class="btn btn-primary" onclick="location.reload()">🔄 Ulangi Semua Latihan</button>
+    </div>
+    <p class="hint">Terima kasih sudah belajar hari ini! 🎉</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="navbar">
+  <div class="nav-btns"><button class="btn-nav" id="prevBtn">← Sebelumnya</button></div>
+  <div class="slide-counter">Slide <span id="currentNum">1</span> / <span id="totalNum">…</span></div>
+  <div class="nav-btns"><button class="btn-nav" id="nextBtn">Berikutnya →</button></div>
+</footer>
+
+<div class="menu-backdrop" id="menuBackdrop"></div>
+<aside class="menu-panel" id="menuPanel">
+  <h3>📚 Daftar Slide</h3>
+  <div id="menuList"></div>
+</aside>
+
+<script>
+/* ============================================================
+   DATA LATIHAN DASAR (9 SOAL: 3 MODUS, 3 MEAN, 3 MEDIAN)
+============================================================ */
+const LATIHAN = [
+  { id:'md1', kat:'modus', katLabel:'Modus', emoji:'⭐', nomor:1, jawaban:5,
+    soal:`Perhatikan data berikut:
+      <div class="data-chips"><span>4</span><span>5</span><span>6</span><span>5</span><span>7</span><span>5</span><span>8</span></div>
+      Berapakah <b>modus</b> dari data tersebut?`,
+    pembahasan:`Modus adalah nilai yang <b>paling sering muncul</b>. Hitung frekuensi setiap nilai:<br>
+      • 4 → 1 kali<br>• 5 → <b>3 kali</b> ⭐<br>• 6 → 1 kali<br>• 7 → 1 kali<br>• 8 → 1 kali<br>
+      Nilai 5 muncul paling sering, sehingga <b>modus = 5</b>.` },
+
+  { id:'md2', kat:'modus', katLabel:'Modus', emoji:'⭐', nomor:2, jawaban:8,
+    soal:`Data nilai kuis sekelompok siswa:
+      <div class="data-chips"><span>8</span><span>7</span><span>9</span><span>8</span><span>10</span><span>7</span><span>8</span><span>9</span><span>8</span></div>
+      Berapakah <b>modus</b> dari data tersebut?`,
+    pembahasan:`Hitung frekuensi setiap nilai:<br>
+      • 7 → 2 kali<br>• 8 → <b>4 kali</b> ⭐<br>• 9 → 2 kali<br>• 10 → 1 kali<br>
+      Nilai yang paling sering muncul adalah 8, sehingga <b>modus = 8</b>.` },
+
+  { id:'md3', kat:'modus', katLabel:'Modus', emoji:'⭐', nomor:3, jawaban:5,
+    soal:`Sebuah toko sepatu mencatat banyak sepatu yang terjual selama 7 hari:
+      <div class="data-chips"><span>3</span><span>5</span><span>4</span><span>5</span><span>6</span><span>5</span><span>4</span></div>
+      Berapakah <b>modus</b> dari data penjualan tersebut?`,
+    pembahasan:`Hitung frekuensi banyak sepatu yang terjual:<br>
+      • 3 → 1 kali<br>• 4 → 2 kali<br>• 5 → <b>3 kali</b> ⭐<br>• 6 → 1 kali<br>
+      <b>Modus = 5</b>, artinya jumlah sepatu yang paling sering terjual dalam sehari adalah 5 pasang.` },
+
+  { id:'me1', kat:'mean', katLabel:'Mean', emoji:'➗', nomor:1, jawaban:8,
+    soal:`Nilai ulangan Matematika Rani: <b>8, 7, 9, 6, 10</b>.<br>Berapakah <b>mean (rata-rata)</b> nilainya?`,
+    pembahasan:`<b>Langkah 1</b> — Jumlahkan semua nilai:<br>8 + 7 + 9 + 6 + 10 = <b>40</b><br>
+      <b>Langkah 2</b> — Bagi dengan banyak data:<br>40 ÷ 5 = <b>8</b><br>Jadi, <b>mean = 8</b>.` },
+
+  { id:'me2', kat:'mean', katLabel:'Mean', emoji:'➗', nomor:2, jawaban:135,
+    soal:`Tinggi badan empat anak (dalam cm): <b>130, 135, 140, 135</b>.<br>Berapakah <b>rata-rata</b> tinggi badan mereka?`,
+    pembahasan:`<b>Langkah 1</b> — Jumlahkan semua tinggi badan:<br>130 + 135 + 140 + 135 = <b>540</b><br>
+      <b>Langkah 2</b> — Bagi dengan banyak data:<br>540 ÷ 4 = <b>135</b><br>Jadi, <b>mean = 135 cm</b>.` },
+
+  { id:'me3', kat:'mean', katLabel:'Mean', emoji:'➗', nomor:3, jawaban:10,
+    soal:`Rata-rata dari <b>4 buah bilangan</b> adalah <b>12</b>. Jika tiga bilangan pertama adalah <b>10, 13, dan 15</b>, berapakah bilangan keempat?`,
+    pembahasan:`Kunci soal ini: <b>Jumlah semua data = rata-rata × banyak data</b>.<br>
+      <b>Langkah 1</b> — Jumlah keempat bilangan = 12 × 4 = <b>48</b>.<br>
+      <b>Langkah 2</b> — Jumlah tiga bilangan pertama = 10 + 13 + 15 = <b>38</b>.<br>
+      <b>Langkah 3</b> — Bilangan keempat = 48 − 38 = <b>10</b>.` },
+
+  { id:'di1', kat:'median', katLabel:'Median', emoji:'🎯', nomor:1, jawaban:5,
+    soal:`Perhatikan data berikut: <b>3, 7, 2, 9, 5</b>.<br>Berapakah <b>median</b>-nya?`,
+    pembahasan:`<b>Langkah 1</b> — Urutkan data dari terkecil:<br><b>2, 3, 5, 7, 9</b><br>
+      <b>Langkah 2</b> — Banyak data n = 5 (ganjil), median ada di posisi tengah: data ke-(5+1)÷2 = <b>ke-3</b>.<br>
+      Data ke-3 adalah <b>5</b>, jadi <b>median = 5</b>.` },
+
+  { id:'di2', kat:'median', katLabel:'Median', emoji:'🎯', nomor:2, jawaban:7,
+    soal:`Perhatikan data berikut: <b>8, 4, 6, 10</b>.<br>Berapakah <b>median</b>-nya?`,
+    pembahasan:`<b>Langkah 1</b> — Urutkan data:<br><b>4, 6, 8, 10</b><br>
+      <b>Langkah 2</b> — n = 4 (genap), median = rata-rata dua nilai tengah (data ke-2 dan ke-3):<br>
+      (6 + 8) ÷ 2 = <b>7</b>. Jadi, <b>median = 7</b>.` },
+
+  { id:'di3', kat:'median', katLabel:'Median', emoji:'🎯', nomor:3, jawaban:14.5,
+    soal:`Perhatikan data berikut: <b>12, 15, 11, 18, 14, 16</b>.<br>Berapakah <b>median</b>-nya? <span class="hint">(tulis misal: 14,5)</span>`,
+    pembahasan:`<b>Langkah 1</b> — Urutkan data:<br><b>11, 12, 14, 15, 16, 18</b><br>
+      <b>Langkah 2</b> — n = 6 (genap), median = rata-rata data ke-3 dan ke-4:<br>
+      (14 + 15) ÷ 2 = 29 ÷ 2 = <b>14,5</b>. Jadi, <b>median = 14,5</b>.` }
+];
+
+/* ============================================================
+   DATA OLIMPIADE (10 SOAL HOTS SESUAI FILE PDF)
+============================================================ */
+const OLYMPIADE = [
+  { nomor:1, kunci:'C',
+    soal:`Rata-rata nilai 4 ulangan matematika Andi adalah 82,5. Setelah Andi mengikuti ulangan ke-5 dan ke-6, rata-rata seluruh ulangannya menjadi 85. Jika perbandingan nilai ulangan ke-5 dan ke-6 adalah 4 : 5, berapakah selisih nilai ulangan ke-5 dan ke-6 yang didapatkan Andi?`,
+    opsi:['10','15','20','25'],
+    pembahasan:`Jumlah nilai 4 ulangan awal = 4 × 82,5 = 330.<br>
+      Jumlah nilai 6 ulangan total = 6 × 85 = 510.<br>
+      Maka, jumlah nilai ulangan ke-5 dan ke-6 adalah 510 − 330 = <b>180</b>.<br>
+      Perbandingan nilai ke-5 dan ke-6 adalah 4 : 5.<br>
+      Nilai ulangan ke-5 = (4/9) × 180 = <b>80</b>. Nilai ulangan ke-6 = (5/9) × 180 = <b>100</b>.<br>
+      Selisih nilai keduanya adalah 100 − 80 = <b>20</b>.` },
+
+  { nomor:2, kunci:'B',
+    soal:`Lima buah bilangan asli diurutkan dari yang terkecil ke yang terbesar sebagai berikut: 8, <i>x</i>, 15, <i>y</i>, 22. Jika rata-rata kelima bilangan tersebut adalah 14 dan modusnya adalah 15, berapakah nilai dari <i>y</i> − <i>x</i>?`,
+    opsi:['3','5','7','10'],
+    pembahasan:`Jumlah kelima bilangan = 5 × 14 = <b>70</b>.<br>
+      Karena modus adalah 15, maka 15 harus muncul lebih dari satu kali. Karena bilangan telah diurutkan (8, <i>x</i>, 15, <i>y</i>, 22), maka <i>x</i> atau <i>y</i> harus bernilai 15.<br>
+      Jika <i>x</i> = 15, maka sisa jumlah untuk <i>y</i> = 70 − (8+15+15+22) = 10. Namun urutan mensyaratkan <i>y</i> ≥ 15, sehingga tidak mungkin.<br>
+      Maka <i>y</i> = 15. Sisa jumlah untuk <i>x</i> = 70 − (8+15+15+22) = 10. Urutannya: 8, 10, 15, 15, 22 (sesuai).<br>
+      Nilai <i>y</i> − <i>x</i> = 15 − 10 = <b>5</b>.` },
+
+  { nomor:3, kunci:'D',
+    soal:`Sekelompok data kuantitatif memiliki rata-rata 60, median 62, dan modus 65. Jika setiap data dalam kelompok tersebut dikalikan 2 kemudian dikurangi 5, manakah pernyataan berikut yang <b>salah</b> mengenai data yang baru?`,
+    opsi:['Rata-rata data yang baru menjadi 115.','Median data yang baru menjadi 119.','Modus data yang baru menjadi 125.','Jangkauan (range) data yang baru bertambah 5.'],
+    pembahasan:`Sifat transformasi statistik: jika setiap data dikalikan konstanta <i>k</i> dan ditambah/dikurangi konstanta <i>c</i>, maka Rata-rata, Median, dan Modus ikut dikalikan <i>k</i> dan ditambah/dikurangi <i>c</i>. Namun untuk ukuran penyebaran seperti <b>Jangkauan (range)</b>, nilainya <b>hanya terpengaruh oleh perkalian/pembagian</b>, tidak oleh penjumlahan/pengurangan.<br>
+      Rata-rata baru = (60 × 2) − 5 = 115 (Benar).<br>
+      Median baru = (62 × 2) − 5 = 119 (Benar).<br>
+      Modus baru = (65 × 2) − 5 = 125 (Benar).<br>
+      Jangkauan baru = Jangkauan lama × 2. Pernyataan D menyebutkan "bertambah 5" — ini pernyataan yang <b>salah</b>.` },
+
+  { nomor:4, kunci:'C',
+    soal:`Perhatikan tabel nilai ujian di bawah ini!
+      <div class="tbl-wrap"><table class="freq">
+        <tr><th>Nilai</th><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+        <tr><th>Frekuensi</th><td>2</td><td>4</td><td><i>p</i></td><td>3</td><td>1</td></tr>
+      </table></div>
+      Jika median dari seluruh data ujian tersebut adalah 8, berapakah jumlah minimal siswa yang mendapatkan nilai 8 (nilai minimum dari <i>p</i>)?`,
+    opsi:['1','2','3','4'],
+    pembahasan:`Total frekuensi N = 2 + 4 + <i>p</i> + 3 + 1 = 10 + <i>p</i>.<br>
+      Frekuensi kumulatif sebelum nilai 8 (nilai 6 dan 7) adalah 6 siswa.<br>
+      Agar median = 8, posisi nilai tengah harus jatuh pada kelompok siswa yang mendapat nilai 8.<br>
+      Jika <i>p</i> = 1, N = 11 → median di data ke-6, yaitu 7.<br>
+      Jika <i>p</i> = 2, N = 12 → median = (7+8)/2 = 7,5.<br>
+      Jika <i>p</i> = 3, N = 13 → median di data ke-7, yaitu <b>8</b>. ✓<br>
+      Jadi, jumlah minimal siswa yang mendapat nilai 8 adalah <b>3</b>.` },
+
+  { nomor:5, kunci:'B',
+    soal:`Rata-rata dari 5 buah bilangan bulat positif berbeda adalah 20. Jika bilangan terbesar dari kelima bilangan tersebut adalah 35, berapakah kemungkinan nilai bilangan terkecil yang <b>paling besar</b>?`,
+    opsi:['13','14','15','16'],
+    pembahasan:`Total dari 5 bilangan = 5 × 20 = <b>100</b>.<br>
+      Misalkan kelima bilangan adalah <i>a</i>, <i>b</i>, <i>c</i>, <i>d</i>, dan 35 dengan <i>a</i> &lt; <i>b</i> &lt; <i>c</i> &lt; <i>d</i> &lt; 35.<br>
+      Untuk memaksimalkan nilai terkecil (<i>a</i>), bilangan lain harus saling berdekatan.<br>
+      Uji <i>a</i> = 15 → <i>b</i>, <i>c</i>, <i>d</i> minimal 16, 17, 18 → jumlah = 15+16+17+18+35 = 101 (melebihi 100, tidak valid).<br>
+      Uji <i>a</i> = 14 → gunakan <i>b</i>, <i>c</i>, <i>d</i> = 16, 17, 18 → jumlah = 14+16+17+18+35 = 100 (Valid!).<br>
+      Nilai maksimum bilangan terkecil yang mungkin adalah <b>14</b>.` },
+
+  { nomor:6, kunci:'C',
+    soal:`Di sebuah kelas unggulan, rata-rata nilai ulangan siswa laki-laki adalah 78, sedangkan rata-rata nilai siswa perempuan adalah 84. Jika rata-rata nilai ulangan seluruh siswa di kelas tersebut adalah 80,5 dan jumlah siswa laki-laki adalah 14 orang, berapakah selisih jumlah siswa laki-laki dan perempuan di kelas tersebut?`,
+    opsi:['2 orang','3 orang','4 orang','5 orang'],
+    pembahasan:`Gunakan konsep rata-rata gabungan:<br>
+      14(78) + <i>n</i>ₚ(84) = (14 + <i>n</i>ₚ)(80,5)<br>
+      1092 + 84<i>n</i>ₚ = 1127 + 80,5<i>n</i>ₚ<br>
+      84<i>n</i>ₚ − 80,5<i>n</i>ₚ = 1127 − 1092<br>
+      3,5<i>n</i>ₚ = 35 → <i>n</i>ₚ = 10.<br>
+      Jumlah siswa perempuan = 10 orang. Selisih = 14 − 10 = <b>4 orang</b>.` },
+
+  { nomor:7, kunci:'B',
+    soal:`Enam orang anak sedang menimbang berat badan. Rata-rata berat badan mereka berenam adalah 32 kg. Diketahui berat badan lima anak di antaranya adalah 30 kg, 31 kg, 31 kg, 34 kg, dan 35 kg. Manakah pernyataan berikut yang <b>benar</b> mengenai berat badan anak keenam?`,
+    opsi:['Berat anak keenam mengubah modus dari kelompok data tersebut.','Berat anak keenam sama dengan nilai median dari seluruh data.','Berat anak keenam berada di atas nilai rata-rata kelompok.','Masuknya anak keenam membuat data tersebut tidak memiliki modus tunggal.'],
+    pembahasan:`Total berat 6 anak = 6 × 32 = <b>192 kg</b>.<br>
+      Total berat 5 anak yang diketahui = 30 + 31 + 31 + 34 + 35 = <b>161 kg</b>.<br>
+      Berat anak keenam = 192 − 161 = <b>31 kg</b>.<br>
+      Jika diurutkan: 30, 31, 31, 31, 34, 35.<br>
+      Modus tetap tunggal yaitu 31 (muncul 3 kali). Median = rata-rata data ke-3 dan ke-4 = (31+31)/2 = <b>31</b>.<br>
+      Maka pernyataan yang benar: berat anak keenam (31 kg) sama dengan nilai <b>median</b> seluruh data.` },
+
+  { nomor:8, kunci:'C',
+    soal:`Sebuah barisan bilangan terdiri dari 15 bilangan ganjil yang berurutan. Jika median dari barisan bilangan tersebut adalah 27, berapakah rata-rata dari 5 bilangan terbesar dalam barisan tersebut?`,
+    opsi:['33','35','37','39'],
+    pembahasan:`Barisan terdiri dari 15 bilangan ganjil berurutan. Median dari 15 bilangan adalah suku ke-8.<br>
+      Diketahui U₈ = <b>27</b>.<br>
+      Lima bilangan terbesar adalah U₁₁ hingga U₁₅. Rata-rata 5 bilangan ganjil berurutan persis sama dengan nilai tengahnya, yaitu suku ke-13 (U₁₃).<br>
+      Karena selisih antar bilangan ganjil berurutan adalah 2:<br>
+      U₁₃ = U₈ + (13 − 8) × 2 = 27 + 5 × 2 = 27 + 10 = <b>37</b>.` },
+
+  { nomor:9, kunci:'B',
+    soal:`Dari 7 buah bilangan bulat positif, diketahui bilangan terkecilnya adalah 4 dan yang terbesar adalah 20. Jika median dari sekumpulan data tersebut adalah 10 dan modusnya adalah 8 (modus tunggal), berapakah jumlah keseluruhan terbesar yang mungkin dari ketujuh bilangan tersebut?`,
+    opsi:['85','87','89','91'],
+    pembahasan:`Misalkan 7 bilangan tersebut adalah x₁, x₂, x₃, x₄, x₅, x₆, x₇.<br>
+      Diketahui x₁ = 4 dan x₇ = 20. Median = x₄ = <b>10</b>.<br>
+      Karena modus tunggalnya adalah 8, angka 8 harus muncul minimal 2 kali. Posisinya sebelum 10, sehingga x₂ = 8 dan x₃ = 8.<br>
+      Untuk memaksimalkan total tanpa mengubah modus (8 tidak boleh tersaingi frekuensinya), angka setelah 10 harus sebesar mungkin tanpa ada yang kembar: 18, 19, dan 20.<br>
+      Data: 4, 8, 8, 10, 18, 19, 20.<br>
+      Total = 4 + 8 + 8 + 10 + 18 + 19 + 20 = <b>87</b>.` },
+
+  { nomor:10, kunci:'B',
+    soal:`Pada sekelompok data yang terdiri dari 11 bilangan berbeda yang telah diurutkan, diketahui rata-ratanya adalah <i>A</i>, mediannya adalah <i>B</i>, dan jangkauannya (range) adalah <i>C</i>. Jika bilangan terbesar dan bilangan terkecil dari kelompok tersebut dihapus dari pendataan, maka nilai statistik yang sudah pasti <b>tidak akan berubah</b> adalah...`,
+    opsi:['Rata-rata','Median','Jangkauan (Range)','Rata-rata dan Median'],
+    pembahasan:`Jumlah data awal = 11 (ganjil). Median berada tepat di posisi tengah, yaitu data ke-6.<br>
+      Jika data terbesar (ke-11) dan terkecil (ke-1) dihapus, tersisa 9 bilangan: data ke-2 hingga ke-10 dari urutan awal.<br>
+      Median dari 9 data baru terletak pada posisi ke-5 susunan baru.<br>
+      Posisi ke-5 dari susunan (data ke-2, ke-3, ke-4, ke-5, ke-6, ...) adalah tepat di <b>data ke-6 yang lama</b>.<br>
+      Dengan demikian, nilai yang pasti tidak berubah adalah <b>Median</b>. Rata-rata dan jangkauan sangat mungkin berubah tergantung nilai yang dihapus.` }
+];
+
+/* ============================================================
+   STATE GLOBAL & UTILITAS
+============================================================ */
+let slides = [];
+let currentSlide = 0;
+const tState = {};            // state timer latihan
+const probById = {};          // id soal latihan -> data
+const latihanResults = {};    // hasil latihan
+const olyResults = {};        // hasil olimpiade
+const olyState = {};          // state soal olimpiade
+
+const $ = s => document.querySelector(s);
+const fmtTime = s => Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+const fmtNum = n => String(n).replace('.', ',');
+const scoreColor = s => s >= 75 ? '#10b981' : (s >= 50 ? '#f59e0b' : '#ef4444');
+
+/* ============================================================
+   MEMBANGUN SLIDE SOAL LATIHAN
+============================================================ */
+function buildLatihanSlide(p){
+  const totalKat = LATIHAN.filter(x => x.kat === p.kat).length;
+  const sec = document.createElement('section');
+  sec.className = 'slide';
+  sec.dataset.menu = `${p.emoji} Latihan ${p.katLabel} — Soal ${p.nomor}`;
+  sec.innerHTML = `
+    <div class="slide-inner problem-slide latihan" data-type="latihan" data-id="${p.id}">
+      <div class="prob-top">
+        <span class="badge ${p.kat}">${p.emoji} Latihan ${p.katLabel} • Soal ${p.nomor} dari ${totalKat}</span>
+        <div class="timer-wrap">
+          <div class="timer-chip"><span>⏱️</span><span class="timer-display">3:00</span></div>
+          <button class="t-btn" title="Jeda / Lanjutkan">⏸</button>
+          <button class="btn-plus">➕ 15 detik</button>
+        </div>
+      </div>
+      <div class="card prob-card ${p.kat}-card">
+        <p class="prob-text">${p.soal}</p>
+        <div class="answer-row">
+          <input class="answer-input" type="text" inputmode="decimal" placeholder="Ketik jawabanmu di sini…" autocomplete="off">
+          <button class="btn btn-check">Cek Jawaban ✔</button>
+        </div>
+        <div class="feedback" hidden></div>
+        <div class="pembahasan" hidden>
+          <div class="pemb-title">📖 Pembahasan</div>
+          <div>${p.pembahasan}</div>
+        </div>
+      </div>
+      <div class="timer-bar"><div class="timer-fill"></div></div>
+    </div>`;
+  return sec;
+}
+
+function setupLatihan(sec, p){
+  probById[p.id] = p;
+  const inner = sec.querySelector('.problem-slide');
+  const els = {
+    display:  inner.querySelector('.timer-display'),
+    fill:     inner.querySelector('.timer-fill'),
+    plus:     inner.querySelector('.btn-plus'),
+    pause:    inner.querySelector('.t-btn'),
+    input:    inner.querySelector('.answer-input'),
+    check:    inner.querySelector('.btn-check'),
+    feedback: inner.querySelector('.feedback'),
+    pemb:     inner.querySelector('.pembahasan'),
+    card:     inner.querySelector('.prob-card')
+  };
+  tState[p.id] = { remaining:180, total:180, interval:null, running:false, done:false, extra:0, els };
+  els.check.addEventListener('click', () => checkLatihan(p.id));
+  els.input.addEventListener('keydown', e => { if(e.key === 'Enter') checkLatihan(p.id); });
+  els.plus.addEventListener('click', () => addTime(p.id));
+  els.pause.addEventListener('click', () => togglePause(p.id));
+  paintTimer(p.id);
+}
+
+/* ============================================================
+   SISTEM TIMER (3 MENIT + TOMBOL +15 DETIK)
+============================================================ */
+function startTimer(id){
+  const st = tState[id];
+  if(!st || st.done || st.running) return;
+  st.running = true;
+  st.els.pause.textContent = '⏸';
+  st.interval = setInterval(() => {
+    st.remaining--;
+    paintTimer(id);
+    if(st.remaining <= 0){
+      clearInterval(st.interval);
+      st.running = false; st.done = true;
+      timeUp(id);
+    }
+  }, 1000);
+  paintTimer(id);
+}
+
+function pauseTimer(id){
+  const st = tState[id];
+  if(st && st.running){
+    clearInterval(st.interval);
+    st.running = false;
+    st.els.pause.textContent = '▶';
+  }
+}
+
+function togglePause(id){
+  const st = tState[id];
+  if(!st || st.done) return;
+  st.running ? pauseTimer(id) : startTimer(id);
+}
+
+function addTime(id){
+  const st = tState[id];
+  if(!st || st.done) return;
+  st.remaining += 15; st.total += 15; st.extra++;
+  st.els.plus.classList.remove('pop'); void st.els.plus.offsetWidth;
+  st.els.plus.classList.add('pop');
+  paintTimer(id);
+}
+
+function paintTimer(id){
+  const st = tState[id], e = st.els;
+  const rem = Math.max(st.remaining, 0);
+  e.display.textContent = fmtTime(rem);
+  e.fill.style.width = (rem / st.total * 100) + '%';
+  e.display.classList.remove('warn','danger');
+  e.fill.classList.remove('warn','danger');
+  const mode = rem > 60 ? '' : (rem > 30 ? 'warn' : 'danger');
+  if(mode){ e.display.classList.add(mode); e.fill.classList.add(mode); }
+  e.plus.disabled = st.done;
+  e.pause.disabled = st.done;
+}
+
+function lockLatihan(st){
+  st.els.input.disabled = true;
+  st.els.check.disabled = true;
+  st.els.plus.disabled = true;
+  st.els.pause.disabled = true;
+  st.els.pemb.hidden = false;
+  st.els.pemb.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function timeUp(id){
+  const st = tState[id], p = probById[id];
+  latihanResults[id] = { status:'habis', timeUsed: st.total, extra: st.extra };
+  lockLatihan(st);
+  st.els.check.textContent = '⏰ Waktu Habis';
+  st.els.feedback.hidden = false;
+  st.els.feedback.className = 'feedback to';
+  st.els.feedback.innerHTML = `⏰ <b>Waktu 3 menit habis!</b> Jawaban yang benar: <b>${fmtNum(p.jawaban)}</b>. Yuk simak pembahasannya! 👇`;
+}
+
+function checkLatihan(id){
+  const st = tState[id];
+  if(st.done) return;
+  const p = probById[id];
+  const raw = st.els.input.value.trim();
+  const shakeInput = () => { st.els.input.classList.add('shake'); setTimeout(() => st.els.input.classList.remove('shake'), 450); };
+  if(!raw) return shakeInput();
+  const val = parseFloat(raw.replace(',', '.'));
+  if(isNaN(val)) return shakeInput();
+  clearInterval(st.interval);
+  st.running = false; st.done = true;
+  const benar = Math.abs(val - p.jawaban) < 0.001;
+  latihanResults[id] = { status: benar ? 'benar' : 'salah', timeUsed: st.total - Math.max(st.remaining,0), extra: st.extra };
+  lockLatihan(st);
+  st.els.check.textContent = '✔ Sudah Diperiksa';
+  st.els.feedback.hidden = false;
+  st.els.feedback.className = 'feedback ' + (benar ? 'ok' : 'err');
+  st.els.feedback.innerHTML = benar
+    ? `🎉 <b>Benar!</b> Jawabanmu tepat. Waktu: ${fmtTime(latihanResults[id].timeUsed)}${st.extra ? ` (dengan bantuan +${st.extra*15} detik)` : ''}. Kerja bagus!`
+    : `❌ <b>Belum tepat.</b> Jawaban yang benar: <b>${fmtNum(p.jawaban)}</b>. Yuk simak pembahasannya! 👇`;
+}
+
+/* ============================================================
+   MEMBANGUN SLIDE OLIMPIADE
+============================================================ */
+function buildOlySlide(q){
+  const sec = document.createElement('section');
+  sec.className = 'slide';
+  sec.dataset.menu = `🏆 Olimpiade — Soal ${q.nomor}`;
+  const opts = q.opsi.map((t,i) => {
+    const key = 'ABCD'[i];
+    return `<button class="option" data-key="${key}"><span class="key">${key}</span><span class="opt-text">${t}</span></button>`;
+  }).join('');
+  sec.innerHTML = `
+    <div class="slide-inner problem-slide oly" data-type="oly" data-id="oly${q.nomor}">
+      <div class="prob-top">
+        <span class="badge oly">🏆 Olimpiade • Soal ${q.nomor} dari ${OLYMPIADE.length}</span>
+        <span class="badge soft">Pilih satu jawaban (A–D)</span>
+      </div>
+      <div class="card prob-card oly-card">
+        <p class="prob-text">${q.soal}</p>
+        <div class="options">${opts}</div>
+        <div class="answer-row"><button class="btn btn-check">Cek Jawaban ✔</button></div>
+        <div class="feedback" hidden></div>
+        <div class="pembahasan" hidden>
+          <div class="pemb-title">📖 Pembahasan — Kunci: ${q.kunci}</div>
+          <div>${q.pembahasan}</div>
+        </div>
+      </div>
+    </div>`;
+  return sec;
+}
+
+function setupOly(sec, q){
+  const inner = sec.querySelector('.problem-slide');
+  const id = inner.dataset.id;
+  const els = {
+    options:  [...sec.querySelectorAll('.option')],
+    check:    sec.querySelector('.btn-check'),
+    feedback: sec.querySelector('.feedback'),
+    pemb:     sec.querySelector('.pembahasan'),
+    card:     sec.querySelector('.prob-card')
+  };
+  const st = { done:false, selected:null, els, q };
+  olyState[id] = st;
+  els.options.forEach(o => o.addEventListener('click', () => {
+    if(st.done) return;
+    st.selected = o.dataset.key;
+    els.options.forEach(x => x.classList.remove('selected'));
+    o.classList.add('selected');
+  }));
+  els.check.addEventListener('click', () => {
+    if(st.done) return;
+    if(!st.selected){
+      els.card.classList.add('shake');
+      setTimeout(() => els.card.classList.remove('shake'), 450);
+      return;
+    }
+    st.done = true;
+    const benar = st.selected === q.kunci;
+    olyResults[id] = { pilih: st.selected, kunci: q.kunci, benar };
+    els.options.forEach(x => {
+      x.disabled = true;
+      if(x.dataset.key === q.kunci) x.classList.add('correct');
+      else if(x.dataset.key === st.selected && !benar) x.classList.add('wrong');
+    });
+    els.feedback.hidden = false;
+    els.feedback.className = 'feedback ' + (benar ? 'ok' : 'err');
+    els.feedback.innerHTML = benar
+      ? `🎉 <b>Benar!</b> Jawabanmu (${st.selected}) tepat sekali!`
+      : `❌ <b>Belum tepat.</b> Kamu memilih ${st.selected}. Kunci jawabannya adalah <b>${q.kunci}</b>.`;
+    els.pemb.hidden = false;
+    els.pemb.scrollIntoView({behavior:'smooth', block:'nearest'});
+    els.check.disabled = true;
+    els.check.textContent = '✔ Sudah Diperiksa';
+  });
+}
+
+/* ============================================================
+   NAVIGASI SLIDE
+============================================================ */
+function goToSlide(n){
+  if(n < 0 || n >= slides.length || n === currentSlide) return;
+  const prevEl = slides[currentSlide];
+  const prevProb = prevEl.querySelector('.problem-slide[data-type="latihan"]');
+  if(prevProb) pauseTimer(prevProb.dataset.id);
+  document.body.classList.toggle('nav-back', n < currentSlide);
+  currentSlide = n;
+  slides.forEach((s,i) => s.classList.toggle('active', i === n));
+  updateHUD();
+  slides[n].scrollTop = 0;
+  const curProb = slides[n].querySelector('.problem-slide[data-type="latihan"]');
+  if(curProb) startTimer(curProb.dataset.id);          // timer 3 menit mulai otomatis
+  if(slides[n].id === 'slideHasilLatihan') renderHasilLatihan();
+  if(slides[n].id === 'slideHasilOly') renderHasilOly();
+}
+function nextSlide(){ goToSlide(currentSlide + 1); }
+function prevSlide(){ goToSlide(currentSlide - 1); }
+
+function updateHUD(){
+  $('#progressBar').style.width = ((currentSlide + 1) / slides.length * 100) + '%';
+  $('#currentNum').textContent = currentSlide + 1;
+  $('#totalNum').textContent = slides.length;
+  $('#prevBtn').disabled = currentSlide === 0;
+  $('#nextBtn').disabled = currentSlide === slides.length - 1;
+}
+
+/* ============================================================
+   MENU DAFTAR SLIDE
+============================================================ */
+function toggleMenu(force){
+  const open = force !== undefined ? force : !$('#menuPanel').classList.contains('open');
+  $('#menuPanel').classList.toggle('open', open);
+  $('#menuBackdrop').classList.toggle('show', open);
+  $('#menuBtn').textContent = open ? '✕ Tutup' : '☰ Daftar Slide';
+}
+function buildMenu(){
+  const list = $('#menuList');
+  list.innerHTML = '';
+  slides.forEach((s,i) => {
+    if(!s.dataset.menu) return;
+    const b = document.createElement('button');
+    b.innerHTML = `${s.dataset.menu} <span style="color:#94a3b8;font-size:11px">• slide ${i+1}</span>`;
+    b.addEventListener('click', () => { goToSlide(i); toggleMenu(false); });
+    list.appendChild(b);
+  });
+}
+
+/* ============================================================
+   RENDER HASIL LATIHAN SISWA
+============================================================ */
+function renderHasilLatihan(){
+  const box = $('#hasilLatihanBox');
+  let benar=0, salah=0, habis=0, extraTotal=0, rows='';
+  LATIHAN.forEach((p,i) => {
+    const r = latihanResults[p.id];
+    let icon, cls, time = '—';
+    if(r){
+      extraTotal += r.extra || 0;
+      if(r.status === 'benar'){ benar++; icon='✔ Benar'; cls='st-b'; time=fmtTime(r.timeUsed); }
+      else if(r.status === 'salah'){ salah++; icon='✘ Salah'; cls='st-s'; time=fmtTime(r.timeUsed); }
+      else { habis++; icon='⏰ Habis Waktu'; cls='st-t'; }
+    } else { icon='• Belum dikerjakan'; cls='st-n'; }
+    rows += `<tr><td>${i+1}</td><td>${p.emoji} ${p.katLabel}</td><td class="${cls}">${icon}</td><td>${time}</td></tr>`;
+  });
+  const total = LATIHAN.length;
+  const score = Math.round(benar / total * 100);
+  const color = scoreColor(score), deg = score * 3.6;
+  const catHtml = ['modus','mean','median'].map(k => {
+    const ps = LATIHAN.filter(p => p.kat === k);
+    const b = ps.filter(p => latihanResults[p.id] && latihanResults[p.id].status === 'benar').length;
+    return `<div class="cat-card ${k}"><div>${ps[0].emoji}</div><b>${ps[0].katLabel}</b><div class="cat-score">${b} / ${ps.length}</div></div>`;
+  }).join('');
+  const answered = Object.keys(latihanResults).length;
+  const note = answered === 0
+    ? '<div class="callout warn">📭 Kamu belum mengerjakan soal latihan mana pun. Buka menu ☰ di kanan atas dan pilih soal latihan untuk mulai!</div>' : '';
+  const msg = score === 100 ? '🏆 <b>SEMPURNA!</b> Semua soal benar — kamu luar biasa!'
+    : score >= 75 ? '🌟 <b>Hebat sekali!</b> Sedikit lagi menuju sempurna!'
+    : score >= 50 ? '💪 <b>Bagus!</b> Terus berlatih, kamu pasti bisa lebih baik!'
+    : '📚 <b>Jangan menyerah!</b> Baca ulang materinya, lalu coba lagi. Kamu pasti bisa!';
+  box.innerHTML = `
+    <div class="score-row">
+      <div class="score-circle" style="background:conic-gradient(${color} ${deg}deg, #e2e8f0 ${deg}deg)"><div class="score-num" style="color:${color}">${score}%</div></div>
+      <div class="score-stats">
+        <div class="stat-chip ok">✔ Benar: ${benar}</div>
+        <div class="stat-chip err">✘ Salah: ${salah}</div>
+        <div class="stat-chip to">⏰ Habis waktu: ${habis}</div>
+        <div class="stat-chip">➕ Bantuan +15 dtk digunakan: ${extraTotal}×</div>
+      </div>
+    </div>
+    ${note}
+    <div class="cat-grid">${catHtml}</div>
+    <div class="table-scroll"><table class="result-table"><tr><th>No</th><th>Materi</th><th>Status</th><th>Waktu</th></tr>${rows}</table></div>
+    <p class="motivasi">${msg}</p>`;
+}
+
+function renderHasilOly(){
+  const box = $('#hasilOlyBox');
+  let benar = 0, rows = '';
+  OLYMPIADE.forEach(q => {
+    const r = olyResults['oly' + q.nomor];
+    let pilih = '—', status, cls;
+    if(r){ pilih = r.pilih; if(r.benar){ benar++; status='✔ Benar'; cls='st-b'; } else { status='✘ Salah'; cls='st-s'; } }
+    else { status = '• Belum dijawab'; cls = 'st-n'; }
+    rows += `<tr><td>${q.nomor}</td><td style="font-weight:800">${pilih}</td><td style="font-weight:800;color:#4f46e5">${q.kunci}</td><td class="${cls}">${status}</td></tr>`;
+  });
+  const total = OLYMPIADE.length;
+  const score = Math.round(benar / total * 100);
+  const color = scoreColor(score), deg = score * 3.6;
+  const answered = Object.keys(olyResults).length;
+  const salah = answered - benar;
+  const note = answered === 0
+    ? '<div class="callout warn" style="text-align:center">📭 Kamu belum menjawab soal olimpiade apa pun. Buka menu ☰ dan pilih soal untuk mulai!</div>' : '';
+  const msg = score === 100 ? '🏆 <b>SEMPURNA!</b> Skor 100 — kamu siap berlaga di olimpiade sungguhan!'
+    : score >= 70 ? '🌟 <b>Hebat!</b> Soal HOTS seperti ini sulit, tapi kamu menguasainya!'
+    : score >= 40 ? '💪 <b>Bagus!</b> Baca ulang pembahasan soal yang salah, lalu jelaskan ke temanmu!'
+    : '📚 <b>Jangan menyerah!</b> Soal olimpiade memang menantang. Baca ulang pembahasannya perlahan, lalu coba lagi!';
+  box.innerHTML = `
+    <div class="score-row">
+      <div class="score-circle" style="background:conic-gradient(${color} ${deg}deg, #e2e8f0 ${deg}deg)"><div class="score-num" style="color:${color}">${score}%</div></div>
+      <div class="score-stats">
+        <div class="stat-chip ok">✔ Benar: ${benar} dari ${total}</div>
+        <div class="stat-chip err">✘ Salah: ${salah}</div>
+        <div class="stat-chip">🧠 Tingkat: Lanjut (HOTS)</div>
+      </div>
+    </div>
+    ${note}
+    <div class="table-scroll"><table class="result-table"><tr><th>No</th><th>Pilihanmu</th><th>Kunci</th><th>Status</th></tr>${rows}</table></div>
+    <p class="motivasi">${msg}</p>`;
+}
+
+/* ============================================================
+   DEMO INTERAKTIF DATASET (slide 3)
+============================================================ */
+function setupDatasetDemo(){
+  const chips = document.querySelectorAll('#datasetDemo .data-chips span');
+  const info = $('#datasetInfo');
+  const defaultMsg = info.textContent;
+  chips.forEach(ch => ch.addEventListener('click', () => {
+    const v = ch.dataset.v;
+    const wasActive = ch.classList.contains('picked');
+    chips.forEach(c => c.classList.remove('picked'));
+    if(!wasActive){
+      const same = [...chips].filter(c => c.dataset.v === v);
+      same.forEach(c => c.classList.add('picked'));
+      info.textContent = `👀 Angka ${v} muncul ${same.length} kali dari 10 data. Coba klik angka lain!`;
+    } else info.textContent = defaultMsg;
+  }));
+}
+
+/* ============================================================
+   NAVIGASI KEYBOARD & INISIALISASI
+============================================================ */
+function keyNav(e){
+  if(e.key === 'Escape'){ toggleMenu(false); return; }
+  const tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'input' || tag === 'textarea') return;
+  if(e.key === 'ArrowRight' || e.key === 'PageDown') nextSlide();
+  else if(e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+  else if(e.key === 'Home') goToSlide(0);
+  else if(e.key === 'End') goToSlide(slides.length - 1);
+}
+
+function init(){
+  // Bangun 9 slide latihan
+  const aL = $('#anchorLatihan');
+  LATIHAN.forEach(p => { const s = buildLatihanSlide(p); setupLatihan(s, p); aL.parentNode.insertBefore(s, aL); });
+  aL.remove();
+  // Bangun 10 slide olimpiade
+  const aO = $('#anchorOly');
+  OLYMPIADE.forEach(q => { const s = buildOlySlide(q); setupOly(s, q); aO.parentNode.insertBefore(s, aO); });
+  aO.remove();
+
+  slides = [...document.querySelectorAll('#deck .slide')];
+  buildMenu();
+  updateHUD();
+
+  $('#prevBtn').addEventListener('click', prevSlide);
+  $('#nextBtn').addEventListener('click', nextSlide);
+  $('#menuBtn').addEventListener('click', () => toggleMenu());
+  $('#menuBackdrop').addEventListener('click', () => toggleMenu(false));
+
+  const iL = slides.findIndex(s => s.querySelector('.problem-slide.latihan'));
+  if(iL >= 0) $('#ctaLatihan').addEventListener('click', () => goToSlide(iL));
+  const iO = slides.findIndex(s => s.querySelector('.problem-slide.oly'));
+  if(iO >= 0) $('#ctaOly').addEventListener('click', () => goToSlide(iO));
+
+  setupDatasetDemo();
+  document.addEventListener('keydown', keyNav);
+}
+init();
+</script>
+</body>
+</html>
