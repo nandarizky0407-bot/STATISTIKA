@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peluang, Peluang Majemuk, Permutasi &amp; Kombinasi — TKA SMA | Interaktif &amp; Mendalam</title>
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#0f172a; --muted:#5b6b7f;
+  --blue:#2563eb; --rose:#e11d48; --amber:#d97706; --green:#059669;
+  --purple:#7c3aed; --slate:#475569; --line:#e2e8f0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+sup,sub{font-size:72%}
+body{font-family:'Segoe UI',Tahoma,system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+
+/* ===== Topbar & progress ===== */
+#topbar{position:fixed;top:0;left:0;right:0;background:rgba(11,18,32,.96);color:#fff;z-index:50;box-shadow:0 2px 12px rgba(2,6,23,.35)}
+.tb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:9px 18px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#34d399,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:17px;flex:none}
+.brand{font-weight:700;letter-spacing:.3px;font-size:14.5px;white-space:nowrap}
+.tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.pwrap{margin-left:auto;flex:1;max-width:260px;height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+#pbar{height:100%;width:0;background:linear-gradient(90deg,#34d399,#818cf8);border-radius:99px;transition:width .3s}
+
+/* ===== Bottom nav ===== */
+#navbar{position:fixed;bottom:0;left:0;right:0;background:rgba(11,18,32,.96);z-index:50;border-top:1px solid rgba(255,255,255,.08)}
+.nb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 18px}
+.nb-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:8px 15px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13.5px;font-family:inherit;white-space:nowrap}
+.nb-btn:hover{background:rgba(255,255,255,.24)}
+#counter{color:#cbd5e1;font-size:13px;min-width:64px;text-align:center;font-weight:600}
+.spacer{flex:1}
+
+/* ===== Deck & slide ===== */
+#deck{max-width:1000px;margin:0 auto;padding:78px 18px 90px}
+.slide{display:none;background:var(--card);border-radius:20px;padding:36px 42px;min-height:540px;box-shadow:0 10px 34px rgba(15,23,42,.09)}
+.slide.active{display:block;animation:fadein .4s ease}
+.slide:not(.active){display:none!important}
+.slide.active.cover{display:flex}
+.slide.active.divider{display:flex}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.acc-green{--acc:#059669}.acc-purple{--acc:#7c3aed}.acc-amber{--acc:#d97706}
+.acc-blue{--acc:#2563eb}.acc-rose{--acc:#e11d48}.acc-slate{--acc:#475569}
+
+h2{font-size:26px;letter-spacing:-.3px}
+h3{font-size:17px}
+.sub{color:var(--muted);margin:6px 0 18px;font-size:15px}
+.rule{width:64px;height:5px;border-radius:99px;background:var(--acc,var(--blue));margin:10px 0 20px}
+
+/* ===== Boxes ===== */
+.defbox{background:#f8fafc;border:1px solid var(--line);border-left:5px solid var(--acc,var(--blue));padding:15px 20px;border-radius:12px;margin:14px 0;font-size:15.5px}
+.formula{background:linear-gradient(135deg,#eff6ff,#eef2ff);border:1px solid #c7d2fe;border-radius:12px;padding:13px 18px;margin:10px 0;font-size:16.5px;font-weight:600;color:#1e3a8a;line-height:1.7}
+.formula small{display:block;font-weight:400;color:#475569;font-size:12.5px;margin-top:4px}
+.formula.fp{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-color:#ddd6fe;color:#4c1d95}
+.formula.fg{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#a7f3d0;color:#065f46}
+.formula.fa{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fde68a;color:#92400e}
+.callout{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.warnbox{background:#fef2f2;border:1px solid #fca5a5;border-left:5px solid #ef4444;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.note{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
+.mini{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.mini h4{font-size:13px;color:var(--acc,var(--blue));margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.mini p{font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+.tbl th{background:#0f172a;color:#fff;padding:8px 10px;text-align:left;font-size:12.5px}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+.tbl tr.hi td{background:#fef9c3;font-weight:700}
+.tbl tr:nth-child(even).hi td{background:#fef9c3}
+.stepbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.75;margin:10px 0}
+.stepbox b.t{text-transform:uppercase;font-size:11.5px;letter-spacing:1px}
+.stepbox.c-green b.t{color:#059669}.stepbox.c-purple b.t{color:#7c3aed}.stepbox.c-amber b.t{color:#d97706}
+.stepbox.c-blue b.t{color:#2563eb}.stepbox.c-rose b.t{color:#e11d48}
+
+/* ===== Cover ===== */
+.slide.cover{background:linear-gradient(140deg,#0b1220 0%,#1e1b4b 55%,#312e81 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.cover::after{content:'';position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(52,211,153,.25),transparent 65%)}
+.cover::before{content:'';position:absolute;left:-100px;bottom:-140px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.25),transparent 65%)}
+.kicker{font-size:12.5px;letter-spacing:3px;font-weight:800;color:#a5b4fc;margin-bottom:14px}
+.cover h1{font-size:42px;line-height:1.12;letter-spacing:-1px;margin-bottom:14px;position:relative;z-index:1}
+.cover .subtitle{font-size:16px;color:#c7d2fe;max-width:700px;margin-bottom:22px;position:relative;z-index:1}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;position:relative;z-index:1}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.cta{background:linear-gradient(135deg,#34d399,#6366f1);border:none;color:#fff;font-weight:800;font-size:16px;padding:13px 30px;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(52,211,153,.4);transition:transform .15s;position:relative;z-index:1}
+.cta:hover{transform:translateY(-2px)}
+.hintline{margin-top:18px;font-size:12.5px;color:#94a3b8}
+
+/* ===== Menu ===== */
+.menugrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.menucard{background:#f8fafc;border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;cursor:pointer;transition:.18s}
+.menucard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1)}
+.mnum{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--acc)}
+.menucard h3{margin:4px 0 6px;font-size:17px}
+.menucard p{font-size:13.5px;color:var(--muted)}
+.mtag{display:inline-block;margin-top:10px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px}
+
+/* ===== Divider ===== */
+.slide.divider{background:linear-gradient(140deg,#0f172a,#1e293b);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.dnum{position:absolute;right:20px;bottom:-46px;font-size:190px;font-weight:900;color:rgba(255,255,255,.06);line-height:1}
+.dkicker{color:var(--acc);font-weight:800;letter-spacing:3px;font-size:13px;margin-bottom:10px}
+.divider h1{font-size:40px;margin-bottom:16px;letter-spacing:-.5px}
+.dlist{list-style:none}
+.dlist li{padding:7px 0 7px 28px;position:relative;color:#cbd5e1;font-size:15.5px}
+.dlist li::before{content:'\25B8';position:absolute;left:6px;color:var(--acc);font-weight:700}
+.slide:not(.divider):not(.cover) .dlist li{color:#334155}
+</style>
+<style>
+/* ===== Lab umum ===== */
+.labbox{background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:16px;padding:18px 20px;margin:16px 0;display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.labbox h3{font-size:15.5px;margin-bottom:12px;color:var(--acc,var(--blue))}
+.lgrid{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.lctl{flex:0 0 250px;display:flex;flex-direction:column;gap:12px}
+.lctl label{font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px;display:flex;flex-direction:column;gap:5px}
+.lctl input[type=range]{width:100%;accent-color:var(--acc,var(--blue))}
+.lval{font-size:15px;font-weight:700;color:var(--acc,var(--blue))}
+.labinfo{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.draghint{font-size:12.5px;color:#64748b;text-align:center;margin-top:6px}
+.lgrow{flex:1 1 320px;min-width:260px}
+.pbtn{border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;background:#eef2f7;color:#334155}
+.pbtn:hover{background:#e2e8f0}
+.pbtn.pri{background:var(--acc,var(--blue));color:#fff;border-color:var(--acc,var(--blue))}
+.pbtn.pri:hover{filter:brightness(1.08)}
+.checkline{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#334155}
+.checkline input{width:17px;height:17px;accent-color:var(--acc,var(--blue))}
+
+/* ===== Skala peluang ===== */
+.scalebar{position:relative;height:16px;border-radius:99px;margin:46px 0 4px;background:linear-gradient(90deg,#ef4444,#f59e0b 25%,#22c55e 50%,#22c55e 75%,#f59e0b 90%,#ef4444)}
+.smark{position:absolute;top:-34px;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;z-index:2}
+.smark::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#0f172a}
+.slabels{display:flex;justify-content:space-between;font-size:10.5px;color:#94a3b8;padding:2px 2px 0}
+
+/* ===== Koin ===== */
+.cbar-wrap{margin:8px 0 12px}
+.cbar-lab{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#334155;margin-bottom:4px}
+.cbar{height:30px;border-radius:9px;background:#e2e8f0;overflow:hidden}
+.cbar i{display:block;height:100%;border-radius:9px;transition:width .35s}
+.cbar i.ba{background:linear-gradient(90deg,#059669,#34d399)}
+.cbar i.bb{background:linear-gradient(90deg,#475569,#94a3b8)}
+
+/* ===== Histogram dadu ===== */
+.hist{display:flex;align-items:flex-end;gap:6px;height:170px;margin-top:14px;padding:0 2px}
+.hcol{flex:1;display:flex;flex-direction:column;height:100%;min-width:0}
+.hbars{flex:1;display:flex;align-items:flex-end;gap:2px}
+.hbars i{flex:1;display:block;border-radius:4px 4px 0 0;transition:height .35s;min-height:0}
+.hbars i.he{background:linear-gradient(180deg,#34d399,#059669)}
+.hbars i.ht{background:#cbd5e1}
+.hval{font-size:9.5px;font-weight:800;color:#047857;text-align:center;height:13px}
+.hlab{font-size:11px;color:#64748b;text-align:center;padding-top:3px;border-top:1px solid var(--line)}
+.legend{display:flex;gap:16px;font-size:12px;color:#475569;margin-top:10px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
+
+/* ===== Bola ===== */
+.balls{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.ball{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;box-shadow:inset 0 -4px 7px rgba(0,0,0,.22);transition:transform .2s}
+.ball.br{background:#dc2626}.ball.bp{background:#94a3b8;color:#1e293b}.ball.bb{background:#2563eb}
+.ball.picked{outline:3px solid #0f172a;outline-offset:2px;transform:scale(1.12)}
+
+/* ===== Venn ===== */
+.vennbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 8px 2px;margin:10px 0}
+.vennbox svg{width:100%;height:auto;display:block}
+
+/* ===== Pohon peluang ===== */
+.tree{font-size:13.5px;overflow-x:auto;padding:6px 2px}
+.tnode{display:inline-block;border:2px solid var(--acc,var(--blue));background:#fff;border-radius:10px;padding:5px 12px;font-weight:800}
+.tbranch{display:flex;gap:16px;margin-top:12px;padding-left:16px;border-left:2px dashed #94a3b8}
+.tsub{min-width:230px}
+.tedge{font-size:12.5px;color:#334155;margin:2px 0}
+.tleaf{background:#fff;border:1px solid var(--line);border-left:4px solid var(--acc,var(--blue));border-radius:9px;padding:6px 10px;margin-top:8px;font-size:12.5px}
+.tleaf b{color:var(--acc,var(--blue))}
+.tsum{background:#eef2ff;border:1.5px solid #c7d2fe;border-radius:9px;padding:7px 12px;margin-top:12px;font-size:12.5px;font-weight:700;color:#3730a3;display:inline-block}
+
+/* ===== Kombinasi chips ===== */
+.combowrap{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.combo{background:#fff;border:1.5px solid #fde68a;color:#92400e;font-weight:800;font-size:12.5px;padding:4px 10px;border-radius:9px;letter-spacing:2px}
+.combo.p{border-color:#a7f3d0;color:#065f46;background:#f0fdf4}
+.fcardrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.fcard{background:#fff;border:1.5px solid var(--line);border-top:4px solid var(--acc,var(--amber));border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.7}
+.fcard .fl{font-size:11px;font-weight:800;letter-spacing:1px;color:var(--acc,var(--amber));text-transform:uppercase}
+.fcard .fv{font-size:19px;font-weight:900;margin-top:2px}
+
+/* ===== Kuis ===== */
+.quiz-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lvl{background:#ede9fe;color:#6d28d9;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.5px}
+.qcount{margin-left:auto;color:var(--muted);font-size:13.5px;font-weight:600}
+.qtext{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:15.5px;margin:12px 0 16px;line-height:1.65}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-family:inherit;line-height:1.5;transition:.15s;color:var(--ink)}
+.opt:hover:not(.locked){border-color:#94a3b8;background:#f8fafc}
+.opt.selected{border-color:var(--acc,var(--blue));background:#eef2ff;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.opt.correct{border-color:#16a34a;background:#f0fdf4;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.opt.wrong{border-color:#dc2626;background:#fef2f2;box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.opt.locked{cursor:default}
+.optletter{flex:none;width:26px;height:26px;border-radius:8px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#334155;margin-top:1px}
+.opt.selected .optletter{background:var(--acc,var(--blue));color:#fff}
+.opt.correct .optletter{background:#16a34a;color:#fff}
+.opt.wrong .optletter{background:#dc2626;color:#fff}
+.expbox{border-radius:12px;padding:14px 18px;margin-top:14px;font-size:14.5px;line-height:1.65;display:none}
+.expbox.good{background:#f0fdf4;border:1px solid #86efac}
+.expbox.bad{background:#fef2f2;border:1px solid #fca5a5}
+.qctrl{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{border:none;border-radius:11px;padding:11px 22px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
+.btn.pri{background:var(--acc,var(--blue));color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.ghost{background:#eef2f7;color:#334155;border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.qresult{text-align:center;padding:30px 10px}
+.qscore{font-size:62px;font-weight:900;color:var(--acc)}
+.qscore span{font-size:26px;color:var(--muted);font-weight:700}
+.qpct{color:var(--muted);margin:8px 0 18px;font-weight:700}
+
+/* ===== Skor ===== */
+.scorebig{display:flex;gap:20px;align-items:center;background:linear-gradient(135deg,#0f172a,#312e81);color:#fff;border-radius:18px;padding:20px 26px;margin:14px 0}
+.scorebig .big{font-size:50px;font-weight:900;color:#a5b4fc;line-height:1}
+.scorebar{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;display:inline-block}
+.scorebar i{display:block;height:100%;border-radius:99px}
+
+@media (max-width:760px){
+  .grid2,.grid3,.menugrid,.fcardrow{grid-template-columns:1fr}
+  .slide{padding:24px 18px;min-height:auto}
+  .cover h1{font-size:31px}
+  .divider h1{font-size:29px}
+  .brand span.tag{display:none}
+  .lctl{flex:1 1 100%}
+  .brand{font-size:12.5px}
+  .hist{gap:3px}
+}
+</style>
+</head>
+<body>
+<header id="topbar"><div class="tb-in">
+  <div class="logo">P</div>
+  <div class="brand">Peluang &middot; Peluang Majemuk &middot; Permutasi &amp; Kombinasi <span class="tag">TKA SMA</span></div>
+  <div class="pwrap"><div id="pbar"></div></div>
+</div></header>
+
+<div id="deck">
+
+<!-- 1. COVER -->
+<section class="slide cover" id="s-cover">
+  <p class="kicker">BANK MATERI TKA SMA &middot; INTERAKTIF &amp; MENDALAM</p>
+  <h1>Peluang, Peluang Majemuk,<br>Permutasi &amp; Kombinasi</h1>
+  <p class="subtitle">Dari ruang sampel sampai soal HOTS: rumus Laplace &amp; peluang empiris &middot; aturan penjumlahan &amp; perkalian &middot; peluang bersyarat &middot; saling lepas vs saling bebas &middot; pohon peluang &amp; peluang total &middot; faktorial, permutasi, kombinasi, dan peluang berbasis kelompok. Semua dibuktikan lewat simulasi yang bisa kamu jalankan sendiri.</p>
+  <div class="chips">
+    <span class="chip">3 Bab Materi Inti</span>
+    <span class="chip">30 Soal HOTS</span>
+    <span class="chip">7 Lab Interaktif</span>
+    <span class="chip">Simulasi Monte Carlo</span>
+    <span class="chip">Pembahasan Lengkap</span>
+  </div>
+  <button class="cta" data-goto="s-menu">Mulai Belajar</button>
+  <p class="hintline">Tips: gunakan tombol panah &larr; &rarr; pada keyboard untuk berpindah halaman. Skor latihan tersimpan otomatis di perangkatmu.</p>
+</section>
+
+<!-- 2. MENU -->
+<section class="slide" id="s-menu">
+  <h2>Peta Materi</h2>
+  <p class="sub">Klik kartu untuk langsung menuju bab. Alurnya dirancang berjenjang: peluang kejadian sederhana &rarr; gabungan beberapa kejadian &rarr; alat hitung banyaknya hasil (permutasi-kombinasi) yang jadi jembatan ke peluang. Setiap bab ditutup 10 soal HOTS berpembahasan.</p>
+  <div class="menugrid">
+    <div class="menucard acc-green" data-goto="s-d1">
+      <span class="mnum">BAB 01</span>
+      <h3>Peluang (Kejadian Sederhana)</h3>
+      <p>Ruang sampel &amp; kejadian, rumus Laplace, peluang empiris &amp; Hukum Bilangan Besar, skala 0&ndash;1, sifat-sifat peluang, dan senjata rahasia: komplemen &ldquo;paling sedikit satu&rdquo;.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-purple" data-goto="s-d2">
+      <span class="mnum">BAB 02</span>
+      <h3>Peluang Majemuk</h3>
+      <p>Aturan penjumlahan (saling lepas &amp; umum), peluang bersyarat, aturan perkalian, kejadian saling bebas, pohon peluang, dan peluang total &mdash; plus jebakan klasik &ldquo;saling lepas &ne; saling bebas&rdquo;.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-amber" data-goto="s-d3">
+      <span class="mnum">BAB 03</span>
+      <h3>Permutasi &amp; Kombinasi</h3>
+      <p>Kaidah dasar memilih &amp; faktorial, permutasi (urutan penting), unsur sama, susunan melingkar, kombinasi (kelompok), pemandu keputusan P atau C, dan peluang berbasis kombinasi.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-blue" data-goto="s-score">
+      <span class="mnum">REKAP</span>
+      <h3>Nilai Kamu</h3>
+      <p>Rekapitulasi otomatis 30 soal HOTS dari 3 bab, lengkap dengan predikat &mdash; tersimpan otomatis di perangkatmu.</p>
+      <span class="mtag">Cek Progres</span>
+    </div>
+    <div class="menucard acc-rose" data-goto="s-summary">
+      <span class="mnum">PENUTUP</span>
+      <h3>Rangkuman &amp; Strategi</h3>
+      <p>Kartu rumus inti ketiga bab, tabel pembeda konsep yang paling sering tertukar, dan enam strategi menaklukkan soal HOTS peluang pada TKA.</p>
+      <span class="mtag">Baca Sebelum Ujian</span>
+    </div>
+  </div>
+</section>
+<!-- 3. DIVIDER BAB 1 -->
+<section class="slide divider acc-green" id="s-d1">
+  <span class="dnum">01</span>
+  <p class="dkicker">BAB 01 &middot; PELUANG KEJADIAN SEDERHANA</p>
+  <h1>Peluang: Mengukur<br>Kemungkinan</h1>
+  <ul class="dlist">
+    <li>Percobaan acak, ruang sampel, dan kejadian</li>
+    <li>Peluang teoretis (Laplace) vs peluang empiris</li>
+    <li>Hukum Bilangan Besar &mdash; dibuktikan lewat simulasi</li>
+    <li>Sifat-sifat peluang &amp; trik komplemen &ldquo;paling sedikit satu&rdquo;</li>
+    <li>3 lab interaktif + 10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 4. KONSEP DASAR -->
+<section class="slide acc-green" id="s-1a">
+  <h2>Tiga Istilah Fondasi: Percobaan, Ruang Sampel, Kejadian</h2>
+  <p class="sub">Semua soal peluang berdiri di atas tiga istilah ini. Kuasai dulu cara <b>menuliskan ruang sampel dengan lengkap dan benar</b> &mdash; 80% kesalahan siswa di soal peluang sebenarnya kesalahan menghitung n(S), bukan kesalahan rumus.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Percobaan acak</b> adalah percobaan yang hasilnya tidak dapat dipastikan meskipun dilakukan dengan cara yang sama, tetapi <b>semua kemungkinan hasilnya sudah diketahui</b>. Contoh: melempar dadu (hasil pasti 1&ndash;6, tapi tidak tahu angka berapa yang muncul), mengocok kartu, mengundi undian berhadiah.</div>
+  <div class="grid2">
+    <div class="mini acc-green">
+      <h4>Ruang Sampel (S)</h4>
+      <p>Himpunan <b>semua hasil yang mungkin</b> terjadi dari percobaan. Banyak anggotanya ditulis <b>n(S)</b>. Ini &ldquo;dunia&rdquo; tempat semua kejadian bernaung.</p>
+    </div>
+    <div class="mini acc-green">
+      <h4>Kejadian (A)</h4>
+      <p>Subhimpunan dari ruang sampel &mdash; kumpulan hasil yang kita minati. Banyak anggotanya <b>n(A)</b>. Titik sampel = satu anggota S.</p>
+    </div>
+  </div>
+  <table class="tbl">
+    <tr><th>Percobaan</th><th>Ruang sampel S</th><th>n(S)</th></tr>
+    <tr><td>Melempar satu koin</td><td>{A, G} (Angka, Gambar)</td><td>2</td></tr>
+    <tr><td>Melempar dua koin</td><td>{AA, AG, GA, GG}</td><td><b>4</b></td></tr>
+    <tr><td>Melempar satu dadu</td><td>{1, 2, 3, 4, 5, 6}</td><td>6</td></tr>
+    <tr><td>Melempar dua dadu</td><td>semua pasangan (a, b), a, b &isin; {1,&hellip;,6}</td><td><b>36</b></td></tr>
+    <tr><td>Mengambil satu kartu bridge</td><td>52 kartu (4 jenis &times; 13 angka)</td><td>52</td></tr>
+  </table>
+  <div class="warnbox"><b>Jebakan klasik #1:</b> dua koin menghasilkan <b>4</b> titik sampel, bukan 3! {AA, AG, GA, GG} &mdash; karena AG dan GA terjadi pada koin yang berbeda, keduanya dihitung terpisah. Salah satunya adalah sisi angka pada koin pertama + gambar pada koin kedua. Kebiasaan menulis S = {AA, AG, GG} akan merusak seluruh perhitungan setelahnya. Untuk dua dadu: buat tabel 6 &times; 6 agar ketiadaan hasil terlewati.</div>
+  <div class="note"><b>Kartu bridge dalam sekilas:</b> 52 kartu = 26 <b>merah</b> (13 hati + 13 wajik) dan 26 <b>hitam</b> (13 sekop + 13 keriting). Setiap jenis memuat 13 kartu: A, 2&ndash;10, J, Q, K. Maka: banyak AS = 4, banyak kartu merah = 26, banyak AS merah (AS hati &amp; AS wajik) = 2. Tiga angka inilah bahan bakar banyak soal HOTS.</div>
+</section>
+
+<!-- 5. DEFINISI PELUANG -->
+<section class="slide acc-green" id="s-1b">
+  <h2>Dua Wajah Peluang: Teoretis &amp; Empiris</h2>
+  <p class="sub">Peluang punya dua definisi yang saling melengkapi. Ujian TKA menguji keduanya &mdash; dan soal HOTS sering memaksamu sadar kapan harus memakai yang mana.</p>
+  <div class="rule"></div>
+  <div class="grid2">
+    <div>
+      <div class="formula fg">Peluang Teoretis (Rumus Laplace)<br>P(A) = n(A) : n(S)<br><small>Berlaku bila semua titik sampel <b>sama mungkin</b> (dadu adil, koin setimbang, kartu dikocok rata)</small></div>
+      <p style="font-size:14.5px">Contoh: peluang dadu muncul bilangan genap, A = {2, 4, 6}, maka P(A) = 3 : 6 = &frac12;. Rumus ini menjawab pertanyaan &ldquo;<b>seharusnya</b> seberapa mungkin?&rdquo; berdasarkan struktur simetris percobaan.</p>
+    </div>
+    <div>
+      <div class="formula">Peluang Empiris (Frekuensi Relatif)<br>P(A) = f(A) : n<br><small>f(A) = banyaknya A muncul; n = banyak percobaan</small></div>
+      <p style="font-size:14.5px">Contoh: dari 40 lemparan koin, gambar muncul 17 kali &rarr; P(gambar) &asymp; 17 : 40 = 0,425. Rumus ini menjawab &ldquo;<b>kenyataannya</b> seberapa sering?&rdquo; berdasarkan data percobaan.</p>
+    </div>
+  </div>
+  <div class="note"><b>Hukum Bilangan Besar:</b> semakin banyak percobaan dilakukan, frekuensi relatif (empiris) akan <b>mendekati peluang teoretis</b>. Pada koin setimbang, 10 lemparan bisa menghasilkan 70% angka &mdash; wajar. Tetapi pada 10.000 lemparan, persentasenya hampir pasti merayap mendekati 50%. Buktikan sendiri di dua lab berikutnya.</div>
+  <h3 style="margin-top:18px">Skala Peluang: 0 &le; P(A) &le; 1</h3>
+  <div class="scalebar">
+    <span class="smark" style="left:0%">P = 0 &middot; mustahil</span>
+    <span class="smark" style="left:50%">P = &frac12; &middot; koin angka</span>
+    <span class="smark" style="left:100%">P = 1 &middot; pasti</span>
+  </div>
+  <div class="slabels"><span>0</span><span>0,25</span><span>0,5</span><span>0,75</span><span>1</span></div>
+  <table class="tbl">
+    <tr><th>Kejadian</th><th>Perhitungan</th><th>Peluang</th><th>Arti</th></tr>
+    <tr><td>Dadu muncul 7</td><td>0 : 6</td><td><b>0</b></td><td>Mustahil</td></tr>
+    <tr><td>Koin muncul angka</td><td>1 : 2</td><td><b>&frac12;</b></td><td>Sama mungkin</td></tr>
+    <tr><td>Kartu terambil AS</td><td>4 : 52</td><td><b>1/13</b></td><td>Kecil</td></tr>
+    <tr><td>Dadu muncul &le; 6</td><td>6 : 6</td><td><b>1</b></td><td>Pasti</td></tr>
+  </table>
+  <div class="callout"><b>Interpretasi praktis:</b> P(A) = 0,25 berarti dalam jangka panjang, 1 dari setiap 4 kali percobaan kejadian A terjadi. Peluang <b>bukan jaminan</b> untuk percobaan tunggal &mdash; kejadian berpeluang 0,99 tetap bisa gagal sekali jalan.</div>
+</section>
+<!-- 6. LAB KOIN -->
+<section class="slide acc-green" id="s-1c">
+  <h2>Lab 1 &mdash; Simulator Koin: Melihat Hukum Bilangan Besar</h2>
+  <p class="sub">Klik tombol lemparan dan amati persentase empirisnya. Awalnya boleh &ldquo;berantakan&rdquo; (70 : 30 pun wajar) &mdash; tapi makin banyak data, keduanya merayap menuju 50%.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <span style="font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px">Jalankan Percobaan</span>
+      <button class="pbtn pri" onclick="flipCoins(1)">Lempar 1&times;</button>
+      <button class="pbtn" onclick="flipCoins(10)">Lempar 10&times;</button>
+      <button class="pbtn" onclick="flipCoins(100)">Lempar 100&times;</button>
+      <button class="pbtn" onclick="flipCoins(1000)">Lempar 1.000&times;</button>
+      <button class="pbtn" onclick="resetCoins()">Reset</button>
+    </div>
+    <div class="lgrow">
+      <div class="cbar-wrap">
+        <div class="cbar-lab"><span>ANGKA &mdash; <span id="coinCntA">0</span> kali</span><span id="coinPctA">0,0%</span></div>
+        <div class="cbar"><i class="ba" id="coinBarA" style="width:0%"></i></div>
+      </div>
+      <div class="cbar-wrap">
+        <div class="cbar-lab"><span>GAMBAR &mdash; <span id="coinCntG">0</span> kali</span><span id="coinPctG">0,0%</span></div>
+        <div class="cbar"><i class="bb" id="coinBarG" style="width:0%"></i></div>
+      </div>
+      <div class="labinfo">Total lemparan: <b id="coinTotal">0</b> &nbsp;|&nbsp; Selisih dari 50%: <b id="coinGap">0,0</b> poin persen.<br>Peluang teoretis tiap sisi = 0,5. <b id="coinMsg">Tekan tombol untuk mulai.</b></div>
+    </div>
+  </div>
+  <div class="callout"><b>Cara membaca:</b> pada 10 lemparan, selisih 20&ndash;30 poin persen masih biasa. Setelah 1.000&ndash;10.000 lemparan, selisihnya biasanya tinggal di bawah 3 poin. Inilah alasan kasino dan asuransi &ldquo;yakin&rdquo; menghitung untung: mereka bermain dalam jumlah percobaan yang sangat besar.</div>
+</section>
+
+<!-- 7. LAB DADU -->
+<section class="slide acc-green" id="s-1d">
+  <h2>Lab 2 &mdash; Dua Dadu: Jumlah Mata Tidak Sama Mungkin!</h2>
+  <p class="sub">Meski 36 titik sampel sama mungkin, <b>jumlahnya tidak</b>. Jumlah 7 punya 6 jalur, jumlah 2 hanya 1 jalur. Bandingkan batang hijau (simulasimu) dengan batang abu-abu (teori).</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <span style="font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px">Lempar Dua Dadu</span>
+      <button class="pbtn pri" onclick="rollDice(1)">Undi 1&times;</button>
+      <button class="pbtn" onclick="rollDice(50)">Undi 50&times;</button>
+      <button class="pbtn" onclick="rollDice(200)">Undi 200&times;</button>
+      <button class="pbtn" onclick="rollDice(1000)">Undi 1.000&times;</button>
+      <button class="pbtn" onclick="resetDice()">Reset</button>
+      <div class="labinfo">Total undian: <b id="diceTotal">0</b></div>
+    </div>
+    <div class="lgrow">
+      <div class="hist" id="diceHist"></div>
+      <div class="legend">
+        <span><i style="background:linear-gradient(180deg,#34d399,#059669)"></i>Hasil simulasimu (%)</span>
+        <span><i style="background:#cbd5e1"></i>Peluang teoretis (%)</span>
+      </div>
+    </div>
+  </div>
+  <table class="tbl">
+    <tr><th>Jumlah</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th></tr>
+    <tr><td><b>Banyak jalur</b></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td><b>6</b></td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+    <tr><td><b>Peluang teoretis</b></td><td>2,8%</td><td>5,6%</td><td>8,3%</td><td>11,1%</td><td>13,9%</td><td><b>16,7%</b></td><td>13,9%</td><td>11,1%</td><td>8,3%</td><td>5,6%</td><td>2,8%</td></tr>
+  </table>
+  <div class="warnbox"><b>Jebakan klasik #2:</b> anggap semua jumlah sama mungkin (P(jumlah 7) = 1 : 11). SALAH! Yang sama mungkin adalah <b>36 pasangan</b> (a, b). Tulis dulu jalurnya: (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) &mdash; enam jalur untuk jumlah 7, maka P = 6 : 36 = 1 : 6. Pola jalur ini hafalan wajib untuk soal HOTS dua dadu.</div>
+</section>
+
+<!-- 8. SIFAT PELUANG & KOMPLEMEN -->
+<section class="slide acc-green" id="s-1e">
+  <h2>Sifat-Sifat Peluang &amp; Trik Komplemen</h2>
+  <p class="sub">Empat sifat ini adalah mesin sederhana yang menggerakkan hampir semua soal. Sifat terakhir &mdash; komplemen &mdash; adalah trik yang paling sering menyelamatkanmu di soal HOTS.</p>
+  <div class="rule"></div>
+  <div class="grid2">
+    <div class="mini acc-green"><h4>Sifat 1 &middot; Batas Nilai</h4><p>0 &le; P(A) &le; 1. Jika perhitunganmu menghasilkan peluang negatif atau lebih dari 1, pasti ada kesalahan &mdash; cek kembali ruang sampelnya.</p></div>
+    <div class="mini acc-green"><h4>Sifat 2 &middot; Kejadian Pasti &amp; Mustahil</h4><p>P(kejadian pasti) = 1 dan P(kejadian mustahil) = 0. Contoh: dadu muncul &le; 6 pasti terjadi; dadu muncul 7 mustahil.</p></div>
+    <div class="mini acc-green"><h4>Sifat 3 &middot; Jumlah Saling Lepas</h4><p>Jika beberapa kejadian saling lepas dan mencakup seluruh S, jumlah peluangnya tepat 1. Contoh satu dadu: P(ganjil) + P(genap) = &frac12; + &frac12; = 1.</p></div>
+    <div class="mini acc-green"><h4>Sifat 4 &middot; Komplemen</h4><p>P(A<sup>c</sup>) = 1 &minus; P(A). A<sup>c</sup> = &ldquo;A tidak terjadi&rdquo;. Jika P(hujan) = 0,3 maka P(tidak hujan) = 0,7.</p></div>
+  </div>
+  <div class="formula fg">Strategi &ldquo;Paling Sedikit Satu&rdquo;<br>P(minimal satu A) = 1 &minus; P(tidak ada A sama sekali)<br><small>Hitung jalur &ldquo;gagal total&rdquo; jauh lebih mudah daripada menghitung kasus 1, 2, 3, &hellip; satu per satu</small></div>
+  <div class="stepbox c-green"><b class="t">Ilustrasi cepat</b><br>Tiga koin dilempar. P(muncul <b>paling sedikit satu gambar</b>)?<br>Kasus langsung: tepat 1 G + tepat 2 G + tepat 3 G = 3 : 8 + 3 : 8 + 1 : 8 = 7 : 8 (tiga perhitungan).<br>Komplemen: P = 1 &minus; P(tanpa gambar) = 1 &minus; (1 : 2)<sup>3</sup> = 1 &minus; 1 : 8 = <b>7 : 8</b> (satu perhitungan).<br>Sama jawabannya &mdash; tapi versi komplemen 3&times; lebih cepat dan jauh lebih kecil peluang kelirunya. Kata kuncinya hafal: <b>&ldquo;paling sedikit&rdquo;, &ldquo;minimal&rdquo;, &ldquo;sedikitnya satu&rdquo;</b> &rarr; hampir selalu pakai komplemen.</div>
+</section>
+
+<!-- 9. LAB KOTAK BOLA -->
+<section class="slide acc-green" id="s-1f">
+  <h2>Lab 3 &mdash; Kotak Bola: Dengan vs Tanpa Pengembalian</h2>
+  <p class="sub">Atur komposisi bola, lalu bandingkan peluang pada mode <b>dengan pengembalian</b> (bola pertama dikembalikan) dan <b>tanpa pengembalian</b> (komposisi berubah setelah tarikan pertama). Perhatikan baris mana yang berubah &mdash; dan baris mana yang ajaibnya tetap.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <label>Bola MERAH <span class="lval" id="lbM">5</span><input type="range" id="boxM" min="1" max="8" value="5" oninput="updateBox()"></label>
+      <label>Bola PUTIH <span class="lval" id="lbP">3</span><input type="range" id="boxP" min="1" max="8" value="3" oninput="updateBox()"></label>
+      <label>Bola BIRU <span class="lval" id="lbB">2</span><input type="range" id="boxB" min="0" max="6" value="2" oninput="updateBox()"></label>
+      <div class="checkline"><input type="checkbox" id="boxRep" onchange="updateBox()"><span>Dengan pengembalian</span></div>
+      <button class="pbtn pri" onclick="drawTwo()">Ambil 2 Bola Acak</button>
+      <div class="labinfo" id="boxDrawMsg">Klik tombol untuk mengambil dua bola.</div>
+    </div>
+    <div class="lgrow">
+      <div class="balls" id="boxBalls"></div>
+      <table class="tbl">
+        <tr><th>Kejadian</th><th>Peluang (mode saat ini)</th></tr>
+        <tr><td>Bola <b>pertama</b> merah</td><td id="bx1"></td></tr>
+        <tr><td>Bola <b>kedua</b> merah</td><td id="bx2"></td></tr>
+        <tr><td><b>Keduanya</b> merah</td><td id="bx3"></td></tr>
+        <tr><td>Kedua bola <b>sama warna</b></td><td id="bx4"></td></tr>
+        <tr><td><b>Minimal satu</b> merah</td><td id="bx5"></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="note"><b>Eksperimen yang harus kamu coba:</b> (1) Bandingkan baris &ldquo;kedua merah&rdquo; pada kedua mode &mdash; nilainya SAMA di kedua mode! Tanpa informasi tentang bola pertama, bola kedua &ldquo;semerah&rdquo; bola-bola lain secara rata-rata. (2) Bandingkan baris &ldquo;keduanya merah&rdquo; &mdash; di mode tanpa pengembalian nilainya lebih kecil, karena setelah satu merah keluar, sisa merah berkurang. (3) Naikkan biru dan amati &ldquo;minimal satu merah&rdquo; turun.</div>
+</section>
+<!-- 10. CONTOH SOAL BAB 1 (1-2) -->
+<section class="slide acc-green" id="s-1g">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 1 (1 dari 2)</h2>
+  <p class="sub">Perhatikan pola penyelesaiannya: tulis S &rarr; tentukan kejadian &rarr; hitung &rarr; cek apakah peluang berada di 0&ndash;1.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 1.</b> Sebuah dadu adil dilempar satu kali. Tentukan peluang muncul mata dadu bilangan prima <b>atau</b> bilangan genap!</div>
+  <div class="stepbox c-green"><b class="t">Pembahasan</b><br>
+  S = {1, 2, 3, 4, 5, 6}, n(S) = 6.<br>
+  A (prima) = {2, 3, 5} &rarr; n(A) = 3; &nbsp; B (genap) = {2, 4, 6} &rarr; n(B) = 3.<br>
+  Irisan A&cap;B = {2} &mdash; angka 2 masuk ke <b>kedua</b> himpunan, sehingga tidak boleh dihitung dua kali.<br>
+  Gabungan langsung: A&cup;B = {2, 3, 4, 5, 6} &rarr; n = 5. Jadi P(A&cup;B) = 5 : 6.<br>
+  Cara kedua (aturan penjumlahan &mdash; akan dibahas tuntas di Bab 2): P = 3 : 6 + 3 : 6 &minus; 1 : 6 = 5 : 6 = <b>0,833</b>. Cek: 0 &le; 0,833 &le; 1. Aman.</div>
+
+  <div class="defbox"><b>Contoh 2.</b> Dua dadu adil dilempar undi bersamaan. Tentukan peluang muncul jumlah mata dadu <b>paling banyak 4</b>!</div>
+  <div class="stepbox c-green"><b class="t">Pembahasan</b><br>
+  n(S) = 36. &ldquo;Paling banyak 4&rdquo; berarti jumlah = 2, 3, atau 4 &mdash; tiga kasus yang saling lepas.<br>
+  Jumlah 2: (1,1) &rarr; 1 jalur. Jumlah 3: (1,2), (2,1) &rarr; 2 jalur. Jumlah 4: (1,3), (2,2), (3,1) &rarr; 3 jalur.<br>
+  Total jalur menguntungkan = 1 + 2 + 3 = 6.<br>
+  P = 6 : 36 = <b>1 : 6</b>.<br>
+  Perhatikan: komplemen di sini justru lebih berat (jumlah 5&ndash;12 ada 30 jalur), jadi hitung langsung lebih bijak. Trik komplemen dipakai <b>bila jalur gagal lebih sedikit</b> &mdash; bukan selalu!</div>
+</section>
+
+<!-- 11. CONTOH SOAL BAB 1 (3) -->
+<section class="slide acc-green" id="s-1h">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 1 (2 dari 2)</h2>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 3.</b> Sebuah kotak berisi 4 bola merah dan 3 bola putih. Dua bola diambil satu per satu <b>tanpa pengembalian</b>. Tentukan peluang kedua bola yang terambil merah!</div>
+  <div class="stepbox c-green"><b class="t">Pembahasan</b><br>
+  Tarikan pertama: kotak masih utuh &mdash; 4 merah dari 7 bola &rarr; P(merah pertama) = 4 : 7.<br>
+  Tarikan kedua: satu merah sudah keluar &mdash; sisa 3 merah dari 6 bola &rarr; P(merah kedua) = 3 : 6.<br>
+  Kedua tarikan harus terjadi berurutan: P = 4 : 7 &times; 3 : 6 = 12 : 42 = <b>2 : 7</b>.<br>
+  Bagian &ldquo;perkalian dua peluang berurutan&rdquo; ini adalah aturan perkalian yang akan diformalkan di Bab 2. Untuk sekarang, yakinkan dirimu dengan logika: dari 42 pasangan terurut yang mungkin, 12 pasangan berupa (merah, merah).</div>
+  <div class="callout"><b>Bedakan dua frasa soal:</b> &ldquo;<b>sekaligus</b>&rdquo; (diambil bersamaan, urutan tidak diperhatikan) dan &ldquo;<b>satu per satu</b>&rdquo; (ada tarikan pertama &amp; kedua). Untuk kejadian sederhana keduanya menghasilkan peluang sama, tetapi cara menguraikannya berbeda &mdash; dan pada soal bab tiga, frasa ini menentukan memakai kombinasi atau permutasi.</div>
+  <div class="note"><b>Ringkasan Bab 1 dalam satu kalimat:</b> tulis ruang sampel dengan jujur dan lengkap, hitung jalur yang diinginkan, lalu bagi &mdash; dan bila soal berkata &ldquo;paling sedikit&rdquo;, buru-lah komplemennya.</div>
+</section>
+<!-- 12. KUIS BAB 1 -->
+<section class="slide acc-green" id="s-1q">
+  <h2>Latihan HOTS &mdash; Bab 1: Peluang</h2>
+  <p class="sub">10 soal HOTS (C4&ndash;C6): multi-langkah, memerlukan analisis, dan dirancang seperti soal TKA sesungguhnya. Pilih jawaban, tekan <b>Periksa Jawaban</b>, lalu baca pembahasannya sampai tuntas.</p>
+  <div class="rule"></div>
+  <div id="q-bab1-body">
+    <div class="quiz-top"><span class="lvl" id="q-bab1-lvl"></span><span class="qcount">Soal <b id="q-bab1-num">1</b> / 10 &nbsp;&middot;&nbsp; Skor: <b id="q-bab1-score">0</b></span></div>
+    <div class="qtext" id="q-bab1-text"></div>
+    <div class="opts" id="q-bab1-opts"></div>
+    <div class="expbox" id="q-bab1-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-bab1-check">Periksa Jawaban</button>
+      <button class="btn ghost" id="q-bab1-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 13. DIVIDER BAB 2 -->
+<section class="slide divider acc-purple" id="s-d2">
+  <span class="dnum">02</span>
+  <p class="dkicker">BAB 02 &middot; PELUANG MAJEMUK</p>
+  <h1>Ketika Dua Kejadian<br>Bertemu</h1>
+  <ul class="dlist">
+    <li>Bahasa &ldquo;dan&rdquo;, &ldquo;atau&rdquo;, dan &ldquo;jika&rdquo; dalam peluang</li>
+    <li>Aturan penjumlahan: saling lepas &amp; versi umum</li>
+    <li>Peluang bersyarat &amp; aturan perkalian</li>
+    <li>Saling bebas vs saling lepas &mdash; jangan tertukar!</li>
+    <li>Pohon peluang &amp; peluang total + 10 soal HOTS</li>
+  </ul>
+</section>
+
+<!-- 14. NOTASI & BAHASA -->
+<section class="slide acc-purple" id="s-2a">
+  <h2>Terjemahkan Kalimat Soal ke Simbol</h2>
+  <p class="sub">Kejadian majemuk = gabungan dua kejadian atau lebih. Kunci cepat menyelesaikan soalnya: <b>menerjemahkan bahasa soal ke simbol dengan tepat</b>. Soal HOTS jarang menuliskan simbolnya &mdash; ia berkamuflase dalam kalimat.</p>
+  <div class="rule"></div>
+  <table class="tbl">
+    <tr><th>Simbol</th><th>Dibaca</th><th>Frasa soal yang biasa muncul</th></tr>
+    <tr><td><b>A&cap;B</b></td><td>A dan B</td><td>&ldquo;keduanya terjadi&rdquo;, &ldquo;A sekaligus B&rdquo;, &ldquo;A tetapi B&rdquo;</td></tr>
+    <tr><td><b>A&cup;B</b></td><td>A atau B</td><td>&ldquo;minimal salah satu&rdquo;, &ldquo;A atau B (atau keduanya)&rdquo;</td></tr>
+    <tr><td><b>A<sup>c</sup></b></td><td>tidak A</td><td>&ldquo;A tidak terjadi&rdquo;, &ldquo;bukan A&rdquo;</td></tr>
+    <tr><td><b>P(A|B)</b></td><td>Peluang A jika B terjadi</td><td>&ldquo;jika diketahui B&hellip;&rdquo;, &ldquo;di antara yang B, peluang A&rdquo;, &ldquo;diketahui terjadi B&rdquo;</td></tr>
+  </table>
+  <div class="defbox"><b>Mengapa &ldquo;atau&rdquo; dalam matematika itu longgar?</b> Dalam kehidupan sehari-hari, &ldquo;kopi atau teh&rdquo; terdengar pilihan salah satu. Dalam peluang, A&cup;B mencakup <b>tiga wilayah</b>: hanya A, hanya B, dan keduanya. Inilah sebabnya aturan penjumlahan butuh pengurangan irisan &mdash; wilayah &ldquo;keduanya&rdquo; terhitung dua kali jika hanya dijumlah.</div>
+  <div class="callout"><b>Latihan terjemahan cepat:</b> &ldquo;Peluang siswa menyukai matematika <i>atau</i> fisika&rdquo; &rarr; P(M&cup;F). &ldquo;Peluang siswa menyukai <i>keduanya</i>&rdquo; &rarr; P(M&cap;F). &ldquo;Peluang siswa <i>tidak menyukai keduanya</i>&rdquo; &rarr; P(M&cap;F)<sup>c</sup> = 1 &minus; P(M&cup;F). Perhatikan perbedaan halus &ldquo;tidak menyukai keduanya&rdquo; (tidak suka M dan tidak suka F) dengan &ldquo;tidak menyukai salah satunya&rdquo; &mdash; dua makna berbeda, dua simbol berbeda.</div>
+</section>
+
+<!-- 15. ATURAN PENJUMLAHAN -->
+<section class="slide acc-purple" id="s-2b">
+  <h2>Aturan Penjumlahan: Menjumlahkan Peluang dengan Jujur</h2>
+  <p class="sub">Satu ide besar: saat dua himpunan tumpang-tindih, wilayah irisan terhitung dua kali. Maka potong sekali kembali.</p>
+  <div class="rule"></div>
+  <div class="grid2">
+    <div>
+      <div class="formula fp">Kejadian Saling Lepas (A&cap;B = &empty;)<br>P(A&cup;B) = P(A) + P(B)<br><small>Tidak ada wilayah bersama &mdash; langsung jumlahkan. Contoh: dadu genap &cup; ganjil; jumlah 7 &cup; jumlah 10</small></div>
+      <p style="font-size:14.5px">Dua kejadian <b>saling lepas</b> (mutually exclusive) tidak mungkin terjadi bersamaan: satu dadu tidak bisa muncul 2 sekaligus 5.</p>
+    </div>
+    <div>
+      <div class="formula fp">Aturan Penjumlahan Umum<br>P(A&cup;B) = P(A) + P(B) &minus; P(A&cap;B)<br><small>Potong irisan yang terhitung dua kali. Berlaku untuk SEMUA pasangan kejadian, termasuk yang saling lepas (irisan 0)</small></div>
+      <p style="font-size:14.5px">Contoh: kartu AS (4 : 52) atau merah (26 : 52); AS-merah ada 2 : 52 &rarr; P = (4 + 26 &minus; 2) : 52 = 28 : 52 = 7 : 13.</p>
+    </div>
+  </div>
+  <div class="formula fp">Tiga Kejadian (versi penuh)<br>P(A&cup;B&cup;C) = P(A) + P(B) + P(C) &minus; P(A&cap;B) &minus; P(A&cap;C) &minus; P(B&cap;C) + P(A&cap;B&cap;C)<br><small>Pola inklusi-eksklusi: jumlah ganjil +, jumlah genap &minus;. Irisan tiga kembali ditambahkan karena terpotong berlebihan</small></div>
+  <div class="warnbox"><b>Penyebab kesalahan paling umum:</b> menjumlahkan tanpa memotong irisan. Contoh fatal: &ldquo;P(suka matematika) = 40%, P(suka fisika) = 60%, jadi P(suka dua-duanya) = 100%?&rdquo; Tidak pernah benar &mdash; selalu tanyakan: <b>apakah ada wilayah yang tumpang-tindih, dan sebesar apa?</b> Bahkan P(A) + P(B) boleh melebihi 1 tanpa kontradiksi.</div>
+</section>
+<!-- 16. LAB VENN -->
+<section class="slide acc-purple" id="s-2c">
+  <h2>Lab 4 &mdash; Diagram Venn Interaktif: Seluruh Aljabar Peluang Dua Kejadian</h2>
+  <p class="sub">Bayangkan kelas berisi <b>100 siswa</b>. Atur berapa yang hanya suka kejadian A, hanya B, dan keduanya. Seluruh besaran peluang dihitung ulang secara langsung &mdash; termasuk tes kebebasan A dan B.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <label>Hanya A (siswa) <span class="lval" id="lbvA">25</span><input type="range" id="vA" min="0" max="80" value="25" oninput="vennSlide('vA')"></label>
+      <label>Hanya B (siswa) <span class="lval" id="lbvB">20</span><input type="range" id="vB" min="0" max="80" value="20" oninput="vennSlide('vB')"></label>
+      <label>A dan B (siswa) <span class="lval" id="lbvC">10</span><input type="range" id="vC" min="0" max="80" value="10" oninput="vennSlide('vC')"></label>
+      <div class="labinfo" id="vennHint">Total A+B+&hellip; dibatasi 100 siswa; sisanya berada di luar kedua lingkaran.</div>
+    </div>
+    <div class="lgrow">
+      <div class="vennbox">
+        <svg viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="130" cy="102" r="72" fill="rgba(5,150,105,.20)" stroke="#059669" stroke-width="2"/>
+          <circle cx="210" cy="102" r="72" fill="rgba(124,58,237,.20)" stroke="#7c3aed" stroke-width="2"/>
+          <text x="62" y="40" font-size="12" font-weight="700" fill="#047857">A</text>
+          <text x="272" y="40" font-size="12" font-weight="700" fill="#6d28d9">B</text>
+          <text x="88" y="107" font-size="17" font-weight="800" fill="#065f46" text-anchor="middle" id="vTxtA">25</text>
+          <text x="170" y="107" font-size="17" font-weight="800" fill="#312e81" text-anchor="middle" id="vTxtC">10</text>
+          <text x="252" y="107" font-size="17" font-weight="800" fill="#4c1d95" text-anchor="middle" id="vTxtB">20</text>
+          <text x="316" y="186" font-size="14" font-weight="800" fill="#64748b" text-anchor="middle" id="vTxtD">45</text>
+          <text x="316" y="200" font-size="9" fill="#94a3b8" text-anchor="middle">luar</text>
+        </svg>
+      </div>
+      <table class="tbl" id="vennStats"></table>
+    </div>
+  </div>
+  <div class="note"><b>Eksperimen wajib:</b> atur angka-angkanya hingga pesan &ldquo;<b>saling bebas</b>&rdquo; muncul. Amati bahwa kebebasan bukan soal irisan kecil atau besar &mdash; melainkan soal proporsi: P(A&cap;B) harus tepat sama dengan P(A) &times; P(B). Coba juga hancurkan nilai A&cap;B menjadi 0: apakah A dan B jadi saling bebas? (Jawabannya tidak &mdash; buktikan dengan tabel!)</div>
+</section>
+
+<!-- 17. BERSYARAT & PERKALIAN -->
+<section class="slide acc-purple" id="s-2d">
+  <h2>Peluang Bersyarat &amp; Aturan Perkalian</h2>
+  <p class="sub">Peluang bersyarat adalah konsep terpenting bab ini: <b>informasi baru menyusutkan ruang sampel</b>. Semua aturan perkalian adalah konsekuensi langsungnya.</p>
+  <div class="rule"></div>
+  <div class="formula fp">Peluang Bersyarat<br>P(A|B) = P(A&cap;B) : P(B), &nbsp; untuk P(B) &gt; 0<br><small>&ldquo;Peluang A, dengan syarat B sudah terjadi&rdquo; &mdash; dunia kita sekarang hanya berisi kejadian B</small></div>
+  <div class="stepbox c-purple"><b class="t">Rasakan penyusutan ruang sampel</b><br>Dua dadu dilempar. Diketahui jumlahnya 8. Berapa peluang dadu pertama genap?<br>Tanpa syarat: 36 kemungkinan. Dengan syarat: hanya 5 kemungkinan &mdash; {(2,6), (3,5), (4,4), (5,3), (6,2)}.<br>Di antara 5 itu, dadu pertama genap pada 3 kasus: (2,6), (4,4), (6,2).<br>Jadi P = 3 : 5 = <b>0,6</b> &mdash; bukan lagi 18 : 36! Informasi &ldquo;jumlah 8&rdquo; mengubah seluruh peta peluang.</div>
+  <div class="grid2">
+    <div>
+      <div class="formula fp">Aturan Perkalian (Umum)<br>P(A&cap;B) = P(A) &times; P(B|A) = P(B) &times; P(A|B)<br><small>Berlaku selalu &mdash; cukup geser-aljabarkan definisi bersyarat</small></div>
+      <p style="font-size:14.5px">Contoh tanpa pengembalian (Lab 3): P(merah lalu merah) = 4 : 7 &times; 3 : 6. Syaratnya bekerja: peluang kedua dihitung <b>setelah</b> kejadian pertama.</p>
+    </div>
+    <div>
+      <div class="formula fp">Kejadian Saling Bebas (Khusus)<br>P(A&cap;B) = P(A) &times; P(B)<br><small>Terjadi hanya bila kejadian A tidak memengaruhi B &mdash; P(B|A) = P(B)</small></div>
+      <p style="font-size:14.5px">Lemparan dadu kedua tidak peduli hasil lemparan pertama. Dengan pengembalian, dua tarikan bola juga saling bebas.</p>
+    </div>
+  </div>
+  <div class="callout"><b>Tes kebebasan (dipakai terus di soal HOTS):</b> diberikan P(A), P(B), dan P(A&cap;B) &rarr; cek apakah P(A&cap;B) = P(A) &times; P(B). Sama &rarr; saling bebas; beda &rarr; tidak saling bebas. Jangan menduga kebebasan dari &ldquo;terasa tidak berhubungan&rdquo; &mdash; buktikan dengan angka!</div>
+</section>
+
+<!-- 18. LAB POHON -->
+<section class="slide acc-purple" id="s-2e">
+  <h2>Lab 5 &mdash; Pohon Peluang: Peta Semua Jalur Cerita</h2>
+  <p class="sub">Pohon peluang memaksa kita jujur pada urutan kejadian. Aturannya dua kata: <b>sepanjang cabang dikali, antar-jalur dijumlah</b>. Geser komposisi kotak dan amati seluruh peluang menyesuaikan.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <label>Bola MERAH <span class="lval" id="lbTm">6</span><input type="range" id="tM" min="1" max="9" value="6" oninput="renderTree()"></label>
+      <label>Bola PUTIH <span class="lval" id="lbTp">4</span><input type="range" id="tP" min="1" max="9" value="4" oninput="renderTree()"></label>
+      <div class="checkline"><input type="checkbox" id="tRep" onchange="renderTree()"><span>Dengan pengembalian</span></div>
+      <div class="labinfo" id="treeMsg"></div>
+    </div>
+    <div class="lgrow">
+      <div class="tree" id="treeBox"></div>
+    </div>
+  </div>
+  <div class="formula fp">Peluang Total (dua jalur menuju B)<br>P(B) = P(A) &times; P(B|A) + P(A<sup>c</sup>) &times; P(B|A<sup>c</sup>)<br><small>B berisiko tercapai lewat jalur A maupun jalur bukan-A: jumlahkan peluang kedua jalur. Inilah mesin di balik soal &ldquo;dua urn / dua mesin / dua pabrik&rdquo;</small></div>
+  <div class="callout"><b>Ke mana pun cabang menunjuk:</b> jumlah peluang pada cabang-cabang keluar dari satu simpul selalu 1. Gunakan ini untuk mengecek pekerjaanmu &mdash; dan untuk menemukan peluang yang belum diketahui dari yang lain.</div>
+</section>
+<!-- 19. LEPAS VS BEBAS + TOTAL -->
+<section class="slide acc-purple" id="s-2f">
+  <h2>Dua Konsep yang Paling Sering Tertukar &mdash; plus Peluang Total</h2>
+  <p class="sub">Saling lepas dan saling bebas terdengar serupa, tetapi maknanya bertolak belakang. Tabel ini adalah penolong hafalan terbaikmu.</p>
+  <div class="rule"></div>
+  <table class="tbl">
+    <tr><th></th><th>Saling Lepas</th><th>Saling Bebas</th></tr>
+    <tr><td><b>Makna</b></td><td>Tidak mungkin terjadi bersamaan</td><td>Salah satu tidak memengaruhi yang lain</td></tr>
+    <tr><td><b>Syarat matematis</b></td><td>P(A&cap;B) = 0</td><td>P(A&cap;B) = P(A) &times; P(B)</td></tr>
+    <tr><td><b>Contoh</b></td><td>Satu dadu: muncul 2 &amp; muncul 5</td><td>Dua dadu terpisah: dadu pertama genap &amp; dadu kedua 6</td></tr>
+    <tr><td><b>Rumus penjumlahan</b></td><td>P(A&cup;B) = P(A) + P(B)</td><td>Harus pakai versi umum (ada irisan)</td></tr>
+  </table>
+  <div class="warnbox"><b>Hubungan yang mengejutkan:</b> dua kejadian berpeluang positif yang <b>saling lepas selalu TIDAK saling bebas</b>! Jika A terjadi, B pasti gagal terjadi &mdash; kejadian A memengaruhi B secara total. Buktikan di Lab 4: setel A&cap;B = 0 dengan P(A), P(B) &gt; 0, lalu lihat hasil tes kebebasannya.</div>
+  <div class="formula fp">Mesin Peluang Total &mdash; contoh dua mesin pabrik<br>P(cacat) = P(mesin A) &times; P(cacat|A) + P(mesin B) &times; P(cacat|B)<br><small>Pabrik bergerak lewat dua jalur produksi; setiap jalur punya bobot (proporsi) dan tingkat risikonya sendiri</small></div>
+  <div class="stepbox c-purple"><b class="t">Ilustrasi peluang total</b><br>Mesin A memproduksi 60% barang dengan tingkat cacat 2%; mesin B memproduksi 40% dengan cacat 5%.<br>P(cacat) = 0,6 &times; 0,02 + 0,4 &times; 0,05 = 0,012 + 0,020 = <b>0,032</b>.<br>Bonus berpikir mundur: dari barang cacat, peluang ia lahir di mesin A = 0,012 : 0,032 = 3 : 8. Pola &ldquo;bobot &times; risiko, lalu dijumlah&rdquo; muncul terus di soal HOTS: pilih koin asli/palsu, urn I/II, jalur jalan raya/tol.</div>
+</section>
+
+<!-- 20. CONTOH SOAL BAB 2 (1-2) -->
+<section class="slide acc-purple" id="s-2g">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 2 (1 dari 2)</h2>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 1.</b> Peluang Andi lulus = 0,7; peluang Budi lulus = 0,8; keduanya saling bebas. Tentukan peluang <b>hanya satu orang</b> yang lulus!</div>
+  <div class="stepbox c-purple"><b class="t">Pembahasan</b><br>&ldquo;Hanya satu&rdquo; terpecah dua kasus saling lepas: (Andi lulus DAN Budi gagal) ATAU (Andi gagal DAN Budi lulus).<br>P(Andi gagal) = 1 &minus; 0,7 = 0,3; P(Budi gagal) = 1 &minus; 0,8 = 0,2.<br>Kasus 1: 0,7 &times; 0,2 = 0,14. Kasus 2: 0,3 &times; 0,8 = 0,24.<br>P = 0,14 + 0,24 = <b>0,38</b>.<br>Perhatikan bedanya dengan &ldquo;minimal satu lulus&rdquo;: 1 &minus; (0,3 &times; 0,2) = 0,94. Dua frasa, dua jawaban &mdash; baca soal dua kali.</div>
+  <div class="defbox"><b>Contoh 2.</b> Kotak berisi 6 merah dan 4 putih. Dua bola diambil satu per satu tanpa pengembalian. Tentukan P(merah lalu putih) dan P(kedua sama warna)!</div>
+  <div class="stepbox c-purple"><b class="t">Pembahasan</b><br>P(M lalu P) = 6 : 10 &times; 4 : 9 = 24 : 90 = <b>4 : 15</b> &mdash; cabang merah dahulu, lalu cabang putih dengan komposisi baru.<br>P(sama warna) = P(MM) + P(PP) &mdash; dua jalur berbeda yang tidak mungkin bersamaan.<br>P(MM) = 6 : 10 &times; 5 : 9 = 30 : 90; P(PP) = 4 : 10 &times; 3 : 9 = 12 : 90.<br>P = (30 + 12) : 90 = 42 : 90 = <b>7 : 15</b>.<br>Terlihat pola bab ini: pohon + &ldquo;kali sepanjang cabang, jumlah antarjalur&rdquo; = satu metode untuk semua soal cerita.</div>
+</section>
+
+<!-- 21. CONTOH SOAL BAB 2 (3) -->
+<section class="slide acc-purple" id="s-2h">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 2 (2 dari 2)</h2>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 3.</b> Dalam kelas, 40% siswa suka matematika, 60% suka fisika, dan 25% suka keduanya. Seorang siswa dipilih acak. Berapa peluang ia tidak menyukai keduanya?</div>
+  <div class="stepbox c-purple"><b class="t">Pembahasan</b><br>Langkah 1 &mdash; terjemahkan: &ldquo;tidak menyukai keduanya&rdquo; = (M&cup;F)<sup>c</sup>.<br>Langkah 2 &mdash; hitung gabungan dengan aturan umum: P(M&cup;F) = 0,4 + 0,6 &minus; 0,25 = 0,75.<br>Langkah 3 &mdash; komplemen: P = 1 &minus; 0,75 = <b>0,25</b>.<br>Cek dengan Venn (Lab 4): hanya M = 15, keduanya = 25, hanya F = 35 &rarr; total dalam lingkaran = 75, di luar = 25 siswa. Konsisten!</div>
+  <div class="callout"><b>Strategi tiga langkah untuk soal cerita peluang majemuk:</b> (1) beri nama kejadian dan tuliskan yang diketahui dalam simbol; (2) terjemahkan yang ditanya &mdash; &cup;, &cap;, |, atau komplemen; (3) pilih mesin: penjumlahan untuk &ldquo;atau&rdquo;, perkalian/pohon untuk &ldquo;dan&rdquo;, komplemen untuk &ldquo;paling sedikit / tidak&rdquo;. Sembilan dari sepuluh soal HOTS bab ini selesai dengan tiga langkah itu.</div>
+</section>
+
+<!-- 22. KUIS BAB 2 -->
+<section class="slide acc-purple" id="s-2q">
+  <h2>Latihan HOTS &mdash; Bab 2: Peluang Majemuk</h2>
+  <p class="sub">10 soal HOTS: bergaya aturan penjumlahan-perkalian, bersyarat, pohon, dan peluang total. Ingat: tulis dulu simbolnya sebelum menghitung.</p>
+  <div class="rule"></div>
+  <div id="q-bab2-body">
+    <div class="quiz-top"><span class="lvl" id="q-bab2-lvl"></span><span class="qcount">Soal <b id="q-bab2-num">1</b> / 10 &nbsp;&middot;&nbsp; Skor: <b id="q-bab2-score">0</b></span></div>
+    <div class="qtext" id="q-bab2-text"></div>
+    <div class="opts" id="q-bab2-opts"></div>
+    <div class="expbox" id="q-bab2-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-bab2-check">Periksa Jawaban</button>
+      <button class="btn ghost" id="q-bab2-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 23. DIVIDER BAB 3 -->
+<section class="slide divider acc-amber" id="s-d3">
+  <span class="dnum">03</span>
+  <p class="dkicker">BAB 03 &middot; PERMUTASI &amp; KOMBINASI</p>
+  <h1>Seni Menghitung<br>Cara Tanpa Menghitung</h1>
+  <ul class="dlist">
+    <li>Kaidah dasar memilih &amp; faktorial</li>
+    <li>Permutasi: saat urutan menjadi penting</li>
+    <li>Kombinasi: saat urutan tidak berarti</li>
+    <li>Unsur sama, susunan melingkar, syarat &ldquo;minimal&rdquo;</li>
+    <li>Jembatan emas: peluang berbasis kombinasi + 10 soal HOTS</li>
+  </ul>
+</section>
+
+<!-- 24. KAIDAH DASAR & FAKTORIAL -->
+<section class="slide acc-amber" id="s-3a">
+  <h2>Kaidah Dasar Memilih &amp; Faktorial</h2>
+  <p class="sub">Sebelum rumus P dan C, ada mesin yang lebih dasar: <b>kaidah perkalian bertahap</b>. Rumus besar nanti sebenarnya hanya mesin ini yang dirapikan.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Kaidah dasar:</b> jika suatu kejadian tersusun atas tahapan yang berurutan dengan k tahap, dan tahap ke-1 punya n<sub>1</sub> pilihan, tahap ke-2 punya n<sub>2</sub> pilihan, dan seterusnya, maka total kemungkinan = n<sub>1</sub> &times; n<sub>2</sub> &times; &hellip; &times; n<sub>k</sub>.</div>
+  <div class="stepbox c-amber"><b class="t">Ilustrasi</b><br>3 kemeja &times; 2 celana = 6 pasangan outfit.<br>Kode PIN 4 digit (0&ndash;9, boleh berulang) = 10 &times; 10 &times; 10 &times; 10 = 10.000 PIN.<br>Rute A&rarr;B ada 3 jalan, B&rarr;C ada 4 jalan &rarr; A&rarr;C lewat B = 12 rute. Tapi A&rarr;C langsung hanya 2 &rarr; total 14 (di sini juga dijumlahkan dua jalur yang saling lepas &mdash; terhubung dengan Bab 2!).</div>
+  <div class="formula fa">Faktorial<br>n! = n &times; (n&minus;1) &times; (n&minus;2) &times; &hellip; &times; 2 &times; 1, &nbsp; dan 0! = 1<br><small>Menyusun n objek berbeda dalam satu barisan: tahap 1 ada n pilihan, tahap 2 tersisa n&minus;1, &hellip; &rarr; n! susunan</small></div>
+  <table class="tbl">
+    <tr><th>n</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+    <tr><td><b>n!</b></td><td>1</td><td>1</td><td>2</td><td>6</td><td>24</td><td>120</td><td>720</td><td>5.040</td></tr>
+  </table>
+  <div class="callout"><b>Mengapa 0! = 1?</b> Karena ada tepat <b>satu cara</b> menyusun tidak ada apa-apa: susunan kosong. Selain itu sifat n! = n &times; (n&minus;1)! memaksa 1! = 1 &times; 0!, sehingga 0! = 1. Faktorial tumbuh begitu cepat: 10! = 3.628.800 &mdash; lebih banyak daripada detik dalam enam pekan.</div>
+</section>
+
+<!-- 25. PERMUTASI -->
+<section class="slide acc-amber" id="s-3b">
+  <h2>Permutasi: Ketika Urutan Berharga</h2>
+  <p class="sub">Permutasi = susunan objek dengan <b>memperhatikan urutan</b>. Kata kunci soal: <i>susunan, urutan, baris, juara, ketua-sekretaris-bendahara, huruf membentuk kata, kursi berjejer</i>.</p>
+  <div class="rule"></div>
+  <div class="formula fa">Permutasi r dari n objek berbeda<br>P(n, r) = n! : (n &minus; r)!<br><small>n objek, dipilih r lalu diatur urutannya: pilih r (tahap demi tahap) &rarr; n &times; (n&minus;1) &times; &hellip; &times; (n&minus;r+1)</small></div>
+  <div class="grid2">
+    <div>
+      <div class="mini acc-amber"><h4>Contoh: podium lomba</h4><p>Dari 8 atlet dipilih juara 1, 2, dan 3. Menukar dua nama berarti juara berbeda &rarr; urutan penting &rarr; P(8,3) = 8 &times; 7 &times; 6 = <b>336</b> susunan.</p></div>
+      <div class="mini acc-amber" style="margin-top:12px"><h4>Permutasi unsur sama</h4><p>n objek dengan kelompok kembar: susunan = n! : (p! &times; q! &times; &hellip;). Kembar di dalam satu kelompok tidak menciptakan susunan baru, maka faktorial kembarannya dibagi keluar. Kata <b>BEBEK</b> (B:2, E:2, K:1) &rarr; 5! : (2! &times; 2!) = 120 : 4 = <b>30</b> kata.</p></div>
+    </div>
+    <div>
+      <div class="mini acc-amber"><h4>Permutasi melingkar (keliling)</h4><p>n orang duduk mengelilingi meja bundar: (n&minus;1)! susunan. Memutar seluruh formasi tidak menciptakan susunan baru, jadi kunci satu orang sebagai jangkar &mdash; sisa n&minus;1 orang bebas mengatur diri.</p></div>
+      <div class="mini acc-amber" style="margin-top:12px"><h4>Kalung (melingkar + cermin)</h4><p>Kalung bisa dibalik, susunan cermin dianggap sama: (n&minus;1)! : 2. Dua langkah pengecualian: meja bundar kunci jangkar, kalung kunci jangkar lalu bagi dua.</p></div>
+    </div>
+  </div>
+  <div class="stepbox c-amber"><b class="t">Blok berdampingan (pola soal favorit)</b><br>6 orang duduk berjejer, dua orang tertentu harus selalu berdampingan.<br>Langkah 1: lekatkan keduanya menjadi <b>satu blok</b> &rarr; entitas yang diatur = 5 (blok + 4 orang).<br>Langkah 2: atur entitas = 5! = 120. Langkah 3: isi blok &mdash; dua orang bertukar posisi = 2 cara.<br>Total = 120 &times; 2 = <b>240</b>. Untuk meja bundar: (5&minus;1)! &times; 2 = 48. Pola &ldquo;blok &rarr; atur &rarr; isi blok&rdquo; berlaku untuk dua, tiga orang berdampingan, dan sebagainya.</div>
+</section>
+<!-- 26. LAB KALKULATOR P/C -->
+<section class="slide acc-amber" id="s-3c">
+  <h2>Lab 6 &mdash; Kalkulator Permutasi &amp; Kombinasi: Lihat Bedanya Secara Nyata</h2>
+  <p class="sub">Geser n dan r, lalu amati tiga hal: nilainya, daftar kombinasinya, dan bukti bahwa <b>satu kombinasi melahirkan r! permutasi</b>.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <label>n (banyak objek) <span class="lval" id="lbN">5</span><input type="range" id="kN" min="1" max="8" value="5" oninput="renderCalc()"></label>
+      <label>r (yang dipilih) <span class="lval" id="lbR">2</span><input type="range" id="kR" min="0" max="8" value="2" oninput="renderCalc()"></label>
+      <div class="labinfo" id="calcNote">Huruf A&ndash;H mewakili n objek. Kombinasi = sekumpulan huruf tanpa urutan; permutasi = urutan-urutannya.</div>
+    </div>
+    <div class="lgrow">
+      <div class="fcardrow">
+        <div class="fcard"><div class="fl">Faktorial</div><div class="fv" id="calcN"></div><div id="calcNf" style="font-size:12.5px;color:#64748b"></div></div>
+        <div class="fcard" style="border-top-color:#059669"><div class="fl" style="color:#059669">Permutasi P(n,r)</div><div class="fv" id="calcP"></div><div id="calcPf" style="font-size:12.5px;color:#64748b"></div></div>
+        <div class="fcard" style="border-top-color:#2563eb"><div class="fl" style="color:#2563eb">Kombinasi C(n,r)</div><div class="fv" id="calcC"></div><div id="calcCf" style="font-size:12.5px;color:#64748b"></div></div>
+      </div>
+      <div class="labinfo"><b>Daftar kombinasi C(n,r)</b> (urutan diabaikan):<div class="combowrap" id="calcList"></div></div>
+      <div class="labinfo" id="calcPerm" style="margin-top:10px"></div>
+      <div class="labinfo" id="calcRel" style="margin-top:10px"></div>
+    </div>
+  </div>
+  <div class="note"><b>Temuan yang harus terlintas:</b> P(n, r) selalu = C(n, r) &times; r!. Kombinasi adalah &ldquo;kelompok&rdquo; &mdash; setiap kelompok bisa diurutkan r! kali menjadi permutasi berbeda. Inilah alasan C tidak pernah melebihi P untuk n dan r yang sama, dan keduanya bertemu di r = 0 dan r = n.</div>
+</section>
+
+<!-- 27. KOMBINASI + PEMANDU -->
+<section class="slide acc-amber" id="s-3d">
+  <h2>Kombinasi &amp; Pemandu Keputusan: P atau C?</h2>
+  <p class="sub">Kombinasi = memilih anggota kelompok dengan <b>mengabaikan urutan</b>. Kata kunci soal: <i>memilih, dipilih sekaligus, tim, panitia, delegasi, komite, pengurus tanpa jabatan</i>.</p>
+  <div class="rule"></div>
+  <div class="formula fa">Kombinasi r dari n objek<br>C(n, r) = n! : (r! &times; (n &minus; r)!) &nbsp;&nbsp; = P(n, r) : r!<br><small>Permutasi dibagi r! &mdash; setiap kelompok r anggota muncul r! kali sebagai susunan berbeda, maka &ldquo;duplikatnya&rdquo; dilucuti</small></div>
+  <div class="grid2">
+    <div class="mini acc-amber"><h4>Sifat yang menghemat waktu</h4><p>C(n, 0) = C(n, n) = 1 &nbsp;&middot;&nbsp; C(n, 1) = n &nbsp;&middot;&nbsp; C(n, r) = C(n, n&minus;r) &mdash; memilih 5 dari 8 sama banyaknya dengan menyingkirkan 3 dari 8: C(8,5) = C(8,3) = 56. Pilih versi yang faktorialnya lebih kecil!</p></div>
+    <div class="mini acc-amber"><h4>Contoh instan</h4><p>Dari 10 siswa dipilih tim lomba 3 orang: C(10,3) = 120. Bandingkan: bila tim itu harus diberi jabatan ketua, sekretaris, bendahara &rarr; P(10,3) = 720. Angka 720 = 120 &times; 3! &mdash; hubungan P&ndash;C terlihat nyata.</p></div>
+  </div>
+  <h3>Pemandu Keputusan 4 Pertanyaan</h3>
+  <div class="stepbox c-amber"><b class="t">Tanya berurutan</b><br>
+  <b>1)</b> Memilih kelompok tanpa jabatan/posisi? &rarr; <b>Kombinasi C(n, r)</b>.<br>
+  <b>2)</b> Ada posisi, urutan, barisan, atau peringkat? &rarr; <b>Permutasi P(n, r)</b> (atau kaidah perkalian bertahap).<br>
+  <b>3)</b> Ada unsur kembar? &rarr; permutasi unsur sama: n! : (p! q! &hellip;).<br>
+  <b>4)</b> Susunan melingkar? &rarr; (n&minus;1)! &mdash; kalung: (n&minus;1)! : 2.<br>
+  <b>Uji pamungkas:</b> tukar posisi dua objek terpilih. Bila hasilnya <b>berbeda maknanya</b> (juara berbeda, kata berbeda) &rarr; permutasi. Bila hasilnya <b>setara</b> (anggota tim tetap sama) &rarr; kombinasi.</div>
+  <div class="warnbox"><b>Jebakan klasik #3 &mdash; nol di depan:</b> banyaknya bilangan 3-angka dari angka {0,1,2,3}: jangan asal hitung 4 &times; 3 &times; 2 = 24. Angka pertama tidak boleh 0 &rarr; 3 &times; 3 &times; 2 = <b>18</b>. Soal HOTS selalu menyelipkan larangan ini. Sebaliknya, susunan huruf/kartu tidak punya larangan &ldquo;nol depan&rdquo;.</div>
+</section>
+<!-- 28. LAB PANITIA + PELUANG KOMBINASI -->
+<section class="slide acc-amber" id="s-3e">
+  <h2>Lab 7 &mdash; Kombinasi Bersyarat &amp; Jembatan ke Peluang</h2>
+  <p class="sub">Syarat &ldquo;paling sedikit&rdquo; dalam pemilihan kelompok diselesaikan dengan <b>memecah kasus lalu menjumlah</b> &mdash; atau dengan <b>komplemen</b> bila kasus gagalnya lebih sedikit. Jalankan simulasi dan bandingkan kedua jalan.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <div class="lctl">
+      <label>Pria <span class="lval" id="lbP2">6</span><input type="range" id="nP" min="0" max="8" value="6" oninput="renderPanitia()"></label>
+      <label>Wanita <span class="lval" id="lbW2">4</span><input type="range" id="nW" min="0" max="8" value="4" oninput="renderPanitia()"></label>
+      <label>Banyak dipilih (k) <span class="lval" id="lbK">5</span><input type="range" id="nK" min="1" max="8" value="5" oninput="renderPanitia()"></label>
+      <label>Minimal wanita (t) <span class="lval" id="lbT">2</span><input type="range" id="nT" min="0" max="8" value="2" oninput="renderPanitia()"></label>
+    </div>
+    <div class="lgrow">
+      <div class="labinfo" id="panitiaMsg"></div>
+      <table class="tbl">
+        <tr><th>Komposisi</th><th>Perhitungan</th><th>Banyak cara</th></tr>
+        <tbody id="panitiaRows"></tbody>
+        <tr class="hi"><td colspan="2"><b>Total memenuhi syarat</b></td><td id="panitiaTotal"><b></b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="formula fa">Jembatan emas ke Bab 1&ndash;2: Peluang Berbasis Kombinasi<br>P(kejadian) = C(jalur menguntungkan) : C(total kemungkinan)<br><small>Dipakai saat pengambilan dilakukan &ldquo;sekaligus&rdquo; &mdash; semua kelompok berukuran sama dianggap sama mungkin</small></div>
+  <div class="stepbox c-amber"><b class="t">Buktikan kekonsistenannya</b><br>Kotak 5 merah &amp; 4 putih, dua bola diambil sekaligus. P(keduanya merah) =?<br>Cara Bab 1 (berurutan): 5 : 9 &times; 4 : 8 = 20 : 72 = 5 : 18.<br>Cara kombinasi: C(5,2) : C(9,2) = 10 : 36 = 5 : 18.<br>Dua jalan berbeda, satu jawaban &mdash; peluang memang konsisten; pilih jalan yang paling nyaman.</div>
+</section>
+
+<!-- 29. CONTOH SOAL BAB 3 (1-2) -->
+<section class="slide acc-amber" id="s-3f">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 3 (1 dari 2)</h2>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 1.</b> Banyak susunan huruf berbeda dari semua huruf kata <b>KOMBINASI</b> adalah&hellip;</div>
+  <div class="stepbox c-amber"><b class="t">Pembahasan</b><br>K-O-M-B-I-N-A-S-I: 9 huruf, dengan huruf I muncul 2 kali, sisanya tunggal.<br>Permutasi unsur sama: 9! : 2! = 362.880 : 2 = <b>181.440</b> susunan.<br>Cek logika: bila sembilan huruf itu semuanya unik, jawabannya 362.880; kembaran I meniadakan separuhnya karena dua posisi I yang tertukar tidak menghasilkan kata baru.</div>
+  <div class="defbox"><b>Contoh 2.</b> Dari 6 pria dan 4 wanita dipilih delegasi 5 orang dengan syarat <b>paling sedikit 2 wanita</b>. Banyak cara memilihnya adalah&hellip;</div>
+  <div class="stepbox c-amber"><b class="t">Pembahasan</b><br>&ldquo;Paling sedikit 2 wanita&rdquo; = tepat 2, atau tepat 3, atau tepat 4 wanita &mdash; tiga kasus saling lepas yang dijumlahkan.<br>Tepat 2W: C(4,2) &times; C(6,3) = 6 &times; 20 = 120.<br>Tepat 3W: C(4,3) &times; C(6,2) = 4 &times; 15 = 60.<br>Tepat 4W: C(4,4) &times; C(6,1) = 1 &times; 6 = 6.<br>Total = 120 + 60 + 6 = <b>186</b> cara.<br>Di Lab 7 kamu bisa memverifikasi angka ini: setel pria 6, wanita 4, k = 5, minimal wanita = 2.</div>
+</section>
+
+<!-- 30. CONTOH SOAL BAB 3 (3) -->
+<section class="slide acc-amber" id="s-3g">
+  <h2>Contoh Soal Tipe Ujian &mdash; Bab 3 (2 dari 2)</h2>
+  <div class="rule"></div>
+  <div class="defbox"><b>Contoh 3.</b> Dari 7 pria dan 6 wanita dipilih panitia 5 orang yang harus memuat <b>paling sedikit satu wanita</b>. Berapa banyak cara memilihnya?</div>
+  <div class="stepbox c-amber"><b class="t">Pembahasan</b><br>Jalan panjang: jumlahkan kasus 1W + 2W + 3W + 4W + 5W &mdash; lima perhitungan kombinasi.<br>Jalan pintas (komplemen): total semua panitia dikurangi panitia yang seluruhnya pria.<br>Total = C(13,5) = 1.287. Semua pria = C(7,5) = 21.<br>Jawaban = 1.287 &minus; 21 = <b>1.266</b> cara.<br>Terlihat lagi pola andalan kursus ini: <b>&ldquo;paling sedikit satu&rdquo; &rarr; komplemen &ldquo;tidak ada sama sekali&rdquo;</b> &mdash; kini dalam bahasa kombinasi, bukan peluang.</div>
+  <div class="callout"><b>Kesimpulan Bab 3:</b> sebelum berhitung, tanyakan dua hal &mdash; <i>urutan penting atau tidak?</i> (memilih P atau C) dan <i>ada syarat minimal?</i> (pecah kasus atau komplemen). Dua pertanyaan itu menuntun ke rumus yang tepat; selebihnya adalah aritmetika faktorial yang mekanis.</div>
+</section>
+
+<!-- 31. KUIS BAB 3 -->
+<section class="slide acc-amber" id="s-3q">
+  <h2>Latihan HOTS &mdash; Bab 3: Permutasi &amp; Kombinasi</h2>
+  <p class="sub">10 soal HOTS: unsur sama, melingkar, blok berdampingan, nol di depan, syarat minimal, dan peluang berbasis kombinasi.</p>
+  <div class="rule"></div>
+  <div id="q-bab3-body">
+    <div class="quiz-top"><span class="lvl" id="q-bab3-lvl"></span><span class="qcount">Soal <b id="q-bab3-num">1</b> / 10 &nbsp;&middot;&nbsp; Skor: <b id="q-bab3-score">0</b></span></div>
+    <div class="qtext" id="q-bab3-text"></div>
+    <div class="opts" id="q-bab3-opts"></div>
+    <div class="expbox" id="q-bab3-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-bab3-check">Periksa Jawaban</button>
+      <button class="btn ghost" id="q-bab3-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 32. REKAP NILAI -->
+<section class="slide acc-blue" id="s-score">
+  <h2>Rekap Nilai Latihanmu</h2>
+  <p class="sub">Skor 30 soal HOTS dari ketiga bab, tersimpan otomatis di perangkat ini.</p>
+  <div class="rule"></div>
+  <div id="score-overall"></div>
+  <div id="score-table"></div>
+  <div class="qctrl"><button class="btn ghost" id="btn-reset">Hapus Semua Skor &amp; Ulangi dari Awal</button></div>
+</section>
+
+<!-- 33. RANGKUMAN -->
+<section class="slide acc-rose" id="s-summary">
+  <h2>Rangkuman Rumus &amp; Strategi Ujian</h2>
+  <p class="sub">Seluruh amunisi tiga bab dalam satu halaman &mdash; baca ulang semalam sebelum ujian.</p>
+  <div class="rule"></div>
+  <table class="tbl">
+    <tr><th style="width:130px">Bab</th><th style="width:210px">Konsep</th><th>Rumus / Aturan</th></tr>
+    <tr><td rowspan="4" style="vertical-align:top"><b>1. Peluang</b></td><td>Rumus Laplace</td><td>P(A) = n(A) : n(S) &mdash; syarat: titik sampel sama mungkin</td></tr>
+    <tr><td>Peluang empiris</td><td>P(A) = f(A) : n &rarr; mendekati teoretis (Hukum Bilangan Besar)</td></tr>
+    <tr><td>Komplemen</td><td>P(A<sup>c</sup>) = 1 &minus; P(A)</td></tr>
+    <tr><td>Minimal satu</td><td>P(&ge;1 kejadian) = 1 &minus; P(tidak ada satu pun)</td></tr>
+    <tr><td rowspan="5" style="vertical-align:top"><b>2. Majemuk</b></td><td>Penjumlahan saling lepas</td><td>P(A&cup;B) = P(A) + P(B) &mdash; saat A&cap;B = &empty;</td></tr>
+    <tr><td>Penjumlahan umum</td><td>P(A&cup;B) = P(A) + P(B) &minus; P(A&cap;B)</td></tr>
+    <tr><td>Peluang bersyarat</td><td>P(A|B) = P(A&cap;B) : P(B), untuk P(B) &gt; 0</td></tr>
+    <tr><td>Perkalian</td><td>P(A&cap;B) = P(A) &times; P(B|A); saling bebas: P(A&cap;B) = P(A) &times; P(B)</td></tr>
+    <tr><td>Peluang total</td><td>P(B) = P(A) &middot; P(B|A) + P(A<sup>c</sup>) &middot; P(B|A<sup>c</sup>)</td></tr>
+    <tr><td rowspan="4" style="vertical-align:top"><b>3. P &amp; C</b></td><td>Faktorial</td><td>n! = n &times; (n&minus;1) &times; &hellip; &times; 1; 0! = 1</td></tr>
+    <tr><td>Permutasi</td><td>P(n,r) = n! : (n&minus;r)!; unsur sama: n! : (p! q! &hellip;); melingkar: (n&minus;1)!; kalung: (n&minus;1)! : 2</td></tr>
+    <tr><td>Kombinasi</td><td>C(n,r) = n! : (r! (n&minus;r)!) = P(n,r) : r!; C(n,r) = C(n, n&minus;r)</td></tr>
+    <tr><td>Peluang kombinasi</td><td>P = C(kasus menguntungkan) : C(total)</td></tr>
+  </table>
+  <h3>Enam Strategi Menaklukkan Soal HOTS</h3>
+  <div class="grid2">
+    <div class="mini acc-rose"><h4>1 &middot; Tulis ruang sampel dengan jujur</h4><p>Dua koin = 4 hasil, dua dadu = 36 hasil. Sebagian besar kesalahan peluang adalah kesalahan n(S).</p></div>
+    <div class="mini acc-rose"><h4>2 &middot; Terjemahkan bahasa ke simbol</h4><p>&ldquo;dan&rdquo; &rarr; &cap;, &ldquo;atau&rdquo; &rarr; &cup;, &ldquo;jika/diketahui&rdquo; &rarr; bersyarat, &ldquo;paling sedikit&rdquo; &rarr; komplemen.</p></div>
+    <div class="mini acc-rose"><h4>3 &middot; Buru komplemen bila jalur gagal sedikit</h4><p>&ldquo;Paling sedikit satu&rdquo; hampir selalu lebih cepat via 1 &minus; P(gagal total), baik dalam peluang maupun kombinasi.</p></div>
+    <div class="mini acc-rose"><h4>4 &middot; Pohon untuk &ldquo;dan&rdquo;, kasus untuk &ldquo;atau&rdquo;</h4><p>Kali sepanjang cabang pohon; jumlahkan antarjalur yang saling lepas. Tiga kasus peluang majemuk pun tuntas.</p></div>
+    <div class="mini acc-rose"><h4>5 &middot; Uji P vs C dengan menukar dua objek</h4><p>Tukar urutan mengubah makna? &rarr; permutasi. Tetap setara? &rarr; kombinasi. Waspada nol di depan bilangan.</p></div>
+    <div class="mini acc-rose"><h4>6 &middot; Cek kewajaran jawaban</h4><p>Peluang wajib di 0&ndash;1; jumlah peluang semua cabang = 1; P(A&cup;B) &ge; max(P(A), P(B)). Angka mustahil = sinyal salah hitung.</p></div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<nav id="navbar"><div class="nb-in">
+  <button class="nb-btn" id="btn-menu">Daftar Materi</button>
+  <button class="nb-btn" id="btn-prev">&larr; Sebelumnya</button>
+  <span id="counter">1 / 33</span>
+  <button class="nb-btn" id="btn-next">Berikutnya &rarr;</button>
+</div></nav>
+<script>
+/* ================= DATA 30 SOAL HOTS ================= */
+const QUIZ={};
+
+QUIZ.bab1={title:'Peluang',acc:'#059669',qs:[
+{lvl:'C4 &middot; Analisis',
+ q:'Sebuah dadu adil dilempar satu kali. Peluang muncul mata dadu yang merupakan bilangan kuadrat sempurna atau kelipatan 3 adalah&hellip;',
+ opts:['1/2','1/3','2/3','5/6','3/4'],
+ ans:2,
+ exp:'S = {1, 2, 3, 4, 5, 6}, n(S) = 6.<br>&bull; Kuadrat sempurna pada dadu: {1, 4} &rarr; 2 kejadian.<br>&bull; Kelipatan 3 pada dadu: {3, 6} &rarr; 2 kejadian.<br>Kedua himpunan TIDAK beririsan (tidak ada angka yang kuadrat sempurna sekaligus kelipatan 3), sehingga cukup dijumlah: banyak kejadian yang diinginkan = 2 + 2 = 4.<br>P = 4 : 6 = <b>2 : 3</b>. Jebakan yang menggoda: mengira kuadrat sempurna hanya {1} atau kelipatan 3 hanya {3} &mdash; telusuri keenam angka satu per satu.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Tiga uang logam setimbang dilempar bersamaan. Peluang muncul paling sedikit satu sisi gambar adalah&hellip;',
+ opts:['1/8','3/8','1/2','3/4','7/8'],
+ ans:4,
+ exp:'Ruang sampel: 2 &times; 2 &times; 2 = 8 titik sampel yang sama mungkin.<br>Kata kunci &ldquo;paling sedikit satu&rdquo; &rarr; komplemen: gagal total berarti TIDAK ada gambar sama sekali, yaitu ketiga koin angka.<br>P(tanpa gambar) = (1 : 2)<sup>3</sup> = 1 : 8.<br>P(minimal satu gambar) = 1 &minus; 1 : 8 = <b>7 : 8</b>.<br>Menghitung kasus langsung (tepat 1G + tepat 2G + tepat 3G = 3:8 + 3:8 + 1:8) memberi hasil sama, tetapi tiga kali lebih panjang.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Dua buah dadu dilempar undi bersamaan. Peluang muncul jumlah mata dadu sama dengan 8 atau 10 adalah&hellip;',
+ opts:['1/9','1/6','2/9','5/18','1/4'],
+ ans:2,
+ exp:'n(S) = 36 (pasangan terurut (a, b)).<br>Jumlah 8: (2,6), (3,5), (4,4), (5,3), (6,2) &rarr; 5 jalur.<br>Jumlah 10: (4,6), (5,5), (6,4) &rarr; 3 jalur.<br>Jumlah 8 dan jumlah 10 tidak mungkin bersamaan &rarr; saling lepas, boleh langsung dijumlah: 5 + 3 = 8 jalur.<br>P = 8 : 36 = <b>2 : 9</b>. Hafalkan peta jalur jumlah dua dadu: simetris memuncak di 7 (enam jalur).'},
+{lvl:'C5 &middot; Analisis',
+ q:'Dari tumpukan 52 kartu bridge diambil satu kartu secara acak. Peluang terambil kartu AS atau kartu berwarna merah adalah&hellip;',
+ opts:['7/13','15/26','1/2','15/52','4/13'],
+ ans:0,
+ exp:'Diketahui: banyak AS = 4, kartu merah = 26, dan AS yang sekaligus merah (AS hati, AS wajik) = 2.<br>&ldquo;Atau&rdquo; &rarr; gabungan; irisan harus dipotong agar tidak terhitung dua kali:<br>P(AS &cup; merah) = 4:52 + 26:52 &minus; 2:52 = 28 : 52 = <b>7 : 13</b>.<br>Tanpa memotong irisan, jawabannya 30:52 &mdash; jawaban pengecoh yang sengaja disediakan.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Sebuah kotak berisi 4 kelereng kuning, 6 kelereng hijau, dan 5 kelereng biru. Dua kelereng diambil satu per satu tanpa pengembalian. Peluang kedua kelereng yang terambil berwarna sama adalah&hellip;',
+ opts:['31/105','29/105','31/90','2/5','1/3'],
+ ans:0,
+ exp:'Total kelereng = 4 + 6 + 5 = 15. &ldquo;Warna sama&rdquo; pecah menjadi tiga kasus saling lepas:<br>&bull; Kuning-kuning: 4 : 15 &times; 3 : 14 = 12 : 210<br>&bull; Hijau-hijau: 6 : 15 &times; 5 : 14 = 30 : 210<br>&bull; Biru-biru: 5 : 15 &times; 4 : 14 = 20 : 210<br>Total = (12 + 30 + 20) : 210 = 62 : 210 = <b>31 : 105</b>.<br>Perhatikan penyebut tarikan kedua menjadi 14 &mdash; kesalahan umum adalah tetap memakai 15 (lupa tanpa pengembalian).'},
+{lvl:'C4 &middot; Analisis',
+ q:'Peluang Andi lulus ujian adalah 0,7 dan peluang Budi lulus adalah 0,8; keduanya saling bebas. Peluang hanya satu orang saja yang lulus adalah&hellip;',
+ opts:['0,24','0,38','0,42','0,50','0,56'],
+ ans:1,
+ exp:'&ldquo;Hanya satu&rdquo; = (Andi lulus &amp; Budi gagal) ATAU (Andi gagal &amp; Budi lulus) &mdash; dua kasus saling lepas.<br>P(Andi gagal) = 0,3 dan P(Budi gagal) = 0,2 (komplemen).<br>Kasus 1: 0,7 &times; 0,2 = 0,14. Kasus 2: 0,3 &times; 0,8 = 0,24.<br>P = 0,14 + 0,24 = <b>0,38</b>.<br>Bandingkan dengan pengecoh 0,94 = P(minimal satu lulus) = 1 &minus; (0,3 &times; 0,2), dan 0,56 = P(keduanya lulus). Tiga frasa berbeda &mdash; tiga jawaban berbeda.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Bilangan dua angka dibentuk dari kartu angka 1, 2, 3, 4, dan 5 tanpa pengulangan angka. Semua bilangan yang mungkin ditulis pada kertas identik lalu satu kertas diambil acak. Peluang terambil bilangan genap adalah&hellip;',
+ opts:['1/5','3/10','1/2','2/5','3/5'],
+ ans:3,
+ exp:'Langkah 1 &mdash; n(S): puluhan 5 pilihan, satuan 4 pilihan sisa &rarr; 5 &times; 4 = 20 bilangan.<br>Langkah 2 &mdash; bilangan genap: satuan wajib 2 atau 4 (2 pilihan); puluhan bebas dari 4 angka sisa &rarr; 2 &times; 4 = 8 bilangan.<br>P = 8 : 20 = <b>2 : 5</b>.<br>Strategi &ldquo;kunci posisi yang dibatasi lebih dahulu&rdquo; &mdash; di soal counting selalu mulai dari posisi paling terikat (di sini satuan).'},
+{lvl:'C5 &middot; Analisis',
+ q:'Seorang penembak memiliki peluang kena sasaran 2/3 untuk setiap tembakan, dan tiap tembakan saling bebas. Jika ia menembak tiga kali, peluang ia kena sasaran paling sedikit dua kali adalah&hellip;',
+ opts:['8/27','4/9','12/27','2/3','20/27'],
+ ans:4,
+ exp:'&ldquo;Paling sedikit dua&rdquo; = tepat dua kena ATAU tepat tiga kena.<br>Tepat 2 dari 3: pilih tembakan mana yang meleset &mdash; 3 posisi; peluang tiap pola (2 kena, 1 meleset) = 2:3 &times; 2:3 &times; 1:3 = 4:27 &rarr; total 3 &times; 4:27 = 12:27.<br>Tepat 3: (2:3)<sup>3</sup> = 8:27.<br>P = 12:27 + 8:27 = <b>20 : 27</b>.<br>Cara komplemen juga elegan: 1 &minus; P(kena 0) &minus; P(kena 1) = 1 &minus; 1:27 &minus; 6:27 = 20:27.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Dalam sebuah kotak terdapat 10 bola bernomor 1 sampai 10. Dua bola diambil sekaligus secara acak. Peluang hasil kali nomor kedua bola merupakan bilangan genap adalah&hellip;',
+ opts:['2/9','4/9','5/9','7/9','8/9'],
+ ans:3,
+ exp:'Hasil kali genap &hArr; minimal satu faktor genap. Komplemennya jauh lebih ringkas: hasil kali GANJIL &hArr; kedua bola ganjil.<br>Bola ganjil: {1, 3, 5, 7, 9} &rarr; 5 bola. Diambil sekaligus &rarr; kombinasi: C(5,2) : C(10,2) = 10 : 45 = 2 : 9.<br>P(kali genap) = 1 &minus; 2 : 9 = <b>7 : 9</b>.<br>Menghitung langsung berarti menjumlah tiga kasus (M+G, G+M, M+M) dengan kombinasi campuran &mdash; bisa, tetapi jauh lebih berisiko keliru.'},
+{lvl:'C6 &middot; Evaluasi',
+ q:'Dalam suatu kelas, 40% siswa menyukai matematika, 60% menyukai fisika, dan 25% menyukai keduanya. Seorang siswa dipilih secara acak. Peluang siswa tersebut tidak menyukai keduanya (maupun salah satunya) adalah&hellip;',
+ opts:['0,05','0,15','0,25','0,35','0,45'],
+ ans:2,
+ exp:'&ldquo;Tidak menyukai keduanya&rdquo; = komplemen dari &ldquo;menyukai minimal satu&rdquo; = (M &cup; F)<sup>c</sup>.<br>P(M &cup; F) = 0,4 + 0,6 &minus; 0,25 = 0,75 (aturan penjumlahan umum &mdash; irisan wajib dipotong).<br>P = 1 &minus; 0,75 = <b>0,25</b>.<br>Cek dengan Venn: hanya M = 15%, keduanya = 25%, hanya F = 35% &rarr; total dalam lingkaran 75%, di luar 25%. Konsisten. Pengecoh 0,05 berasal dari keliru menjumlah 0,4 + 0,6 = 1 lalu &ldquo;mengurangi 0,25 dua kali&rdquo;.'}
+]};
+
+QUIZ.bab2={title:'Peluang Majemuk',acc:'#7c3aed',qs:[
+{lvl:'C4 &middot; Analisis',
+ q:'Diketahui P(A) = 1/2, P(B) = 1/3, dan P(A&cap;B) = 1/6. Pernyataan yang tepat tentang P(A&cup;B) dan hubungan kejadian A, B adalah&hellip;',
+ opts:['P(A&cup;B) = 2/3 dan A, B saling bebas','P(A&cup;B) = 2/3 dan A, B tidak saling bebas','P(A&cup;B) = 5/6 dan A, B saling bebas','P(A&cup;B) = 5/6 dan A, B tidak saling bebas','P(A&cup;B) = 1/2 dan A, B saling lepas'],
+ ans:0,
+ exp:'Aturan penjumlahan umum: P(A&cup;B) = 1:2 + 1:3 &minus; 1:6 = 3:6 + 2:6 &minus; 1:6 = <b>2 : 3</b>.<br>Tes kebebasan: P(A) &times; P(B) = 1:2 &times; 1:3 = 1:6, dan kebetulan P(A&cap;B) = 1:6 juga &rarr; keduanya <b>saling bebas</b>.<br>Soal seperti ini menguji dua mesin sekaligus: potong irisan saat menjumlah, dan verifikasi kebebasan lewat perkalian &mdash; bukan lewat firasat.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Dua dadu dilempar. Jika diketahui jumlah mata dadu yang muncul adalah 8, peluang salah satu dadu menunjukkan angka 5 adalah&hellip;',
+ opts:['1/5','2/5','3/5','1/2','2/3'],
+ ans:1,
+ exp:'&ldquo;Jika diketahui&rdquo; &rarr; peluang bersyarat: ruang sampel menyusut ke jalur jumlah 8 saja:<br>{(2,6), (3,5), (4,4), (5,3), (6,2)} &rarr; 5 kemungkinan.<br>Yang memuat angka 5: (3,5) dan (5,3) &rarr; 2 kemungkinan.<br>P = 2 : 5.<br>Dalam simbol: P(A|B) = n(A&cap;B) : n(B) = 2 : 5. Kesalahan klasik: tetap membagi dengan 36 &mdash; padahal dunia sudah menyusut ke 5 kemungkinan.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Dari 100 siswa, 45 menyukai kopi, 30 menyukai teh, dan 20 menyukai keduanya. Dipilih satu siswa; jika ternyata ia menyukai kopi, peluang ia juga menyukai teh adalah&hellip;',
+ opts:['2/9','1/3','1/2','4/9','5/9'],
+ ans:3,
+ exp:'&ldquo;Jika ternyata menyukai kopi&rdquo; &rarr; bersyarat pada K: dunia menyusut ke 45 penyuka kopi.<br>Di antara mereka, penyuka teh (keduanya) ada 20 orang.<br>P(T|K) = 20 : 45 = <b>4 : 9</b>.<br>Dalam rumus: P(T|K) = P(T&cap;K) : P(K) = 20:100 dibagi 45:100 &mdash; angka 100 saling menghapus, menyisakan 20 : 45. Soal Venn + bersyarat adalah kombinasi paling sering muncul di TKA.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Sebuah kotak berisi 8 bola merah dan 4 bola putih. Dua bola diambil satu per satu tanpa pengembalian. Peluang bola KEDUA berwarna merah adalah&hellip;',
+ opts:['1/2','7/11','2/3','3/4','5/6'],
+ ans:2,
+ exp:'Bola kedua merah bisa lewat dua jalur:<br>&bull; Merah lalu merah: 8:12 &times; 7:11 = 56:132<br>&bull; Putih lalu merah: 4:12 &times; 8:11 = 32:132<br>P = (56 + 32) : 132 = 88 : 132 = <b>2 : 3</b>.<br>Temuan yang elegan: 2:3 = 8:12, sama dengan peluang bola PERTAMA merah! Tanpa informasi tarikan pertama, posisi kedua sama merahnya dengan posisi lain (prinsip simetri). Soal HOTS menyukai momen &ldquo;ternaya&rdquo; ini.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Tersedia dua urn. Urn I berisi 3 bola merah dan 2 bola putih; Urn II berisi 4 bola merah dan 3 bola putih. Sebuah dadu dilempar: jika muncul mata genap dipilih Urn I, jika ganjil dipilih Urn II, lalu satu bola diambil acak dari urn pilihan. Peluang terambil bola merah adalah&hellip;',
+ opts:['39/70','41/70','43/70','37/70','1/2'],
+ ans:1,
+ exp:'P(Urn I) = P(Urn II) = 3:6 = 1:2 (genap: 2,4,6; ganjil: 1,3,5).<br>Peluang total &mdash; jumlahkan dua jalur menuju bola merah:<br>&bull; Jalur I: 1:2 &times; 3:5 = 3:10 = 21:70<br>&bull; Jalur II: 1:2 &times; 4:7 = 2:7 = 20:70<br>P(merah) = 21:70 + 20:70 = <b>41 : 70</b>.<br>Sketsa pohonnya: dua cabang urn, tiap cabang bercabang warna. Sepanjang cabang dikali, antarjalur dijumlah.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Peluang hujan pada hari Sabtu adalah 0,6 dan pada hari Minggu 0,7. Jika peluang hujan pada kedua hari tersebut adalah 0,5, peluang hujan paling sedikit satu hari dalam akhir pekan adalah&hellip;',
+ opts:['0,6','0,7','0,75','0,8','0,9'],
+ ans:3,
+ exp:'&ldquo;Paling sedikit satu hari&rdquo; &rarr; gabungan: P(S &cup; M).<br>Aturan penjumlahan umum: P(S &cup; M) = 0,6 + 0,7 &minus; 0,5 = <b>0,8</b>.<br>Perhatikan bahwa P(S) + P(M) = 1,3 melebihi 1 &mdash; tidak ada masalah, justru sinyal bahwa kedua kejadian tumpang-tindih berat (hujan dua-duanya 0,5). Tanpa memotong irisan, jawaban mustahil 1,3 akan muncul.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Dari 52 kartu bridge diambil dua kartu satu per satu tanpa pengembalian. Peluang kedua kartu yang terambil adalah AS adalah&hellip;',
+ opts:['1/13','1/169','1/221','4/663','3/676'],
+ ans:2,
+ exp:'Kartu pertama AS: 4 : 52.<br>Kartu kedua AS: sisa AS tinggal 3 dari 51 kartu &rarr; 3 : 51.<br>P = 4:52 &times; 3:51 = 12 : 2.652 = <b>1 : 221</b>.<br>Pengecoh 1:169 berasal dari menganggap tarikan kedua tetap 4:52 (dengan pengembalian) &mdash; padahal soal tegas tanpa pengembalian. Selalu tanyakan: komposisi kotak berubah atau tidak setelah tarikan pertama?'},
+{lvl:'C5 &middot; Analisis',
+ q:'Peluang seorang siswa lulus matematika 4/5, lulus fisika 3/4, dan lulus keduanya 3/5. Peluang siswa tersebut TIDAK lulus keduanya adalah&hellip;',
+ opts:['1/20','1/10','3/20','1/5','1/40'],
+ ans:0,
+ exp:'&ldquo;Tidak lulus keduanya&rdquo; = gagal pada keduanya = komplemen dari &ldquo;lulus minimal satu&rdquo;.<br>P(lulus M &cup; F) = 4:5 + 3:4 &minus; 3:5 = 16:20 + 15:20 &minus; 12:20 = 19:20.<br>P(gagal keduanya) = 1 &minus; 19:20 = <b>1 : 20</b>.<br>Cara kedua: P(gagal M) = 1:5, P(gagal F) = 1:4; irisan gagal keduanya = 1:5 + 1:4 &minus; (1 &minus; 3:5) &hellip; hasilnya sama 1:20, hanya lebih panjang. Pilih komplemen gabungan.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Di sebuah perusahaan, 70% karyawan adalah pria dan 30% wanita. Peluang seorang karyawan pria mengikuti pelatihan adalah 0,3, sedangkan peluang karyawan wanita mengikuti pelatihan adalah 0,6. Dipilih satu karyawan secara acak, peluang ia mengikuti pelatihan adalah&hellip;',
+ opts:['0,36','0,30','0,39','0,42','0,45'],
+ ans:2,
+ exp:'Peluang total dengan dua jalur (pria/wanita):<br>&bull; Jalur pria: 0,7 &times; 0,3 = 0,21<br>&bull; Jalur wanita: 0,3 &times; 0,6 = 0,18<br>P(pelatihan) = 0,21 + 0,18 = <b>0,39</b>.<br>Struktur soal &ldquo;bobot kelompok &times; risiko dalam kelompok, lalu jumlahkan&rdquo;. Jangan menjumlahkan 0,3 + 0,6 = 0,9 &mdash; itu peluang bersyarat pada kelompok berbeda, bukan besaran yang boleh digabung begitu saja.'},
+{lvl:'C6 &middot; Evaluasi',
+ q:'Sebuah kotak berisi 3 bola putih dan beberapa bola merah. Dua bola diambil sekaligus secara acak. Jika peluang terambilnya dua-duanya bola merah adalah 2/7, banyak bola merah dalam kotak adalah&hellip;',
+ opts:['3','4','5','6','7'],
+ ans:1,
+ exp:'Misalkan banyak merah = n, total bola = n + 3. Diambil sekaligus &rarr; kombinasi:<br>C(n,2) : C(n+3,2) = 2:7 &rarr; [n(n&minus;1)] : [(n+3)(n+2)] = 2:7.<br>7n&sup2; &minus; 7n = 2n&sup2; + 10n + 12 &rarr; 5n&sup2; &minus; 17n &minus; 12 = 0 &rarr; (5n + 3)(n &minus; 4) = 0.<br>n = 4 (nilai negatif ditolak). <b>Banyak bola merah = 4</b>.<br>Cek mundur: C(4,2) : C(7,2) = 6 : 21 = 2:7. Soal &ldquo;mundur&rdquo; seperti ini menuntut perlakuan n sebagai variabel &mdash; ciri khas HOTS level evaluasi.'}
+]};
+
+QUIZ.bab3={title:'Permutasi & Kombinasi',acc:'#d97706',qs:[
+{lvl:'C4 &middot; Analisis',
+ q:'Banyak susunan huruf berbeda yang dapat dibentuk dari semua huruf kata MATEMATIKA adalah&hellip;',
+ opts:['45.360','75.600','151.200','302.400','907.200'],
+ ans:2,
+ exp:'Tuliskan 10 huruf: M-A-T-E-M-A-T-I-K-A.<br>Frekuensi: M = 2, A = 3, T = 2, E = 1, I = 1, K = 1 (total 10).<br>Permutasi unsur sama: 10! : (2! &times; 3! &times; 2!) = 3.628.800 : (2 &times; 6 &times; 2) = 3.628.800 : 24 = <b>151.200</b>.<br>Kesalahan umum: lupa menghitung ulang frekuensi setiap huruf. Biasakan membuat tabel frekuensi dulu sebelum memasukkan ke rumus.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Dari 6 pria dan 4 wanita akan dipilih delegasi beranggotakan 5 orang dengan syarat paling sedikit 2 wanita. Banyak cara memilih delegasi tersebut adalah&hellip;',
+ opts:['156','196','216','186','246'],
+ ans:3,
+ exp:'&ldquo;Paling sedikit 2 wanita&rdquo; pecah menjadi tiga kasus saling lepas (urutan tidak penting &rarr; kombinasi):<br>&bull; 2W &amp; 3P: C(4,2) &times; C(6,3) = 6 &times; 20 = 120<br>&bull; 3W &amp; 2P: C(4,3) &times; C(6,2) = 4 &times; 15 = 60<br>&bull; 4W &amp; 1P: C(4,4) &times; C(6,1) = 1 &times; 6 = 6<br>Total = 120 + 60 + 6 = <b>186</b>.<br>Setiap kasus = (kombinasi dari sisi wanita) &times; (kombinasi dari sisi pria) &mdash; kaidah perkalian bertahap di dalam tiap kasus.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Empat orang duduk mengelilingi meja bundar. Jika dua orang tertentu harus selalu berdampingan, banyak susunan duduk yang mungkin adalah&hellip;',
+ opts:['2','6','8','12','4'],
+ ans:4,
+ exp:'Langkah 1 &mdash; lekatkan pasangan itu menjadi satu blok &rarr; entitas yang melingkar = 3 (blok + 2 orang lain).<br>Langkah 2 &mdash; susunan melingkar 3 entitas: (3 &minus; 1)! = 2.<br>Langkah 3 &mdash; isi blok: dua orang bertukar tempat = 2 cara.<br>Total = 2 &times; 2 = <b>4</b> susunan.<br>Dua mesin digabung: blok berdampingan + faktor melingkar. Cek angka dasarnya: tanpa syarat, 4 orang melingkar = 3! = 6; syarat berdampingan mengecilkannya menjadi 4.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Banyak bilangan yang terdiri atas empat angka berbeda dan habis dibagi 5, yang dapat dibentuk dari angka 0, 1, 2, 3, dan 4 adalah&hellip;',
+ opts:['18','24','30','36','42'],
+ ans:1,
+ exp:'Habis dibagi 5 &rarr; satuan 0 atau 5. Angka 5 tidak tersedia, jadi <b>satuan wajib 0</b> &mdash; hanya satu kasus.<br>Satuan = 0. Ribuan tidak boleh 0: pilihan 4 (angka 1&ndash;4). Ratusan: 3 sisa. Puluhan: 2 sisa.<br>Total = 4 &times; 3 &times; 2 = <b>24</b> bilangan.<br>Bandingkan bila angka 5 tersedia: kasus satuan 0 dan satuan 5 harus dipecah &mdash; ribuan pada kasus satuan 5 tidak dibatasi nol. Jebakan &ldquo;nol di depan&rdquo; + syarat habis dibagi muncul berpasangan di soal TKA.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Lima orang (termasuk Andi dan Bani) duduk pada lima kursi berjejer. Andi harus duduk di kursi paling kiri dan Bani tidak boleh di kursi paling kanan. Banyak susunan duduk adalah&hellip;',
+ opts:['12','24','18','30','36'],
+ ans:2,
+ exp:'Kunci posisi terikat dahulu:<br>&bull; Kursi 1 (paling kiri): Andi &mdash; terkunci, 1 cara.<br>&bull; Bani: tersisa kursi 2, 3, 4, 5; kursi 5 (paling kanan) dilarang &rarr; 3 pilihan.<br>&bull; Tiga orang sisa mengisi tiga kursi: 3! = 6 cara.<br>Total = 1 &times; 3 &times; 6 = <b>18</b> susunan.<br>Strategi umum soal kursi berjejer: urutkan pengerjaan dari posisi paling banyak larangannya ke paling bebas.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Dari 7 pria dan 6 wanita dipilih panitia 5 orang. Banyak cara memilih jika panitia harus memiliki paling sedikit satu wanita adalah&hellip;',
+ opts:['792','1.197','1.245','1.266','1.287'],
+ ans:3,
+ exp:'Jalan pintas komplemen (hanya satu kasus &ldquo;gagal&rdquo;: tanpa wanita sama sekali):<br>Total panitia tanpa syarat: C(13,5) = 1.287.<br>Panitia seluruhnya pria: C(7,5) = 21.<br>Jawaban = 1.287 &minus; 21 = <b>1.266</b> cara.<br>Jalan panjang (kasus 1W+2W+3W+4W+5W) memberi 6 &times; 210 + 15 &times; 119 + 20 &times; 35 + 15 &times; 7 + 1 &times; 0 = 1.266 &mdash; sama, tapi lima kali lebih lama. Pilih komplemen saat &ldquo;paling sedikit satu&rdquo;.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Banyak cara memilih 5 kartu dari 52 kartu bridge sehingga kelima kartu semuanya kartu hati adalah&hellip;',
+ opts:['1.287','715','5.005','6.188','154.440'],
+ ans:0,
+ exp:'Memilih 5 kartu dari 13 kartu hati, urutan tidak penting &rarr; kombinasi:<br>C(13,5) = 13! : (5! &times; 8!) = (13 &times; 12 &times; 11 &times; 10 &times; 9) : (5 &times; 4 &times; 3 &times; 2 &times; 1) = 154.440 : 120 = <b>1.287</b>.<br>Triks praktis: batalkan faktorial secara bertahap &mdash; 12:5!, 12:4, dst. Pengecoh 154.440 adalah pembilangnya sebelum dibagi 5!; 6.188 = C(13,6) dan 715 = C(13,4) adalah kombinasi tetangganya.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Banyak ruas garis yang dapat dibuat dengan menghubungkan dua titik sudut dari sebuah segi delapan (oktagon), tidak termasuk sisi-sisinya, adalah&hellip;',
+ opts:['16','24','20','28','40'],
+ ans:2,
+ exp:'Setiap pasangan titik sudut menghasilkan satu ruas garis &rarr; C(8,2) = 28 pasangan.<br>Di antara 28 itu, 8 ruas adalah sisi oktagon &mdash; harus dikeluarkan.<br>Diagonal = 28 &minus; 8 = <b>20</b>.<br>Rumus umum diagonal segi-n: C(n,2) &minus; n = n(n&minus;3) : 2. Soal geometri yang sesungguhnya dijawab dengan kombinasi &mdash; bukti bahwa P &amp; C adalah alat hitung lintas topik.'},
+{lvl:'C4 &middot; Analisis',
+ q:'Banyak susunan berbeda dari semua huruf kata SUSU adalah&hellip;',
+ opts:['4','6','12','24','8'],
+ ans:1,
+ exp:'Empat huruf: S = 2, U = 2.<br>Permutasi unsur sama: 4! : (2! &times; 2!) = 24 : 4 = <b>6</b>.<br>Dapat diperiksa dengan mendaftar langsung: SSUU, SUSU, SUUS, USSU, USUS, UUSS &mdash; tepat enam. Untuk kata pendek, daftar manual adalah alat verifikasi termurah; untuk kata panjang, andalkan rumus plus cek frekuensi.'},
+{lvl:'C5 &middot; Analisis',
+ q:'Sebuah kotak berisi 5 bola merah dan 4 bola putih. Tiga bola diambil sekaligus secara acak. Peluang terambil tepat dua bola merah adalah&hellip;',
+ opts:['5/21','2/7','10/21','5/12','4/9'],
+ ans:2,
+ exp:'Diambil sekaligus &rarr; gunakan kombinasi pada seluruh kelompok C(9,3) = 84.<br>Kasus menguntungkan (tepat 2 merah &amp; 1 putih): C(5,2) &times; C(4,1) = 10 &times; 4 = 40.<br>P = 40 : 84 = <b>10 : 21</b>.<br>Cek silang dengan jalur berurutan (Bab 1): P(MMP) + P(MPM) + P(PMM) = 3 &times; (5:9 &times; 4:8 &times; 4:7) = 3 &times; 80:504 = 240:504 = 10:21. Dua metode, satu jawaban &mdash; kombinasi lebih ringkas ketika bola diambil sekaligus.'}
+]};
+</script>
+<script>
+/* ================= LAB HELPERS ================= */
+const $=id=>document.getElementById(id);
+const LETTERS=['A','B','C','D','E'];
+function fmt(n){
+  if(n===null||n===undefined||!isFinite(n))return'\u2014';
+  const r=Math.round(n*10000)/10000;
+  let s=String(r);
+  if(s.indexOf('e')>-1)s=r.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
+  return s.replace('.',',');
+}
+function pct(x){return fmt(x*100)+'%';}
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function frac(n,d){
+  if(!d)return'\u2014';
+  const g=gcd(Math.abs(n),Math.abs(d))||1;
+  const nn=n/g,dd=d/g;
+  return dd===1?String(nn):(nn+':'+dd);
+}
+function fact(n){let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
+function comb(n,r){
+  if(r<0||r>n||n<0)return 0;
+  r=Math.min(r,n-r);
+  let num=1;
+  for(let i=0;i<r;i++)num=num*(n-i)/(i+1);
+  return Math.round(num);
+}
+function popcount(x){let c=0;while(x){c+=x&1;x>>=1;}return c;}
+function permute(arr){
+  if(arr.length<=1)return[arr.slice()];
+  const out=[];
+  arr.forEach((v,i)=>{
+    const rest=arr.slice(0,i).concat(arr.slice(i+1));
+    permute(rest).forEach(p=>out.push([v].concat(p)));
+  });
+  return out;
+}
+
+/* ================= LAB 1: KOIN ================= */
+let cA=0,cG=0;
+function flipCoins(n){
+  for(let i=0;i<n;i++){if(Math.random()<0.5)cA++;else cG++;}
+  renderCoins();
+}
+function resetCoins(){cA=0;cG=0;renderCoins();}
+function renderCoins(){
+  const tot=cA+cG;
+  const pa=tot?cA/tot:0.5,pg=tot?cG/tot:0.5;
+  $('coinCntA').textContent=fmt(cA);
+  $('coinCntG').textContent=fmt(cG);
+  $('coinPctA').textContent=pct(pa);
+  $('coinPctG').textContent=pct(pg);
+  $('coinBarA').style.width=(pa*100)+'%';
+  $('coinBarG').style.width=(pg*100)+'%';
+  $('coinTotal').textContent=fmt(tot);
+  if(!tot){$('coinGap').textContent='0,0';$('coinMsg').textContent='Tekan tombol untuk mulai.';return;}
+  const gap=Math.abs(pa-0.5)*100;
+  $('coinGap').textContent=fmt(gap);
+  $('coinMsg').textContent=gap<3?'Sangat dekat ke 50% \u2014 Hukum Bilangan Besar terlihat!':gap<10?'Mulai merapat ke 50%. Tambah lagi lemparannya.':'Masih bergolak \u2014 wajar untuk data sedikit. Tambah lemparan!';
+}
+
+/* ================= LAB 2: DUA DADU ================= */
+let dSums={},dTotal=0;
+const DTHEO={2:1,3:2,4:3,5:4,6:5,7:6,8:5,9:4,10:3,11:2,12:1};
+function rollDice(n){
+  for(let i=0;i<n;i++){
+    const a=1+Math.floor(Math.random()*6),b=1+Math.floor(Math.random()*6);
+    dSums[a+b]=(dSums[a+b]||0)+1;
+    dTotal++;
+  }
+  renderDice();
+}
+function resetDice(){dSums={};dTotal=0;renderDice();}
+function renderDice(){
+  let h='';
+  for(let s=2;s<=12;s++){
+    const emp=dTotal?(dSums[s]||0)/dTotal:0;
+    const theo=DTHEO[s]/36;
+    const he=Math.min(100,emp/0.17*100),ht=Math.min(100,theo/0.17*100);
+    h+='<div class="hcol"><div class="hbars"><i class="he" style="height:'+(dTotal?he:0)+'%"></i><i class="ht" style="height:'+ht+'%"></i></div>';
+    h+='<div class="hval">'+(dTotal?fmt(emp*100):'\u00A0')+'</div><div class="hlab">'+s+'</div></div>';
+  }
+  $('diceHist').innerHTML=h;
+  $('diceTotal').textContent=fmt(dTotal);
+}
+
+/* ================= LAB 3: KOTAK BOLA ================= */
+function updateBox(){
+  const m=+$('boxM').value,p=+$('boxP').value,b=+$('boxB').value,rep=$('boxRep').checked;
+  $('lbM').textContent=m;$('lbP').textContent=p;$('lbB').textContent=b;
+  const n=m+p+b;
+  let bh='';
+  for(let i=0;i<m;i++)bh+='<span class="ball br">M</span>';
+  for(let i=0;i<p;i++)bh+='<span class="ball bp">P</span>';
+  for(let i=0;i<b;i++)bh+='<span class="ball bb">B</span>';
+  $('boxBalls').innerHTML=bh;
+  const d2=n*(n-1),nr=n-m;
+  function cell(num,den){return frac(num,den)+' \u2248 '+fmt(num/den);}
+  $('bx1').innerHTML=cell(m,n);
+  $('bx2').innerHTML=cell(m,n); /* P(bola kedua merah) = m/n pada kedua mode */
+  if(rep){
+    $('bx3').innerHTML=cell(m*m,n*n);
+    $('bx4').innerHTML=cell(m*m+p*p+b*b,n*n);
+    $('bx5').innerHTML=cell(n*n-nr*nr,n*n);
+  }else{
+    $('bx3').innerHTML=cell(m*(m-1),d2);
+    $('bx4').innerHTML=cell(m*(m-1)+p*(p-1)+b*(b-1),d2);
+    $('bx5').innerHTML=cell(d2-nr*(nr-1),d2);
+  }
+  $('boxDrawMsg').innerHTML='Mode: <b>'+(rep?'dengan':'tanpa')+' pengembalian</b> \u00B7 Total bola: <b>'+n+'</b>. Klik &ldquo;Ambil 2 Bola Acak&rdquo; untuk mencoba.';
+}
+function drawTwo(){
+  const m=+$('boxM').value,p=+$('boxP').value,b=+$('boxB').value;
+  const arr=[];
+  for(let i=0;i<m;i++)arr.push('br');
+  for(let i=0;i<p;i++)arr.push('bp');
+  for(let i=0;i<b;i++)arr.push('bb');
+  const i1=Math.floor(Math.random()*arr.length);
+  let i2=Math.floor(Math.random()*(arr.length-1));
+  if(i2>=i1)i2++;
+  const names={br:'MERAH',bp:'PUTIH',bb:'BIRU'};
+  let bh='';
+  for(let i=0;i<arr.length;i++){
+    bh+='<span class="ball '+arr[i]+((i===i1||i===i2)?' picked':'')+'">'+(arr[i]==='br'?'M':arr[i]==='bp'?'P':'B')+'</span>';
+  }
+  $('boxBalls').innerHTML=bh;
+  const c1=arr[i1],c2=arr[i2];
+  $('boxDrawMsg').innerHTML='Hasil tarikan: <b>'+names[c1]+'</b> lalu <b>'+names[c2]+'</b>'+(c1===c2?' \u2014 warna sama!':' \u2014 warna berbeda.');
+}
+
+/* ================= LAB 4: VENN ================= */
+function vennSlide(id){
+  const g=x=>+$('v'+x).value;
+  const a=g('A'),b=g('B'),c=g('C');
+  const rest=id==='vA'?b+c:(id==='vB'?a+c:a+b);
+  const cur=+$(id).value,mx=100-rest;
+  if(cur>mx)$(id).value=mx;
+  $('lbvA').textContent=$('vA').value;
+  $('lbvB').textContent=$('vB').value;
+  $('lbvC').textContent=$('vC').value;
+  renderVenn();
+}
+function renderVenn(){
+  const a=+$('vA').value,b=+$('vB').value,c=+$('vC').value,d=100-a-b-c;
+  $('vTxtA').textContent=a;$('vTxtC').textContent=c;$('vTxtB').textContent=b;$('vTxtD').textContent=d;
+  const PA=(a+c)/100,PB=(b+c)/100,PI=c/100,PU=(a+b+c)/100;
+  const okb=b+c>0,oka=a+c>0;
+  const ind=Math.abs(PA*PB-PI)<1e-9;
+  $('vennHint').innerHTML='Diluar kedua lingkaran: <b>'+d+' siswa</b>. Cek kebebasan: P(A)\u00D7P(B) = '+fmt(PA*PB)+' vs P(A\u2229B) = '+fmt(PI)+' \u2192 <b>'+(ind?'saling bebas':'TIDAK saling bebas')+'</b>.';
+  let h='<tr><th>Besaran</th><th>Nilai</th><th>Besaran</th><th>Nilai</th></tr>';
+  h+='<tr><td>P(A)</td><td>'+fmt(PA)+'</td><td>P(B)</td><td>'+fmt(PB)+'</td></tr>';
+  h+='<tr><td>P(A\u2229B)</td><td>'+fmt(PI)+'</td><td>P(A\u222AB)</td><td>'+fmt(PU)+'</td></tr>';
+  h+='<tr><td>P(A saja)</td><td>'+fmt(a/100)+'</td><td>P(B saja)</td><td>'+fmt(b/100)+'</td></tr>';
+  h+='<tr><td>P(A|B)</td><td>'+(okb?frac(c,b+c)+' \u2248 '+fmt(c/(b+c)):'\u2014')+'</td><td>P(B|A)</td><td>'+(oka?frac(c,a+c)+' \u2248 '+fmt(c/(a+c)):'\u2014')+'</td></tr>';
+  h+='<tr><td>P(luar keduanya)</td><td>'+fmt(d/100)+'</td><td>Status kebebasan</td><td><b>'+(ind?'saling bebas':'tidak bebas')+'</b></td></tr>';
+  $('vennStats').innerHTML=h;
+}
+
+/* ================= LAB 5: POHON PELUANG ================= */
+function renderTree(){
+  const m=+$('tM').value,p=+$('tP').value,rep=$('tRep').checked;
+  $('lbTm').textContent=m;$('lbTp').textContent=p;
+  const T=m+p;
+  /* Peluang tarikan KEDUA bergantung warna tarikan pertama saat tanpa pengembalian:
+     setelah merah keluar -> sisa (m-1) merah & p putih;
+     setelah putih keluar -> sisa m merah & (p-1) putih. */
+  const mr=rep?m:m-1, pr=rep?p:p, mw=rep?m:m, pw=rep?p:p-1;
+  const S=rep?T:T-1;
+  const pMM=m/T*mr/S,pMP=m/T*pr/S,pPM=p/T*mw/S,pPP=p/T*pw/S;
+  const nMM=m*mr,nMP=m*pr,nPM=p*mw,nPP=p*pw,dMM=T*S;
+  const frMR=rep?frac(m,T):frac(m-1,T-1), frPR=rep?frac(p,T):frac(p,T-1);
+  const frMW=rep?frac(m,T):frac(m,T-1), frPW=rep?frac(p,T):frac(p-1,T-1);
+  let h='<div><span class="tnode">Kotak: '+m+' Merah \u00B7 '+p+' Putih</span></div>';
+  h+='<div class="tbranch">';
+  h+='<div class="tsub"><div class="tedge">Tarikan 1 \u2192 <b>Merah</b> \u00B7 P = '+frac(m,T)+'</div><div class="tbranch">';
+  h+='<div class="tleaf">lalu <b>Merah</b> \u00B7 '+frMR+'<br>P(MM) = '+frac(nMM,dMM)+' \u2248 '+fmt(pMM)+'</div>';
+  h+='<div class="tleaf">lalu <b>Putih</b> \u00B7 '+frPR+'<br>P(MP) = '+frac(nMP,dMM)+' \u2248 '+fmt(pMP)+'</div>';
+  h+='</div></div>';
+  h+='<div class="tsub"><div class="tedge">Tarikan 1 \u2192 <b>Putih</b> \u00B7 P = '+frac(p,T)+'</div><div class="tbranch">';
+  h+='<div class="tleaf">lalu <b>Merah</b> \u00B7 '+frMW+'<br>P(PM) = '+frac(nPM,dMM)+' \u2248 '+fmt(pPM)+'</div>';
+  h+='<div class="tleaf">lalu <b>Putih</b> \u00B7 '+frPW+'<br>P(PP) = '+frac(nPP,dMM)+' \u2248 '+fmt(pPP)+'</div>';
+  h+='</div></div>';
+  h+='</div>';
+  const tot=pMM+pMP+pPM+pPP;
+  h+='<div class="tsum">Cek jumlah semua jalur: '+fmt(pMM)+' + '+fmt(pMP)+' + '+fmt(pPM)+' + '+fmt(pPP)+' = '+fmt(tot)+' \u2014 selalu tepat 1.</div>';
+  h+='<div class="labinfo" style="margin-top:10px">P(keduanya merah) = <b>'+frac(nMM,dMM)+' \u2248 '+fmt(pMM)+'</b> \u00B7 P(minimal satu putih) = <b>'+frac(nMP+nPM+nPP,dMM)+' \u2248 '+fmt(1-pMM)+'</b>'+(rep?' (mode: dengan pengembalian \u2014 komposisi tidak berubah)':' (mode: tanpa pengembalian \u2014 komposisi bergeser)')+'.</div>';
+  $('treeBox').innerHTML=h;
+  $('treeMsg').innerHTML='Total bola: <b>'+T+'</b>. '+(rep?'Dengan pengembalian: peluang tarikan kedua sama dengan pertama.':'Tanpa pengembalian: penyebut tarikan kedua menjadi '+(T-1)+' dan komposisinya bergeser.')+'';
+}
+</script>
+<script>
+/* ================= LAB 6: KALKULATOR nPr / nCr ================= */
+function renderCalc(){
+  const n=+$('kN').value;
+  let r=+$('kR').value;
+  $('kR').max=n;
+  if(r>n){r=n;$('kR').value=n;}
+  $('lbN').textContent=n;$('lbR').textContent=r;
+  const fn=fact(n),P=fact(n)/fact(n-r),C=comb(n,r);
+  $('calcN').innerHTML=fmt(fn);
+  $('calcNf').innerHTML=n+'! = 1\u00D72\u00D7\u2026\u00D7'+n;
+  $('calcP').innerHTML=fmt(P);
+  $('calcPf').innerHTML='P('+n+','+r+') = '+n+'! : ('+n+'\u2212'+r+')! = '+fmt(fn)+' : '+fmt(fact(n-r));
+  $('calcC').innerHTML=fmt(C);
+  $('calcCf').innerHTML='C('+n+','+r+') = '+n+'! : ('+r+'! \u00D7 '+(n-r)+'!) = P : '+r+'!';
+  /* daftar kombinasi (bitmask) */
+  const L='ABCDEFGH'.slice(0,n),combos=[];
+  for(let msk=0;msk<(1<<n);msk++){
+    if(popcount(msk)===r){
+      let s='';
+      for(let i=0;i<n;i++)if(msk&(1<<i))s+=L[i];
+      combos.push(s);
+    }
+  }
+  let h=combos.slice(0,24).map(s=>'<span class="combo">'+s.split('').join('\u2009')+'</span>').join(' ');
+  if(combos.length>24)h+=' <b style="color:#92400e">\u2026+'+fmt(combos.length-24)+' lagi</b>';
+  if(r===0)h='<span style="color:#92400e">memilih kosong \u2014 tepat 1 cara (kelompok hampa)</span>';
+  if(r===n)h+=' <span style="color:#92400e">\u2190 memilih semua: 1 kelompok</span>';
+  $('calcList').innerHTML=h;
+  /* permutasi dari kombinasi pertama */
+  let ph='';
+  if(r>0&&r<=4&&combos.length){
+    const first=combos[0].split('');
+    const ps=permute(first);
+    ph='<b>Buktinya:</b> kombinasi <b>'+first.join('')+'</b> punya r! = '+fact(r)+' susunan urutan: '+ps.map(p=>'<span class="combo p">'+p.join('\u2009')+'</span>').join(' ')+(ps.length>24?' \u2026':'')+' \u2192 total permutasi = C \u00D7 r!.';
+  }else if(r>4){
+    ph='<b>Buktinya:</b> setiap kombinasi punya r! = '+fact(r)+' susunan urutan (terlalu banyak untuk didaftar) \u2192 P = C \u00D7 r!.';
+  }
+  $('calcPerm').innerHTML=ph;
+  $('calcRel').innerHTML='<b>Hubungan kunci:</b> P('+n+','+r+') = C('+n+','+r+') \u00D7 '+r+'! \u2192 '+fmt(P)+' = '+fmt(C)+' \u00D7 '+fmt(fact(r))+'.'+(r>0&&r<n?' Perhatikan P > C: urutan menambah banyak kemungkinan.':'');
+}
+
+/* ================= LAB 7: PANITIA BERSYARAT ================= */
+function renderPanitia(){
+  const p=+$('nP').value,w=+$('nW').value;
+  let k=+$('nK').value;
+  let t=+$('nT').value;
+  $('lbP2').textContent=p;$('lbW2').textContent=w;
+  if(k>p+w){k=p+w;$('nK').value=k;}
+  $('nT').max=k;
+  if(t>k){t=k;$('nT').value=k;}
+  $('lbK').textContent=k;$('lbT').textContent=t;
+  if(k>p+w){
+    $('panitiaMsg').innerHTML='<b>Kursi melebihi total orang.</b> Kecilkan k.';
+    $('panitiaRows').innerHTML='';$('panitiaTotal').innerHTML='\u2014';
+    return;
+  }
+  let rows='',total=0;
+  for(let i=t;i<=Math.min(k,w);i++){
+    const j=k-i;
+    if(j>p)continue;
+    const v=comb(w,i)*comb(p,j);
+    total+=v;
+    rows+='<tr><td>'+i+' wanita & '+j+' pria</td><td>C('+w+','+i+') \u00D7 C('+p+','+j+') = '+fmt(comb(w,i))+' \u00D7 '+fmt(comb(p,j))+'</td><td><b>'+fmt(v)+'</b></td></tr>';
+  }
+  if(!rows)rows='<tr><td colspan="3">Tidak ada komposisi yang memenuhi syarat.</td></tr>';
+  $('panitiaRows').innerHTML=rows;
+  $('panitiaTotal').innerHTML=fmt(total);
+  let msg='Semua panitia tanpa syarat: C('+(p+w)+','+k+') = '+fmt(comb(p+w,k))+' cara.';
+  if(t===1&&k<=p)msg='Cara pintas komplemen: C('+(p+w)+','+k+') \u2212 C('+p+','+k+') = '+fmt(comb(p+w,k))+' \u2212 '+fmt(comb(p,k))+' = <b>'+fmt(comb(p+w,k)-comb(p,k))+'</b> \u2014 sama dengan jumlah seluruh kasus di tabel.';
+  else if(t>1)msg='Cara pintas komplemen untuk t>1: C('+(p+w)+','+k+') \u2212 [C('+w+',0)C('+p+','+k+') + \u2026 + C('+w+','+(t-1)+')C('+p+','+(k-t+1)+')] \u2014 pecah kasus tetap paling jelas.';
+  else msg='t = 0 berarti tanpa syarat: C('+(p+w)+','+k+') = '+fmt(comb(p+w,k))+' cara.';
+  $('panitiaMsg').innerHTML=msg;
+}
+</script>
+<script>
+/* ================= MESIN NAVIGASI ================= */
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,k)=>s.classList.toggle('active',k===cur));
+  $('pbar').style.width=((cur+1)/slides.length*100)+'%';
+  $('counter').textContent=(cur+1)+' / '+slides.length;
+  window.scrollTo({top:0,behavior:'auto'});
+  if(slides[cur].id==='s-score')renderScores();
+}
+function goId(id){const k=slides.findIndex(s=>s.id===id);if(k>=0)go(k);}
+
+/* ================= MESIN KUIS ================= */
+const qState={};
+Object.keys(QUIZ).forEach(k=>{qState[k]={i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]};});
+const origBody={};
+
+function qRender(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  st.sel=null;st.checked=false;
+  $('q-'+k+'-num').textContent=st.i+1;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-lvl').innerHTML=q.lvl;
+  $('q-'+k+'-text').innerHTML=q.q;
+  const box=$('q-'+k+'-opts');box.innerHTML='';
+  q.opts.forEach((t,idx)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='opt';
+    b.innerHTML='<span class="optletter">'+LETTERS[idx]+'</span><span>'+t+'</span>';
+    b.addEventListener('click',()=>{
+      if(st.checked)return;
+      st.sel=idx;
+      [...box.children].forEach((c,j)=>c.classList.toggle('selected',j===idx));
+      $('q-'+k+'-check').disabled=false;
+    });
+    box.appendChild(b);
+  });
+  $('q-'+k+'-exp').style.display='none';
+  $('q-'+k+'-check').disabled=true;
+  const nx=$('q-'+k+'-next');
+  nx.disabled=true;
+  nx.textContent=(st.i===QUIZ[k].qs.length-1)?'Lihat Hasil \u2192':'Soal Berikutnya \u2192';
+}
+function qCheck(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  if(st.sel==null||st.checked)return;
+  st.checked=true;
+  const ok=st.sel===q.ans;
+  if(ok)st.score++;
+  st.answered++;
+  st.results.push(ok);
+  [...$('q-'+k+'-opts').children].forEach((b,j)=>{
+    b.classList.add('locked');
+    if(j===q.ans)b.classList.add('correct');
+    else if(j===st.sel)b.classList.add('wrong');
+  });
+  const eb=$('q-'+k+'-exp');
+  eb.style.display='block';
+  eb.className='expbox '+(ok?'good':'bad');
+  eb.innerHTML=(ok?'<b>Benar! </b>':'<b>Belum tepat. Jawaban yang benar: '+LETTERS[q.ans]+'. </b>')+q.exp;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-check').disabled=true;
+  const nx=$('q-'+k+'-next');
+  nx.disabled=false;
+  nx.textContent=(st.i===QUIZ[k].qs.length-1)?'Lihat Hasil \u2192':'Soal Berikutnya \u2192';
+  saveProg();
+}
+function qNext(k){
+  const st=qState[k];
+  if(!st.checked)return;
+  if(st.i<QUIZ[k].qs.length-1){st.i++;qRender(k);}
+  else{st.done=true;qResult(k);saveProg();}
+}
+function qResult(k){
+  const st=qState[k],d=QUIZ[k],tot=QUIZ[k].qs.length;
+  const p=Math.round(st.score/tot*100);
+  const msg=st.score>=9?'Luar biasa! Kamu sangat menguasai materi ini.':st.score>=7?'Bagus! Sedikit lagi menuju sempurna.':st.score>=5?'Cukup. Baca ulang bagian teori, lalu coba lagi.':'Ayo pelajari kembali materinya, lalu ulangi latihan ini.';
+  $('q-'+k+'-body').innerHTML='<div class="qresult"><div class="qscore">'+st.score+'<span>/'+tot+'</span></div><h3>Latihan '+d.title+' selesai</h3><p style="margin-top:6px">'+msg+'</p><p class="qpct">'+p+'% benar</p><button class="btn pri" id="q-'+k+'-retry">Ulangi Latihan</button></div>';
+  $('q-'+k+'-retry').addEventListener('click',()=>qRetry(k));
+}
+function qRetry(k){
+  Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  $('q-'+k+'-body').innerHTML=origBody[k];
+  qRender(k);saveProg();
+}
+
+/* ================= PENYIMPANAN LOKAL ================= */
+function saveProg(){
+  try{
+    const d={};
+    for(const k in qState){const s=qState[k];d[k]={score:s.score,answered:s.answered,done:s.done,i:s.i,results:s.results};}
+    localStorage.setItem('peluang-tka-v1',JSON.stringify(d));
+  }catch(e){}
+}
+function loadProg(){
+  try{
+    const d=JSON.parse(localStorage.getItem('peluang-tka-v1')||'{}');
+    for(const k in d){
+      if(!qState[k])continue;
+      Object.assign(qState[k],{
+        i:Math.min(d[k].i||0,QUIZ[k].qs.length-1),
+        score:d[k].score||0,
+        answered:d[k].answered||0,
+        done:!!d[k].done,
+        results:Array.isArray(d[k].results)?d[k].results:[],
+        sel:null,checked:false
+      });
+    }
+  }catch(e){}
+}
+
+/* ================= HALAMAN NILAI ================= */
+function renderScores(){
+  const order=['bab1','bab2','bab3'];
+  let h='<table class="tbl"><tr><th>Bab</th><th>Dijawab</th><th>Benar</th><th>Nilai</th><th>Status</th></tr>';
+  let tc=0;
+  order.forEach(k=>{
+    const s=qState[k],d=QUIZ[k];tc+=s.score;
+    const nilai=Math.round(s.score/QUIZ[k].qs.length*100);
+    h+='<tr><td><b>'+d.title+'</b></td><td>'+s.answered+' / '+QUIZ[k].qs.length+'</td><td>'+s.score+'</td><td><div class="scorebar" style="width:110px;vertical-align:middle"><i style="width:'+nilai+'%;background:'+d.acc+'"></i></div> '+nilai+'</td><td>'+(s.done?'Selesai':'Berjalan')+'</td></tr>';
+  });
+  h+='</table>';
+  $('score-table').innerHTML=h;
+  const pctAll=Math.round(tc/30*100);
+  const pred=tc>=27?'Istimewa! Kamu siap menghadapi soal peluang &amp; permutasi-kombinasi pada TKA.':tc>=21?'Hebat \u2014 tinggal poles soal yang masih keliru.':tc>=15?'Bagus, lanjutkan latihan pada bagian yang lemah.':'Terus semangat: baca ulang teorinya, mainkan labnya, lalu kerjakan lagi latihannya.';
+  $('score-overall').innerHTML='<div class="scorebig"><div class="big">'+tc+'<span style="font-size:22px;color:#94a3b8">/30</span></div><div><b>Skor total: '+pctAll+'%</b><br><span style="color:#cbd5e1;font-size:14px">'+pred+'</span></div></div>';
+}
+
+/* ================= INISIALISASI ================= */
+document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goId(el.dataset.goto)));
+$('btn-prev').addEventListener('click',()=>go(cur-1));
+$('btn-next').addEventListener('click',()=>go(cur+1));
+$('btn-menu').addEventListener('click',()=>goId('s-menu'));
+document.addEventListener('keydown',e=>{
+  if(e.target&&/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+for(const k in QUIZ){
+  origBody[k]=$('q-'+k+'-body').innerHTML;
+  $('q-'+k+'-check').addEventListener('click',()=>qCheck(k));
+  $('q-'+k+'-next').addEventListener('click',()=>qNext(k));
+}
+$('btn-reset').addEventListener('click',()=>{
+  try{localStorage.removeItem('peluang-tka-v1');}catch(e){}
+  for(const k in qState)Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  for(const k in QUIZ){$('q-'+k+'-body').innerHTML=origBody[k];qRender(k);}
+  renderScores();
+});
+renderCoins();
+renderDice();
+updateBox();
+renderVenn();
+renderTree();
+renderCalc();
+renderPanitia();
+loadProg();
+for(const k in QUIZ){if(qState[k].done)qResult(k);else qRender(k);}
+go(0);
+</script>
+</body>
+</html>

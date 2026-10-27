@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuartil, Desil, Persentil &amp; Jangkauan (Data Tunggal &amp; Kelompok) — TKA SMA | Interaktif &amp; Mendalam</title>
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#0f172a; --muted:#5b6b7f;
+  --blue:#2563eb; --rose:#e11d48; --amber:#d97706; --green:#059669;
+  --purple:#7c3aed; --slate:#475569; --line:#e2e8f0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+sup,sub{font-size:72%}
+body{font-family:'Segoe UI',Tahoma,system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+
+/* ===== Topbar & progress ===== */
+#topbar{position:fixed;top:0;left:0;right:0;background:rgba(11,18,32,.96);color:#fff;z-index:50;box-shadow:0 2px 12px rgba(2,6,23,.35)}
+.tb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:9px 18px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#818cf8,#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:17px;flex:none}
+.brand{font-weight:700;letter-spacing:.3px;font-size:14.5px;white-space:nowrap}
+.tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.pwrap{margin-left:auto;flex:1;max-width:260px;height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+#pbar{height:100%;width:0;background:linear-gradient(90deg,#818cf8,#34d399);border-radius:99px;transition:width .3s}
+
+/* ===== Bottom nav ===== */
+#navbar{position:fixed;bottom:0;left:0;right:0;background:rgba(11,18,32,.96);z-index:50;border-top:1px solid rgba(255,255,255,.08)}
+.nb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 18px}
+.nb-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:8px 15px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13.5px;font-family:inherit;white-space:nowrap}
+.nb-btn:hover{background:rgba(255,255,255,.24)}
+#counter{color:#cbd5e1;font-size:13px;min-width:64px;text-align:center;font-weight:600}
+.spacer{flex:1}
+
+/* ===== Deck & slide ===== */
+#deck{max-width:1000px;margin:0 auto;padding:78px 18px 90px}
+.slide{display:none;background:var(--card);border-radius:20px;padding:36px 42px;min-height:540px;box-shadow:0 10px 34px rgba(15,23,42,.09)}
+.slide.active{display:block;animation:fadein .4s ease}
+.slide:not(.active){display:none!important}
+.slide.active.cover{display:flex}
+.slide.active.divider{display:flex}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.acc-rose{--acc:#e11d48}.acc-blue{--acc:#2563eb}.acc-amber{--acc:#d97706}
+.acc-green{--acc:#059669}.acc-purple{--acc:#7c3aed}.acc-slate{--acc:#475569}
+
+h2{font-size:26px;letter-spacing:-.3px}
+h3{font-size:17px}
+.sub{color:var(--muted);margin:6px 0 18px;font-size:15px}
+.rule{width:64px;height:5px;border-radius:99px;background:var(--acc,var(--blue));margin:10px 0 20px}
+
+/* ===== Boxes ===== */
+.defbox{background:#f8fafc;border:1px solid var(--line);border-left:5px solid var(--acc,var(--blue));padding:15px 20px;border-radius:12px;margin:14px 0;font-size:15.5px}
+.formula{background:linear-gradient(135deg,#eff6ff,#eef2ff);border:1px solid #c7d2fe;border-radius:12px;padding:13px 18px;margin:10px 0;font-size:16.5px;font-weight:600;color:#1e3a8a;line-height:1.7}
+.formula small{display:block;font-weight:400;color:#475569;font-size:12.5px;margin-top:4px}
+.formula.fp{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-color:#ddd6fe;color:#4c1d95}
+.callout{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.note{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
+.mini{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.mini h4{font-size:13px;color:var(--acc,var(--blue));margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.mini p{font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+.tbl th{background:#0f172a;color:#fff;padding:8px 10px;text-align:left;font-size:12.5px}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+.tbl tr.hi td{background:#fef9c3;font-weight:700}
+.tbl tr:nth-child(even).hi td{background:#fef9c3}
+
+/* ===== Cover ===== */
+.slide.cover{background:linear-gradient(140deg,#0b1220 0%,#1e1b4b 55%,#312e81 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.cover::after{content:'';position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(129,140,248,.28),transparent 65%)}
+.cover::before{content:'';position:absolute;left:-100px;bottom:-140px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.2),transparent 65%)}
+.kicker{font-size:12.5px;letter-spacing:3px;font-weight:800;color:#a5b4fc;margin-bottom:14px}
+.cover h1{font-size:44px;line-height:1.1;letter-spacing:-1px;margin-bottom:14px;position:relative;z-index:1}
+.cover .subtitle{font-size:16px;color:#c7d2fe;max-width:680px;margin-bottom:22px;position:relative;z-index:1}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;position:relative;z-index:1}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.cta{background:linear-gradient(135deg,#818cf8,#6366f1);border:none;color:#fff;font-weight:800;font-size:16px;padding:13px 30px;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(99,102,241,.45);transition:transform .15s;position:relative;z-index:1}
+.cta:hover{transform:translateY(-2px)}
+.hintline{margin-top:18px;font-size:12.5px;color:#94a3b8}
+
+/* ===== Menu ===== */
+.menugrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.menucard{background:#f8fafc;border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;cursor:pointer;transition:.18s}
+.menucard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1)}
+.mnum{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--acc)}
+.menucard h3{margin:4px 0 6px;font-size:17px}
+.menucard p{font-size:13.5px;color:var(--muted)}
+.mtag{display:inline-block;margin-top:10px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px}
+
+/* ===== Divider ===== */
+.slide.divider{background:linear-gradient(140deg,#0f172a,#1e293b);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.dnum{position:absolute;right:20px;bottom:-46px;font-size:190px;font-weight:900;color:rgba(255,255,255,.06);line-height:1}
+.dkicker{color:var(--acc);font-weight:800;letter-spacing:3px;font-size:13px;margin-bottom:10px}
+.divider h1{font-size:40px;margin-bottom:16px;letter-spacing:-.5px}
+.dlist{list-style:none}
+.dlist li{padding:7px 0 7px 28px;position:relative;color:#cbd5e1;font-size:15.5px}
+.dlist li::before{content:'\25B8';position:absolute;left:6px;color:var(--acc);font-weight:700}
+.slide:not(.divider):not(.cover) .dlist li{color:#334155}
+</style>
+<style>
+/* ===== Lab umum ===== */
+.labbox{background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:16px;padding:18px 20px;margin:16px 0}
+.labbox h3{font-size:15.5px;margin-bottom:12px;color:var(--acc,var(--blue))}
+.lgrid{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.lctl{flex:0 0 250px;display:flex;flex-direction:column;gap:12px}
+.lctl label{font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px;display:flex;flex-direction:column;gap:5px}
+.lctl input[type=range]{width:100%;accent-color:var(--acc,var(--blue))}
+.lval{font-size:15px;font-weight:700;color:var(--acc,var(--blue))}
+.labinfo{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.draghint{font-size:12.5px;color:#64748b;text-align:center;margin-top:6px}
+.lgrow{flex:1 1 320px;min-width:260px}
+
+/* ===== Kartu statistik kuantil ===== */
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0}
+.statcard{border-radius:13px;padding:12px 15px;border:1.5px solid var(--line);background:#fff}
+.statcard .sl{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.statcard .sv{font-size:23px;font-weight:900;margin-top:2px}
+.statcard.c-blue .sl,.statcard.c-blue .sv{color:#2563eb}
+.statcard.c-green .sl,.statcard.c-green .sv{color:#059669}
+.statcard.c-amber .sl,.statcard.c-amber .sv{color:#d97706}
+.statcard.c-purple .sl,.statcard.c-purple .sv{color:#7c3aed}
+.statcard.c-rose .sl,.statcard.c-rose .sv{color:#e11d48}
+.statcard.c-slate .sl,.statcard.c-slate .sv{color:#475569}
+.stepbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.75;margin:10px 0}
+.stepbox b.t{text-transform:uppercase;font-size:11.5px;letter-spacing:1px}
+.stepbox.c-blue b.t{color:#2563eb}.stepbox.c-green b.t{color:#059669}.stepbox.c-amber b.t{color:#d97706}
+.stepbox.c-purple b.t{color:#7c3aed}.stepbox.c-rose b.t{color:#e11d48}
+
+/* ===== Input data ===== */
+.ds-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.ds-input{flex:1;min-width:210px;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 14px;font-size:15px;font-family:inherit}
+.ds-input:focus{outline:2px solid #c7d2fe;border-color:#6366f1}
+.pbtn{border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;background:#eef2f7;color:#334155}
+.pbtn:hover{background:#e2e8f0}
+.dschips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.dchip{position:relative;width:36px;height:36px;border-radius:9px;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.dchip i{position:absolute;top:1px;left:4px;font-size:8.5px;color:#94a3b8;font-style:normal}
+.dchip.q1h{border-color:#2563eb;background:#eff6ff;color:#1d4ed8;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.dchip.q2h{border-color:#059669;background:#ecfdf5;color:#047857;box-shadow:0 0 0 3px rgba(5,150,105,.12)}
+.dchip.q3h{border-color:#d97706;background:#fffbeb;color:#b45309;box-shadow:0 0 0 3px rgba(217,119,6,.12)}
+.dchip.ph{border-color:#7c3aed;background:#f5f3ff;color:#6d28d9;box-shadow:0 0 0 3px rgba(124,58,237,.12)}
+
+/* ===== Segbar konsep ===== */
+.segbar{position:relative;display:flex;height:52px;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin:40px 0 8px}
+.segbar .seg{flex:1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#1e40af}
+.segbar .seg:nth-child(odd){background:#eff6ff}
+.segbar .seg:nth-child(even){background:#dbeafe}
+.segbar.d10 .seg{color:#065f46;font-size:10px}
+.segbar.d10 .seg:nth-child(odd){background:#ecfdf5}
+.segbar.d10 .seg:nth-child(even){background:#d1fae5}
+.segbar .smark{position:absolute;top:-30px;transform:translateX(-50%);background:#1d4ed8;color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;z-index:2}
+.segbar .smark::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1d4ed8}
+.segbar.d10 .smark{background:#047857}
+.segbar.d10 .smark::after{border-top-color:#047857}
+.segcap{font-size:12px;color:#64748b;margin:4px 0 2px}
+
+/* ===== Penjelajah letak ===== */
+.poswrap{position:relative;padding-top:48px;margin:10px 0 4px}
+.posrow{display:flex;gap:2px}
+.posrow .cell{flex:1;min-width:0;background:#eff6ff;border:1px solid #c7d2fe;border-radius:5px 5px 0 0;text-align:center;font-size:9.5px;color:#1e40af;padding:7px 0 5px;overflow:hidden}
+.posmark{position:absolute;top:10px;transform:translateX(-50%);background:var(--mc,#1d4ed8);color:#fff;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:8px;white-space:nowrap;z-index:2}
+.posmark::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--mc,#1d4ed8)}
+.posinfo{font-size:13.5px;color:#334155;line-height:1.75;margin-top:8px}
+
+/* ===== Bar persentil ===== */
+.pbar{position:relative;height:46px;border-radius:12px;margin:48px 0 6px;background:linear-gradient(90deg,#a5b4fc,#7dd3fc,#6ee7b7,#fde047,#fda4af);border:1px solid var(--line)}
+.pmark{position:absolute;top:-34px;transform:translateX(-50%);background:#6d28d9;color:#fff;font-weight:800;font-size:12px;padding:4px 11px;border-radius:9px;white-space:nowrap;transition:left .12s}
+.pmark::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#6d28d9}
+.pticks{display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;padding:2px 2px 0}
+.pinfo{font-size:14px;color:#334155;margin-top:8px;line-height:1.65}
+.eqchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.eqchip{background:#f5f3ff;border:1px solid #ddd6fe;color:#6d28d9;font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+.eqchip.hot{background:#6d28d9;color:#fff;border-color:#6d28d9}
+
+/* ===== SVG & tabel lab ===== */
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 8px 4px;margin:10px 0}
+.svgbox svg{width:100%;height:auto;display:block}
+.svgcap{font-size:12px;color:#64748b;text-align:center;margin:2px 0 8px}
+.ftwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ftable{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;min-width:480px}
+.ftable th{background:#0f172a;color:#fff;padding:7px 8px;font-size:12px;text-align:center}
+.ftable td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:center}
+.ftable input{width:58px;border:1.5px solid #cbd5e1;border-radius:8px;padding:6px 4px;font-size:14px;font-family:inherit;text-align:center}
+.ftable tr.hiq1 td{background:#eff6ff}
+.ftable tr.hiq2 td{background:#ecfdf5}
+.ftable tr.hiq3 td{background:#fffbeb}
+.ftable tr.hid td{background:#f5f3ff}
+.ftwarn{color:#b91c1c;font-weight:700;font-size:13.5px}
+
+/* ===== Boxplot stats ===== */
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.bstat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:11.5px;font-weight:700;color:#64748b}
+.bstat b{display:block;font-size:16px;color:#0f172a;font-variant-numeric:tabular-nums}
+.bstat.hot b{color:#e11d48}
+
+/* ===== Kuis ===== */
+.quiz-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lvl{background:#ede9fe;color:#6d28d9;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.5px}
+.qcount{margin-left:auto;color:var(--muted);font-size:13.5px;font-weight:600}
+.qtext{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:15.5px;margin:12px 0 16px;line-height:1.65}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-family:inherit;line-height:1.5;transition:.15s;color:var(--ink)}
+.opt:hover:not(.locked){border-color:#94a3b8;background:#f8fafc}
+.opt.selected{border-color:var(--acc,var(--blue));background:#eef2ff;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.opt.correct{border-color:#16a34a;background:#f0fdf4;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.opt.wrong{border-color:#dc2626;background:#fef2f2;box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.opt.locked{cursor:default}
+.optletter{flex:none;width:26px;height:26px;border-radius:8px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#334155;margin-top:1px}
+.opt.selected .optletter{background:var(--acc,var(--blue));color:#fff}
+.opt.correct .optletter{background:#16a34a;color:#fff}
+.opt.wrong .optletter{background:#dc2626;color:#fff}
+.expbox{border-radius:12px;padding:14px 18px;margin-top:14px;font-size:14.5px;line-height:1.65;display:none}
+.expbox.good{background:#f0fdf4;border:1px solid #86efac}
+.expbox.bad{background:#fef2f2;border:1px solid #fca5a5}
+.qctrl{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{border:none;border-radius:11px;padding:11px 22px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
+.btn.pri{background:var(--acc,var(--blue));color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.ghost{background:#eef2f7;color:#334155;border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.qresult{text-align:center;padding:30px 10px}
+.qscore{font-size:62px;font-weight:900;color:var(--acc)}
+.qscore span{font-size:26px;color:var(--muted);font-weight:700}
+.qpct{color:var(--muted);margin:8px 0 18px;font-weight:700}
+
+/* ===== Skor ===== */
+.scorebig{display:flex;gap:20px;align-items:center;background:linear-gradient(135deg,#0f172a,#312e81);color:#fff;border-radius:18px;padding:20px 26px;margin:14px 0}
+.scorebig .big{font-size:50px;font-weight:900;color:#a5b4fc;line-height:1}
+.scorebar{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;display:inline-block}
+.scorebar i{display:block;height:100%;border-radius:99px}
+
+@media (max-width:760px){
+  .grid2,.grid3,.menugrid{grid-template-columns:1fr}
+  .statrow{grid-template-columns:1fr 1fr}
+  .bgrid{grid-template-columns:1fr 1fr}
+  .slide{padding:24px 18px;min-height:auto}
+  .cover h1{font-size:31px}
+  .divider h1{font-size:29px}
+  .brand span.tag{display:none}
+  .lctl{flex:1 1 100%}
+  .brand{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<header id="topbar"><div class="tb-in">
+  <div class="logo">Q</div>
+  <div class="brand">Kuartil &middot; Desil &middot; Persentil &middot; Jangkauan <span class="tag">TKA SMA</span></div>
+  <div class="pwrap"><div id="pbar"></div></div>
+</div></header>
+
+<div id="deck">
+
+<!-- 1. COVER -->
+<section class="slide cover" id="s-cover">
+  <p class="kicker">BANK MATERI TKA SMA &middot; INTERAKTIF &amp; MENDALAM</p>
+  <h1>Kuartil, Desil, Persentil &amp; Jangkauan</h1>
+  <p class="subtitle">Ukuran letak (kuantil) dan ukuran penyebaran dari nol hingga mahir: data tunggal &amp; tabel distribusi frekuensi &middot; letak i(n+1):d dan interpolasi &middot; membaca ogif &middot; boxplot &amp; outlier &middot; aplikasi nyata: batas 25% teratas, desil pendapatan, cut-off skor, dan data ekstrem.</p>
+  <div class="chips">
+    <span class="chip">4 Materi Inti</span>
+    <span class="chip">40 Soal HOTS</span>
+    <span class="chip">10 Lab Interaktif</span>
+    <span class="chip">Ogif &amp; Boxplot Otomatis</span>
+    <span class="chip">Pembahasan Lengkap</span>
+  </div>
+  <button class="cta" data-goto="s-menu">Mulai Belajar</button>
+  <p class="hintline">Tips: gunakan tombol panah &larr; &rarr; pada keyboard untuk berpindah halaman. Skor latihan tersimpan otomatis di perangkatmu.</p>
+</section>
+
+<!-- 2. MENU -->
+<section class="slide" id="s-menu">
+  <h2>Peta Materi</h2>
+  <p class="sub">Klik kartu untuk langsung menuju bab. Alur belajar: kuartil &rarr; desil &rarr; persentil &rarr; jangkauan &mdash; mesin hitungnya satu keluarga, tinggal mengganti titik potongnya. Setiap bab ditutup 10 soal HOTS berpembahasan.</p>
+  <div class="menugrid">
+    <div class="menucard acc-blue" data-goto="s-d1">
+      <span class="mnum">BAB 01</span>
+      <h3>Kuartil</h3>
+      <p>Q1, Q2, Q3: membagi data terurut menjadi 4 bagian sama banyak. Letak i(n+1):4 + interpolasi untuk data tunggal; frekuensi kumulatif + rumus Tb untuk data kelompok; batas 25% teratas/terbawah.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-green" data-goto="s-d2">
+      <span class="mnum">BAB 02</span>
+      <h3>Desil</h3>
+      <p>D1&ndash;D9: membagi data menjadi 10 bagian. D5 = median, D9 = batas 10% teratas. Aplikasi klasik: desil pendapatan dan seleksi 10% terbawah/teratas.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-purple" data-goto="s-d3">
+      <span class="mnum">BAB 03</span>
+      <h3>Persentil</h3>
+      <p>P1&ndash;P99: skala paling halus. Skor tes, kartu pertumbuhan anak, dan cut-off PPDB semuanya berbahasa persentil &mdash; lengkap dengan peta ekuivalensinya terhadap kuartil &amp; desil.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-rose" data-goto="s-d4">
+      <span class="mnum">BAB 04</span>
+      <h3>Jangkauan</h3>
+      <p>Jangkauan (range) data tunggal &amp; kelompok, jangkauan antarkuartil H = Q3 &minus; Q1, simpangan kuartil Qd, boxplot, dan uji ketahanan terhadap outlier.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-blue" data-goto="s-score">
+      <span class="mnum">REKAP</span>
+      <h3>Nilai Kamu</h3>
+      <p>Rekapitulasi otomatis 40 soal HOTS dari 4 bab, lengkap dengan predikat &mdash; tersimpan otomatis di perangkatmu.</p>
+      <span class="mtag">Cek Progres</span>
+    </div>
+    <div class="menucard acc-amber" data-goto="s-summary">
+      <span class="mnum">PENUTUP</span>
+      <h3>Rangkuman &amp; Strategi</h3>
+      <p>Kartu rumus inti, peta ekuivalensi antar-kuantil, dan lima strategi menaklukkan soal HOTS kuantil &amp; jangkauan pada TKA.</p>
+      <span class="mtag">Baca Sebelum Ujian</span>
+    </div>
+  </div>
+</section>
+<!-- 3. DIVIDER BAB 1 -->
+<section class="slide divider acc-blue" id="s-d1">
+  <div class="dnum">01</div>
+  <p class="dkicker">BAB 1</p>
+  <h1>Kuartil</h1>
+  <ul class="dlist">
+    <li>Kuartil membagi data terurut menjadi 4 bagian sama banyak: Q1, Q2 (= median), Q3</li>
+    <li>Data tunggal: letak Q<sub>i</sub> = i(n + 1) : 4 &mdash; bulat atau interpolasi</li>
+    <li>Data kelompok: kelas kuartil lewat frekuensi kumulatif + interpolasi dengan T<sub>b</sub>, F, f, c</li>
+    <li>Lab interaktif: penjelajah letak kuartil, studio kuartil tunggal, kalkulator kelompok + ogif</li>
+    <li>Aplikasi: batas 25% teratas, seleksi beasiswa, nilai ambang</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 4. BAB1 KONSEP: KUARTIL DATA TUNGGAL -->
+<section class="slide acc-blue" id="s-m1a">
+  <h2>Kuartil: Membagi Data Menjadi Empat</h2>
+  <p class="sub">Median membelah data menjadi dua; kuartil memperhalusnya menjadi empat bagian sama banyak &mdash; inilah "ukuran letak" pertama yang wajib kamu kuasai.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Kuartil</b> adalah nilai-nilai yang membagi data <b>terurut</b> menjadi <b>4 bagian sama banyak</b>. <b style="color:#2563eb">Q1</b> (kuartil bawah): 25% data bernilai &le; Q1. <b style="color:#059669">Q2</b>: tepat sama dengan <b>median</b>. <b style="color:#d97706">Q3</b> (kuartil atas): 75% data bernilai &le; Q3. Jarak Q1&ndash;Q3 menampung "50% data tengah" &mdash; ide inilah yang nanti menjadi jangkauan antarkuartil di Bab 4.</div>
+  <div class="segbar">
+    <div class="seg">25% data</div><div class="seg">25% data</div><div class="seg">25% data</div><div class="seg">25% data</div>
+    <span class="smark" style="left:25%">Q1 &middot; 25%</span>
+    <span class="smark" style="left:50%">Q2 &middot; 50%</span>
+    <span class="smark" style="left:75%">Q3 &middot; 75%</span>
+  </div>
+  <p class="segcap">Q2 = median: dua ide berbeda, satu titik yang sama.</p>
+  <div class="formula">Letak Q<sub>i</sub> = i(n + 1) : 4 &nbsp;&nbsp;untuk i = 1, 2, 3
+    <small>Banyak data = n. <b>Letak bulat</b> &rarr; kuartil = data pada posisi itu. <b>Letak pecahan</b> &rarr; interpolasi antara dua data bertetangga: Q = x<sub>k</sub> + t &times; (x<sub>k+1</sub> &minus; x<sub>k</sub>), dengan t = bagian pecahannya.</small>
+  </div>
+  <div class="grid2">
+    <div class="mini"><h4>n ganjil &mdash; sering letaknya bulat</h4><p>Data 6, 7, 7, 8, 8, 8, 9, 9, 10 (urut, n = 9).<br>Letak Q1 = 10 : 4 = 2,5 &rarr; antara data ke-2 dan ke-3: Q1 = 7 + 0,5&times;(7 &minus; 7) = <b>7</b>.<br>Letak Q2 = 10 : 2 = 5 &rarr; data ke-5 = <b>8</b> (= median &#10003;).<br>Letak Q3 = 3(10) : 4 = 7,5 &rarr; Q3 = 9 + 0,5&times;(9 &minus; 9) = <b>9</b>.</p></div>
+    <div class="mini"><h4>n genap &mdash; interpolasi murni</h4><p>Data 4, 5, 6, 7, 8, 9, 10, 12 (n = 8).<br>Letak Q1 = 9 : 4 = 2,25 &rarr; 5 + 0,25&times;(6 &minus; 5) = <b>5,25</b>.<br>Letak Q2 = 9 : 2 = 4,5 &rarr; (7 + 8) : 2 = <b>7,5</b>.<br>Letak Q3 = 27 : 4 = 6,75 &rarr; 9 + 0,75&times;(10 &minus; 9) = <b>9,75</b>.</p></div>
+  </div>
+  <div class="callout"><b>Catatan konvensi:</b> di buku sekolah dan soal TKA, letak kuartil data tunggal memakai <b>(n + 1)</b> &mdash; bukan n. Perangkat lunak (Excel, kalkulator statistik) memakai konvensi lain sehingga hasilnya bisa selisih kecil; ikuti konvensi i(n+1):4 saat ujian. Ingat pula: <b>Q2 selalu identik dengan median</b> &mdash; kalau soal memberi median, kamu otomatis punya Q2.</div>
+</section>
+
+<!-- 5. BAB1 LAB: PENJELAJAH + STUDIO TUNGGAL -->
+<section class="slide acc-blue" id="s-m1b">
+  <h2>Lab Interaktif &mdash; Kuartil Data Tunggal</h2>
+  <p class="sub">Geser n untuk melihat ke mana letak kuartil "mendarat", lalu ketik datamu sendiri: Q1, Q2, Q3 dihitung lengkap dengan langkah dan gambar titiknya.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 1: Penjelajah Letak Kuartil</h3>
+    <div id="pos-lab"></div>
+    <p class="draghint">Tanda di atas sel = posisi kuartil. Boleh mendarat <b>di antara</b> dua data &mdash; itulah interpolasi.</p>
+  </div>
+  <div class="labbox">
+    <h3>Lab 2: Studio Kuartil Tunggal</h3>
+    <div id="sq-lab"></div>
+    <p class="draghint">Chip terurut dengan nomor posisi &middot; titik biru = data &middot; garis putus-putus = Q1, Q2, Q3.</p>
+  </div>
+</section>
+
+<!-- 6. BAB1 KONSEP: KUARTIL DATA KELOMPOK -->
+<section class="slide acc-blue" id="s-m1c">
+  <h2>Kuartil Data Kelompok</h2>
+  <p class="sub">Pada tabel distribusi frekuensi, posisi kuartil dicari lewat <b>frekuensi kumulatif</b>, lalu diinterpolasi di dalam kelasnya &mdash; persis mesin median, hanya titik potongnya berubah.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Langkah 1:</b> hitung posisi data ke&ndash;i&middot;n : 4. <b>Langkah 2:</b> cari <b>kelas kuartil</b> &mdash; kelas pertama yang memenuhi F &lt; i&middot;n:4 &le; F + f (F = kumulatif <i>sebelum</i> kelas itu). <b>Langkah 3:</b> interpolasi di dalam kelas.</div>
+  <div class="formula">Q<sub>i</sub> = T<sub>b</sub> + ( (i&middot;n : 4 &minus; F) : f ) &times; c
+    <small><b>T<sub>b</sub></b> = tepi bawah kelas kuartil (batas bawah &minus; 0,5) &middot; <b>F</b> = frekuensi kumulatif <i>sebelum</i> kelas kuartil &middot; <b>f</b> = frekuensi kelas kuartil &middot; <b>c</b> = panjang kelas. Pecahan (i&middot;n:4 &minus; F) : f = "seberapa jauh kita masuk ke kelas".</small>
+  </div>
+  <table class="tbl">
+    <tr><th>Kelas nilai</th><th>Frekuensi (f)</th><th>Kumulatif (F)</th></tr>
+    <tr><td>41&ndash;50</td><td>3</td><td>3</td></tr>
+    <tr class="hi"><td>51&ndash;60</td><td>7</td><td>10</td></tr>
+    <tr class="hi"><td>61&ndash;70</td><td>10</td><td>20</td></tr>
+    <tr class="hi"><td>71&ndash;80</td><td>10</td><td>30</td></tr>
+    <tr><td>81&ndash;90</td><td>7</td><td>37</td></tr>
+    <tr><td>91&ndash;100</td><td>3</td><td>40</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:#475569;margin-top:-6px">Nilai ulangan 40 siswa (n = 40) &rarr; posisi: Q1 = 40:4 = 10, Q2 = 20, Q3 = 30. Baris kuning = kelas kuartil.</p>
+  <div class="stepbox c-blue"><b class="t">Q1</b><br>Pos = 10 &rarr; kelas <b>51&ndash;60</b> (karena 3 &lt; 10 &le; 10). T<sub>b</sub> = 50,5; F = 3; f = 7; c = 10.<br>Q1 = 50,5 + ((10 &minus; 3) : 7) &times; 10 = 50,5 + 10 = <b>60,5</b></div>
+  <div class="stepbox c-green"><b class="t">Q2</b><br>Pos = 20 &rarr; kelas <b>61&ndash;70</b> (10 &lt; 20 &le; 20). Q2 = 60,5 + ((20 &minus; 10) : 10) &times; 10 = <b>70,5</b> &nbsp;(= median &#10003;)</div>
+  <div class="stepbox c-amber"><b class="t">Q3</b><br>Pos = 30 &rarr; kelas <b>71&ndash;80</b> (20 &lt; 30 &le; 30). Q3 = 70,5 + ((30 &minus; 20) : 10) &times; 10 = <b>80,5</b></div>
+  <div class="note"><b>Kenapa hasilnya "pas" di tepi kelas?</b> Di contoh ini posisi jatuh tepat di batas kumulatif (10 = 3 + 7), artinya data terakhir kelas itu adalah kuartilnya &mdash; rumus memberi tepi atas kelas kuartil. Wajar dan konsisten.</div>
+  <div class="callout"><b>Checklist anti-salah:</b> <b>(1)</b> Kelas kuartil dicari lewat <i>kumulatif</i>, bukan frekuensi tunggal. <b>(2)</b> F = kumulatif <i>sebelum</i> kelas kuartil. <b>(3)</b> T<sub>b</sub> selalu berakhiran ,5 (mis. 50,5), bukan batas tulisannya (51). <b>(4)</b> c = batas atas &minus; batas bawah + 1: kelas 41&ndash;50 &rarr; c = 10, bukan 9. <b>(5)</b> Jangan lupa mengalikan pecahan dengan c.</div>
+</section>
+
+<!-- 7. BAB1 LAB: KUARTIL KELOMPOK -->
+<section class="slide acc-blue" id="s-m1d">
+  <h2>Lab Interaktif &mdash; Kuartil Data Kelompok</h2>
+  <p class="sub">Ubah frekuensinya sesukamu: kelas kuartil, langkah interpolasi, dan ogif-nya dihitung ulang seketika.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 3: Kalkulator Kuartil Kelompok</h3>
+    <div id="gq-lab"></div>
+    <p class="draghint">Ogif: titik biru = frekuensi kumulatif di tepi atas kelas &middot; garis putus-putus = perpotongan posisi kuartil dengan ogif &mdash; inilah wujud visual interpolasi.</p>
+  </div>
+</section>
+
+<!-- 8. BAB1 KUIS -->
+<section class="slide acc-blue" id="s-m1q">
+  <div id="q-kuartil-body">
+    <h2>Latihan HOTS &mdash; Kuartil</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-kuartil-lvl"></span><span class="qcount">Soal <b id="q-kuartil-num">1</b>/10 &middot; Skor: <b id="q-kuartil-score">0</b></span></div>
+    <div class="qtext" id="q-kuartil-text"></div>
+    <div class="opts" id="q-kuartil-opts"></div>
+    <div class="expbox" id="q-kuartil-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-kuartil-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-kuartil-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 9. DIVIDER BAB 2 -->
+<section class="slide divider acc-green" id="s-d2">
+  <div class="dnum">02</div>
+  <p class="dkicker">BAB 2</p>
+  <h1>Desil</h1>
+  <ul class="dlist">
+    <li>Desil membagi data terurut menjadi 10 bagian sama banyak: D1 sampai D9</li>
+    <li>Data tunggal: letak D<sub>i</sub> = i(n + 1) : 10; D5 = median</li>
+    <li>Data kelompok: D<sub>i</sub> = T<sub>b</sub> + ((i&middot;n : 10 &minus; F) : f) &times; c</li>
+    <li>Syarat letak &le; n: desil besar butuh data yang cukup banyak</li>
+    <li>Jangkauan antardesil D9 &minus; D1; desil pendapatan &amp; seleksi 10%</li>
+    <li>Lab interaktif: penjelajah desil + kalkulator kelompok berogif</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 10. BAB2 KONSEP + LAB DESIL TUNGGAL -->
+<section class="slide acc-green" id="s-m2a">
+  <h2>Desil: Membagi Data Menjadi Sepuluh</h2>
+  <p class="sub">Kalau kuartil memotong di setiap 25%, desil memotong di setiap kelipatan 10% &mdash; sembilan titik potong: D1 sampai D9.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Desil</b> D<sub>i</sub> (i = 1, &hellip;, 9) adalah nilai yang membagi data terurut menjadi 10 bagian sama banyak: <b>i &times; 10% data bernilai &le; D<sub>i</sub></b>. Tiga yang paling sering dipakai: <b>D1</b> (batas 10% terbawah), <b>D5</b> (= median = Q2), dan <b>D9</b> (batas 10% teratas).</div>
+  <div class="segbar d10">
+    <div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div><div class="seg">10%</div>
+    <span class="smark" style="left:10%">D1 &middot; 10%</span>
+    <span class="smark" style="left:50%">D5 &middot; 50%</span>
+    <span class="smark" style="left:90%">D9 &middot; 90%</span>
+  </div>
+  <div class="formula">Letak D<sub>i</sub> = i(n + 1) : 10 &nbsp;&nbsp;untuk i = 1, 2, &hellip;, 9
+    <small>Mesin yang sama dengan kuartil &mdash; pembaginya kini 10. Letak pecahan tetap diinterpolasi: D = x<sub>k</sub> + t &times; (x<sub>k+1</sub> &minus; x<sub>k</sub>).</small>
+  </div>
+  <div class="grid2">
+    <div class="mini"><h4>Contoh n = 9</h4><p>Data 5, 6, 6, 7, 8, 8, 9, 10, 12 (urut).<br>Letak D<sub>i</sub> = i(10) : 10 = <b>i</b> &mdash; semua desil tepat di data ke-i!<br>D3 = data ke-3 = <b>6</b>; D7 = data ke-7 = <b>9</b>; D5 = data ke-5 = 8 = median &#10003;.</p></div>
+    <div class="mini"><h4>Interpretasi &amp; pakem soal cerita</h4><p>"10% teratas" &rarr; batasnya <b>D9</b>; "10% terbawah" &rarr; batasnya <b>D1</b>; "30% teratas" &rarr; batasnya <b>D7</b> (karena 100% &minus; 30% = 70%).<br><b>D9 &minus; D1</b> = jangkauan antardesil: merentang 80% data tengah.</p></div>
+  </div>
+  <div class="callout"><b>Syarat letak &le; n.</b> Untuk n kecil, desil besar bisa "keluar dari jangkauan": dengan n = 8, letak D9 = 9(9) : 10 = 8,1 &gt; 8, jadi D9 tidak terdefinisi (butuh minimal n = 9). Semakin besar i, semakin besar n minimum yang dibutuhkan &mdash; kalkulator di bawah akan memperingatkanmu saat itu terjadi.</div>
+  <div class="labbox">
+    <h3>Lab 4: Penjelajah Desil Tunggal</h3>
+    <div id="sd-lab"></div>
+    <p class="draghint">Geser i dari 1 sampai 9 dan amati desil berjalan menyusuri data.</p>
+  </div>
+</section>
+
+<!-- 11. BAB2 KELOMPOK + LAB -->
+<section class="slide acc-green" id="s-m2b">
+  <h2>Desil Data Kelompok</h2>
+  <p class="sub">Rumus interpolasi yang sama dengan kuartil &mdash; pembilang posisinya kini i&middot;n : 10.</p>
+  <div class="rule"></div>
+  <div class="formula">D<sub>i</sub> = T<sub>b</sub> + ( (i&middot;n : 10 &minus; F) : f ) &times; c
+    <small>T<sub>b</sub> = tepi bawah kelas desil &middot; F = kumulatif sebelum kelas desil &middot; f = frekuensi kelas desil &middot; c = panjang kelas. Kelas desil: kelas pertama dengan F &lt; i&middot;n:10 &le; F + f.</small>
+  </div>
+  <div class="defbox"><b>Contoh.</b> Pengeluaran harian 40 siswa (dalam ribuan rupiah): 40&ndash;49 (f = 3), 50&ndash;59 (7), 60&ndash;69 (12), 70&ndash;79 (10), 80&ndash;89 (6), 90&ndash;99 (2). Kumulatif: 3, 10, 22, 32, 38, 40.<br><b>D4:</b> pos = 4 &times; 40 : 10 = 16 &rarr; kelas <b>60&ndash;69</b> (10 &lt; 16 &le; 22) &rarr; D4 = 59,5 + ((16 &minus; 10) : 12) &times; 10 = 59,5 + 5 = <b>64,5</b>.<br><b>D8:</b> pos = 32 &rarr; kelas <b>70&ndash;79</b> (22 &lt; 32 &le; 32) &rarr; D8 = 69,5 + ((32 &minus; 22) : 10) &times; 10 = 69,5 + 10 = <b>79,5</b>.</div>
+  <div class="labbox">
+    <h3>Lab 5: Kalkulator Desil Kelompok</h3>
+    <div id="gd-lab"></div>
+    <p class="draghint">Edit frekuensi &amp; geser i: baris kelas desil tersorot ungu, ogif menunjukkan perpotongannya.</p>
+  </div>
+  <div class="callout"><b>Aplikasi klasik:</b> Bank Dunia dan BPS melaporkan pendapatan masyarakat per <b>desil</b>: "desil pertama" = 10% penduduk termiskin, "desil kesepuluh" = 10% terkaya. Soal TKA suka memakai cerita ini &mdash; kalimat "10% teratas/terbawah" langsung terjemahkan ke D9/D1 sebelum menghitung.</div>
+</section>
+
+<!-- 12. BAB2 KUIS -->
+<section class="slide acc-green" id="s-m2q">
+  <div id="q-desil-body">
+    <h2>Latihan HOTS &mdash; Desil</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-desil-lvl"></span><span class="qcount">Soal <b id="q-desil-num">1</b>/10 &middot; Skor: <b id="q-desil-score">0</b></span></div>
+    <div class="qtext" id="q-desil-text"></div>
+    <div class="opts" id="q-desil-opts"></div>
+    <div class="expbox" id="q-desil-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-desil-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-desil-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 13. DIVIDER BAB 3 -->
+<section class="slide divider acc-purple" id="s-d3">
+  <div class="dnum">03</div>
+  <p class="dkicker">BAB 3</p>
+  <h1>Persentil</h1>
+  <ul class="dlist">
+    <li>Persentil membagi data terurut menjadi 100 bagian: P1 sampai P99</li>
+    <li>Data tunggal: letak P<sub>i</sub> = i(n + 1) : 100</li>
+    <li>Data kelompok: P<sub>i</sub> = T<sub>b</sub> + ((i&middot;n : 100 &minus; F) : f) &times; c</li>
+    <li>Peta ekuivalensi: P25 = Q1, P50 = D5 = median, P75 = Q3</li>
+    <li>Aplikasi: skor tes, kartu pertumbuhan anak, cut-off PPDB, "top 1%"</li>
+    <li>Lab interaktif: bar persentil + dua kalkulator berogif</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 14. BAB3 KONSEP + LAB PERSUNTIL -->
+<section class="slide acc-purple" id="s-m3a">
+  <h2>Persentil: Skala Seratus</h2>
+  <p class="sub">Skor tes nasional, kartu pertumbuhan anak, "top 1% terkaya" &mdash; semuanya berbahasa persentil. Ini kuantil paling halus; kuartil dan desil hanyalah persentil tertentu.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Persentil</b> P<sub>i</sub> (i = 1, &hellip;, 99) membagi data terurut menjadi 100 bagian sama banyak: <b>i% data bernilai &le; P<sub>i</sub></b>. Jika skor Bima setara <b>P85</b>, artinya Bima mengalahkan sekitar 85% peserta &mdash; kedudukan relatif, bukan nilai mentah.</div>
+  <div class="labbox">
+    <h3>Lab 6: Bar Persentil Interaktif</h3>
+    <div id="pb-lab"></div>
+    <p class="draghint">Geser posisi 1&ndash;99 dan lihat persentil mana yang sedang kamu sentuh: kuartil? desil? keduanya?</p>
+  </div>
+  <div class="formula fp">Letak P<sub>i</sub> = i(n + 1) : 100 &nbsp;&nbsp;untuk i = 1, 2, &hellip;, 99
+    <small>Interpolasi tetap sama. Hati-hati: letak harus &le; n &mdash; <b>P99 butuh minimal n = 99</b> data!</small>
+  </div>
+  <table class="tbl">
+    <tr><th>Persentil</th><th>Setara dengan</th><th>Makna</th></tr>
+    <tr><td><b>P10</b></td><td>D1</td><td>Batas 10% terbawah</td></tr>
+    <tr><td><b>P25</b></td><td>Q1</td><td>Batas 25% terbawah</td></tr>
+    <tr><td><b>P50</b></td><td>Q2 = D5 = median</td><td>Tengah data</td></tr>
+    <tr><td><b>P75</b></td><td>Q3</td><td>Batas 25% teratas</td></tr>
+    <tr><td><b>P90</b></td><td>D9</td><td>Batas 10% teratas</td></tr>
+    <tr><td><b>P99</b></td><td>&mdash;</td><td>Batas "top 1%"</td></tr>
+  </table>
+  <div class="mini"><h4>Contoh data tunggal (n = 10)</h4><p>Data 12, 15, 15, 18, 20, 20, 22, 25, 28, 30.<br>Letak P10 = 10(11) : 100 = 1,1 &rarr; P10 = 12 + 0,1&times;(15 &minus; 12) = <b>12,3</b>.<br>Letak P50 = 11 : 2 = 5,5 &rarr; P50 = (20 + 20) : 2 = <b>20</b> (= median &#10003;).<br>Letak P90 = 9,9 &rarr; P90 = 28 + 0,9&times;(30 &minus; 28) = <b>29,8</b>.</p></div>
+  <div class="labbox">
+    <h3>Lab 7: Kalkulator Persentil Tunggal</h3>
+    <div id="sp-lab"></div>
+    <p class="draghint">Coba i = 99 pada data pendek &mdash; kalkulator akan menolak dan menjelaskan syarat n.</p>
+  </div>
+</section>
+
+<!-- 15. BAB3 KELOMPOK + LAB -->
+<section class="slide acc-purple" id="s-m3b">
+  <h2>Persentil Data Kelompok</h2>
+  <p class="sub">Mesin interpolasi yang sama &mdash; pembilang posisinya kini i&middot;n : 100.</p>
+  <div class="rule"></div>
+  <div class="formula fp">P<sub>i</sub> = T<sub>b</sub> + ( (i&middot;n : 100 &minus; F) : f ) &times; c
+    <small>Kelas persentil: kelas pertama dengan F &lt; i&middot;n:100 &le; F + f. T<sub>b</sub>, F, f, c dibaca pada kelas itu.</small>
+  </div>
+  <div class="defbox"><b>Contoh.</b> Tinggi badan 40 siswa (cm): 146&ndash;150 (f = 2), 151&ndash;155 (6), 156&ndash;160 (12), 161&ndash;165 (10), 166&ndash;170 (8), 171&ndash;175 (2). Kumulatif: 2, 8, 20, 30, 38, 40; c = 5.<br><b>P50:</b> pos = 20 &rarr; kelas <b>156&ndash;160</b> (8 &lt; 20 &le; 20) &rarr; P50 = 155,5 + ((20 &minus; 8) : 12) &times; 5 = 155,5 + 5 = <b>160,5</b>.<br><b>P75:</b> pos = 30 &rarr; kelas <b>161&ndash;165</b> (20 &lt; 30 &le; 30) &rarr; P75 = 160,5 + ((30 &minus; 20) : 10) &times; 5 = <b>165,5</b>.<br><b>P90:</b> pos = 36 &rarr; kelas <b>166&ndash;170</b> (30 &lt; 36 &le; 38) &rarr; P90 = 165,5 + ((36 &minus; 30) : 8) &times; 5 = 165,5 + 3,75 = <b>169,25</b>.</div>
+  <div class="labbox">
+    <h3>Lab 8: Kalkulator Persentil Kelompok</h3>
+    <div id="gp-lab"></div>
+    <p class="draghint">Geser i 1&ndash;99: baris kelas persentil tersorot, ogif menandai perpotongan posisinya.</p>
+  </div>
+  <div class="callout"><b>Pola soal cut-off:</b> "peserta lolos jika nilainya minimal P60" &rarr; hitung P60 dulu sebagai <b>nilai batas</b>, lalu bandingkan nilai siswa dengannya. Sebaliknya, "siswa terbaik 25%" berarti batasnya <b>Q3 = P75</b> &mdash; terjemahkan kalimatnya ke kuantil sebelum menghitung.</div>
+</section>
+
+<!-- 16. BAB3 KUIS -->
+<section class="slide acc-purple" id="s-m3q">
+  <div id="q-persentil-body">
+    <h2>Latihan HOTS &mdash; Persentil</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-persentil-lvl"></span><span class="qcount">Soal <b id="q-persentil-num">1</b>/10 &middot; Skor: <b id="q-persentil-score">0</b></span></div>
+    <div class="qtext" id="q-persentil-text"></div>
+    <div class="opts" id="q-persentil-opts"></div>
+    <div class="expbox" id="q-persentil-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-persentil-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-persentil-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 17. DIVIDER BAB 4 -->
+<section class="slide divider acc-rose" id="s-d4">
+  <div class="dnum">04</div>
+  <p class="dkicker">BAB 4</p>
+  <h1>Jangkauan</h1>
+  <ul class="dlist">
+    <li>Ukuran penyebaran: seberapa menyebar data di sekitar pusatnya</li>
+    <li>Jangkauan data tunggal: J = maks &minus; min; data kelompok: tepi atas akhir &minus; tepi bawah awal</li>
+    <li>Jangkauan antarkuartil H = Q3 &minus; Q1 dan simpangan kuartil Qd = H : 2</li>
+    <li>Sifat transformasi: y = b&middot;x + a &rarr; semua jangkauan dikali b, konstanta a tak berefek</li>
+    <li>Boxplot, pagar 1,5&times;H, dan uji ketahanan terhadap outlier</li>
+    <li>Lab interaktif: studio boxplot + kalkulator sebaran data kelompok</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 18. BAB4 KONSEP: JANGKAUAN -->
+<section class="slide acc-rose" id="s-m4a">
+  <h2>Jangkauan (Range)</h2>
+  <p class="sub">Ukuran pemusatan menjawab "di mana pusatnya?" &mdash; jangkauan menjawab "seberapa menyebar isinya?". Dua kelompok data bisa berpusat sama namun sangat berbeda kerapianya.</p>
+  <div class="rule"></div>
+  <div class="defbox">Kelas A dan kelas B sama-sama berrata-rata 75 &mdash; tetapi nilai A tersebar 40 sampai 100 sedangkan B hanya 65 sampai 85. <b style="color:#e11d48">Jangkauan</b> adalah ukuran penyebaran paling sederhana: selisih dua nilai ujung. Jangkauan kecil &rarr; data rapat (<b>homogen</b>); jangkauan besar &rarr; data menyebar (<b>heterogen</b>).</div>
+  <div class="formula">Data tunggal: J = data terbesar &minus; data terkecil
+    <small>Contoh: 8, 5, 9, 7, 6, 10, 4 &rarr; urutkan &rarr; 4, 5, 6, 7, 8, 9, 10 &rarr; J = 10 &minus; 4 = <b>6</b>. Urutkan dulu agar ujungnya tak keliru!</small>
+  </div>
+  <div class="formula">Data kelompok: J = tepi atas kelas terakhir &minus; tepi bawah kelas pertama
+    <small>Contoh: 31&ndash;40 (5), 41&ndash;50 (8), 51&ndash;60 (12), 61&ndash;70 (9), 71&ndash;80 (6) &rarr; J = 80,5 &minus; 30,5 = <b>50</b>. Kelas 31&ndash;40 menampung data hingga 40,5 dan kelas 71&ndash;80 hingga 80,5 &mdash; gunakan tepi kelas, bukan batas tulisannya (yang memberi 49, kurang 1).</small>
+  </div>
+  <div class="formula">Sifat transformasi &mdash; jika setiap data diubah menjadi b&middot;x + a (b &gt; 0):
+    <small>Jangkauan baru = <b>b &times; jangkauan lama</b>. Menambah konstanta a <b>tidak mengubah</b> jangkauan (semua data bergeser bersama). Contoh: J = 6 &rarr; semua data dikali 3 lalu ditambah 2 &rarr; J' = 3 &times; 6 = <b>18</b>.</small>
+  </div>
+  <div class="callout"><b>Kelemahan fatal jangkauan:</b> ia hanya melihat <b>dua ujung data</b>. Satu nilai ekstrem bisa melipatgandakannya, sementara 98% data lain tak tersentuh. Karena itu statistikawan memakai ukuran yang lebih stabil &mdash; kenalan dengan H dan Qd di halaman berikutnya.</div>
+</section>
+
+<!-- 19. BAB4 KONSEP: H & Qd -->
+<section class="slide acc-rose" id="s-m4b">
+  <h2>Jangkauan Antarkuartil &amp; Simpangan Kuartil</h2>
+  <p class="sub">Alih-alih seluruh data, ukur sebaran <b>50% data tengah</b> &mdash; kuartil otomatis menyingkirkan gangguan di ujung.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Jangkauan antarkuartil</b> (interquartile range) <b style="color:#e11d48">H = Q3 &minus; Q1</b>: panjang "kotak" yang menampung 50% data tengah. <b>Simpangan kuartil</b> (semi antarkuartil) <b style="color:#b45309">Qd = H : 2</b>: setengahnya, dipakai sebagai ukuran simpangan data tengah. H kecil &rarr; bagian tengah data homogen.</div>
+  <div class="formula">H = Q3 &minus; Q1 &nbsp;&nbsp;&nbsp; Qd = (Q3 &minus; Q1) : 2 = H : 2
+    <small>Hitung Q1 dan Q3 dulu (data tunggal: letak i(n+1):4 &mdash; data kelompok: rumus T<sub>b</sub>), lalu kurangkan.</small>
+  </div>
+  <div class="grid2">
+    <div class="mini"><h4>Contoh tanpa outlier</h4><p>Data 8, 9, 10, 11, 12, 13, 14, 18 (n = 8).<br>Q1 = 9,25; Q3 = 13,75 (letak 2,25 dan 6,75).<br>H = 13,75 &minus; 9,25 = <b>4,5</b>; Qd = <b>2,25</b>.<br>J = 18 &minus; 8 = 10.</p></div>
+    <div class="mini"><h4>Tambahkan outlier 40</h4><p>Data menjadi 8, 9, 10, 11, 12, 13, 14, 18, 40 (n = 9).<br>Q1 = 9,5; Q3 = 16 &rarr; H = <b>6,5</b> (naik &plusmn;44%).<br>J = 40 &minus; 8 = <b>32</b> (melonjak 220%!).<br>Kesimpulan: H jauh lebih kebal outlier daripada J.</p></div>
+  </div>
+  <div class="note"><b>Boxplot (pengayaan).</b> Boxplot meringkas data menjadi <b>5 angka</b>: Min, Q1, Me, Q3, Maks &mdash; kotaknya tepat sepanjang H. <b>Pagar outlier:</b> Q1 &minus; 1,5&times;H dan Q3 + 1,5&times;H; titik data di luar pagar digambar terpisah sebagai outlier. Lab di bawah menggambarnya otomatis dari datamu.</div>
+  <div class="callout"><b>Dua jebakan H &amp; Qd:</b> <b>(1)</b> Hubungan H = 2&times;Qd sering ditanya bolak-balik &mdash; diberi Qd, kalikan 2 untuk H. <b>(2)</b> H = 0 <b>tidak</b> berarti semua data sama: data 1, 3, 3, 3, 3, 3, 9 punya Q1 = Q3 = 3 sehingga H = 0, padahal ujungnya 1 dan 9 &mdash; artinya 50% data tengah bernilai sama.</div>
+</section>
+
+<!-- 20. BAB4 LAB: BOXPLOT + KELOMPOK -->
+<section class="slide acc-rose" id="s-m4c">
+  <h2>Lab Interaktif &mdash; Boxplot, Outlier &amp; Sebaran Kelompok</h2>
+  <p class="sub">Gambar boxplot datamu, uji ketahanannya terhadap outlier, lalu hitung seluruh ukuran sebaran sebuah tabel frekuensi sekaligus.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 9: Studio Boxplot &amp; Outlier</h3>
+    <div id="bx-lab"></div>
+    <p class="draghint">Kotak biru = Q1&rarr;Q3 (panjang H) &middot; garis hijau = median &middot; pagar merah = batas 1,5&times;H &middot; titik merah = outlier.</p>
+  </div>
+  <div class="labbox">
+    <h3>Lab 10: Jangkauan Data Kelompok Lengkap</h3>
+    <div id="gr-lab"></div>
+    <p class="draghint">Lab ini menghitung J, Q1, Q3, H, Qd, D1, D9, hingga jangkauan antardesil D9 &minus; D1 dari tabel yang bisa kamu edit.</p>
+  </div>
+</section>
+
+<!-- 21. BAB4 KUIS -->
+<section class="slide acc-rose" id="s-m4q">
+  <div id="q-jangkauan-body">
+    <h2>Latihan HOTS &mdash; Jangkauan</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-jangkauan-lvl"></span><span class="qcount">Soal <b id="q-jangkauan-num">1</b>/10 &middot; Skor: <b id="q-jangkauan-score">0</b></span></div>
+    <div class="qtext" id="q-jangkauan-text"></div>
+    <div class="opts" id="q-jangkauan-opts"></div>
+    <div class="expbox" id="q-jangkauan-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-jangkauan-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-jangkauan-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+<!-- 22. SKOR -->
+<section class="slide acc-blue" id="s-score">
+  <h2>Nilai Kamu</h2>
+  <p class="sub">Rekapitulasi otomatis seluruh latihan. Skor tersimpan di perangkatmu, walau halaman ditutup.</p>
+  <div class="rule"></div>
+  <div id="score-overall"></div>
+  <div id="score-table"></div>
+  <div class="qctrl">
+    <button class="btn ghost" id="btn-reset">Reset Semua Skor</button>
+    <button class="btn pri" data-goto="s-menu">Kembali ke Peta Materi</button>
+  </div>
+</section>
+
+<!-- 23. RANGKUMAN -->
+<section class="slide acc-amber" id="s-summary">
+  <h2>Rangkuman &amp; Strategi TKA</h2>
+  <p class="sub">Kartu rumus inti, peta ekuivalensi antar-kuantil, dan lima strategi menaklukkan soal HOTS kuantil &amp; jangkauan.</p>
+  <div class="rule"></div>
+  <div class="grid2">
+    <div class="mini acc-blue"><h4>Kartu Rumus &mdash; Data Tunggal</h4><p>Letak kuartil: <b>Q<sub>i</sub> = i(n+1) : 4</b><br>Letak desil: <b>D<sub>i</sub> = i(n+1) : 10</b><br>Letak persentil: <b>P<sub>i</sub> = i(n+1) : 100</b><br>Letak bulat &rarr; ambil datanya; pecahan &rarr; interpolasi x<sub>k</sub> + t(x<sub>k+1</sub> &minus; x<sub>k</sub>).<br>Jangkauan: <b>J = maks &minus; min</b> (urutkan dulu!).</p></div>
+    <div class="mini acc-green"><h4>Kartu Rumus &mdash; Data Kelompok</h4><p>Q<sub>i</sub> = T<sub>b</sub> + ((i&middot;n:4 &minus; F) : f) &times; c<br>D<sub>i</sub> = T<sub>b</sub> + ((i&middot;n:10 &minus; F) : f) &times; c<br>P<sub>i</sub> = T<sub>b</sub> + ((i&middot;n:100 &minus; F) : f) &times; c<br>Kelas kuantil: F &lt; pos &le; F + f lewat <b>kumulatif</b>.<br>J = tepi atas kelas akhir &minus; tepi bawah kelas awal.</p></div>
+    <div class="mini acc-purple"><h4>Peta Ekuivalensi Antar-Kuantil</h4><p>P25 = Q1 &middot; P50 = Q2 = D5 = <b>median</b> &middot; P75 = Q3<br>P10 = D1 &middot; P20 = D2 &middot; P30 = D3 &middot; P90 = D9<br>D<sub>k</sub> = P<sub>10k</sub> dan Q<sub>k</sub> = P<sub>25k</sub>.<br>Sebaran: <b>H = Q3 &minus; Q1 = 2&middot;Qd</b>; jangkauan antardesil = D9 &minus; D1 = P90 &minus; P10.</p></div>
+    <div class="mini acc-rose"><h4>Jebakan yang Harus Kamu Waspadai</h4><p>Lupa mengurutkan data tunggal.<br>Letak memakai n, bukan (n+1) &mdash; ikuti konvensi sekolah.<br>T<sub>b</sub> ditulis batas tulisan (51), bukan 50,5.<br>F dianggap kumulatif kelas kuantil, bukan <i>sebelumnya</i>.<br>Lupa &times; c; c dihitung 9 untuk kelas 41&ndash;50.<br>Soal "10% teratas" tak diterjemahkan ke D9/P90.</p></div>
+  </div>
+  <div class="defbox"><b>Lima strategi soal HOTS:</b></div>
+  <ul class="dlist" style="margin-top:0">
+    <li><b>Kenali jenis datanya dulu.</b> Daftar nilai = data tunggal (letak i(n+1):d); tabel kelas = data kelompok (pos i&middot;n:d + interpolasi T<sub>b</sub>). Mekanismenya beda &mdash; jangan tertukar.</li>
+    <li><b>Urutkan, lalu baru hitung.</b> Seluruh kuantil hanya bermakna pada data terurut; cek ulang urutan sebelum mencari letak.</li>
+    <li><b>Tulis anatomi variabel satu per satu.</b> Untuk data kelompok: pos, kelas kuantil, T<sub>b</sub>, F, f, c &mdash; baru substitusi. Kesalahan paling umum adalah salah mengambil kelas atau F.</li>
+    <li><b>Terjemahkan kalimat cerita ke kuantil.</b> "25% teratas" &rarr; Q3; "10% terbawah" &rarr; D1; "60% ke bawah" &rarr; P60; "top 1%" &rarr; P99. Setelah diterjemahkan, sisanya mesin hitung biasa.</li>
+    <li><b>Manfaatkan sifat transformasi &amp; ekuivalensi.</b> y = b&middot;x + a menggeser semua ukuran letak dan melipatgandakan semua jangkauan dengan b; Q2 = D5 = P50 = median menjadi kunci cek cepat banyak soal.</li>
+  </ul>
+  <div class="callout" style="margin-top:16px"><b>Langkah terakhir:</b> kerjakan ulang soal yang salah pada tiap bab lewat Peta Materi, lalu pantau halaman Nilai hingga keempat bab hijau. Selamat berlatih!</div>
+</section>
+
+</div><!-- /deck -->
+
+<nav id="navbar"><div class="nb-in">
+  <button class="nb-btn" id="btn-menu">&#8801; Peta</button>
+  <button class="nb-btn" id="btn-prev">&larr; Sebelumnya</button>
+  <span id="counter">1 / 23</span>
+  <span class="spacer"></span>
+  <button class="nb-btn" id="btn-next">Berikutnya &rarr;</button>
+</div></nav>
+<script>
+/* ================= DATA 40 SOAL HOTS ================= */
+const QUIZ={};
+
+QUIZ.kuartil={title:'Kuartil',acc:'#2563eb',qs:[
+{lvl:'C5 · Analisis',
+ q:'Data: 6, 8, 10, 7, 9, 11, 8, 7, 12, 9. Setiap data diubah dengan aturan y = (x − 3) : 2. Kuartil bawah (Q1) data yang baru adalah…',
+ opts:['1,5','2','2,5','3','3,5'],
+ ans:1,
+ exp:'Urutkan: 6, 7, 7, 8, 8, 9, 9, 10, 11, 12 (n = 10). Letak Q1 = (10+1) : 4 = 2,75 → Q1 = 7 + 0,75 × (7 − 7) = 7.<br>Transformasi y = (x − 3) : 2 naik-monoton → semua ukuran letak ikut berubah: Q1 baru = (7 − 3) : 2 = <b>2</b>.<br>Tidak perlu menghitung ulang 10 data baru — cukup transformasikan kuartilnya.'},
+{lvl:'C4 · Analisis',
+ q:'Data terurut: 4, 6, 7, 8, 9, 10, 12, 14, 16, 18. Nilai Q1 + Q3 − Q2 adalah…',
+ opts:['10,75','11,25','11,75','12,25','12,75'],
+ ans:2,
+ exp:'n = 10 → letak Q1 = 11 : 4 = 2,75 → Q1 = 6 + 0,75 × (7 − 6) = 6,75.<br>Letak Q2 = 11 : 2 = 5,5 → Q2 = (9 + 10) : 2 = 9,5.<br>Letak Q3 = 33 : 4 = 8,25 → Q3 = 14 + 0,25 × (16 − 14) = 14,5.<br>Q1 + Q3 − Q2 = 6,75 + 14,5 − 9,5 = <b>11,75</b>.'},
+{lvl:'C5 · Analisis',
+ q:'Suatu data memiliki Q1 = 20 dan Q3 = 32. Jika setiap data diubah menjadi y = 2x − 10, jangkauan antarkuartil data yang baru adalah…',
+ opts:['12','22','24','32','44'],
+ ans:2,
+ exp:'H awal = Q3 − Q1 = 32 − 20 = 12.<br>y = 2x − 10 naik-monoton; pada SELISIH, konstanta −10 saling menghapus: H baru = 2 × (Q3 − Q1) = 2 × 12 = <b>24</b>.<br>Aturan praktis: transformasi b·x + a melipatgandakan semua ukuran sebaran (J, H, Qd) dengan b, sementara a tidak berefek pada sebaran.'},
+{lvl:'C4 · Analisis',
+ q:'Nilai ulangan 40 siswa: 41–50 (f = 3), 51–60 (7), 61–70 (10), 71–80 (10), 81–90 (7), 91–100 (3). Nilai Q1 + Q3 data tersebut adalah…',
+ opts:['135,5','138,5','141','142,5','145'],
+ ans:2,
+ exp:'Kumulatif: 3, 10, 20, 30, 37, 40.<br>Pos Q1 = 40 : 4 = 10 → kelas 51–60 (3 &lt; 10 ≤ 10): Q1 = 50,5 + ((10 − 3) : 7) × 10 = 50,5 + 10 = 60,5.<br>Pos Q3 = 30 → kelas 71–80 (20 &lt; 30 ≤ 30): Q3 = 70,5 + ((30 − 20) : 10) × 10 = 70,5 + 10 = 80,5.<br>Q1 + Q3 = 60,5 + 80,5 = <b>141</b>.'},
+{lvl:'C5 · Analisis',
+ q:'Data kelompok: 41–50 (f = 10), 51–60 (15), 61–70 (18), 71–80 (8), 81–90 (4). Jika Q1 = 53, banyak data (n) kelompok itu adalah…',
+ opts:['50','52','54','55','58'],
+ ans:3,
+ exp:'Kelas Q1 = 51–60 dengan Tb = 50,5; F = 10; f = 15; c = 10; pos = n : 4.<br>53 = 50,5 + ((n:4 − 10) : 15) × 10 → 2,5 = (n:4 − 10) × 2:3 → n:4 − 10 = 3,75 → n = <b>55</b>.<br>Cek: pos = 55 : 4 = 13,75 memang jatuh di kelas 51–60 ✓. Soal "mundur" seperti ini selesai dengan memperlakukan posisi sebagai variabel.'},
+{lvl:'C4 · Analisis',
+ q:'Data: 2, 3, 4, 5, 6, 7. Dengan letak kuartil i(n+1) : 4, nilai Q3 adalah…',
+ opts:['5,75','6','6,25','6,5','6,75'],
+ ans:2,
+ exp:'n = 6 → letak Q3 = 3(6+1) : 4 = 5,25 → antara data ke-5 (6) dan ke-6 (7).<br>Q3 = 6 + 0,25 × (7 − 6) = <b>6,25</b>.<br>Metode "median separuh data" akan memberi 6 — pada TKA ikuti konvensi letak i(n+1) : 4 sebagaimana diajarkan sekolah.'},
+{lvl:'C4 · Analisis',
+ q:'Nilai 50 siswa: 40–49 (f = 4), 50–59 (6), 60–69 (10), 70–79 (16), 80–89 (10), 90–99 (4). Guru menetapkan 25% siswa teratas mendapat nilai A. Nilai batas (Q3) pemberian A adalah…',
+ opts:['79,5','80,5','81','81,5','82'],
+ ans:2,
+ exp:'Kumulatif: 4, 10, 20, 36, 46, 50. "25% teratas" → batasnya kuartil atas.<br>Pos Q3 = 3 × 50 : 4 = 37,5 → kelas 80–89 (36 &lt; 37,5 ≤ 46).<br>Q3 = 79,5 + ((37,5 − 36) : 10) × 10 = 79,5 + 1,5 = <b>81</b>.<br>Jadi siswa memperoleh A jika nilainya mencapai 81 ke atas.'},
+{lvl:'C5 · Analisis',
+ q:'Pada suatu data tunggal, letak Q2 adalah data ke-10,5 dan letak Q3 − letak Q1 = 10,5. Banyak data (n) adalah…',
+ opts:['18','19','20','21','22'],
+ ans:2,
+ exp:'Letak Q2 = (n + 1) : 2 = 10,5 → n + 1 = 21 → n = <b>20</b>.<br>Cek syarat kedua: letak Q3 − letak Q1 = 3(n+1) : 4 − (n+1) : 4 = (n+1) : 2 = 10,5 ✓ konsisten.<br>Dua informasi posisi bekerja seperti sistem persamaan — jawaban harus memenuhi keduanya.'},
+{lvl:'C4 · Analisis',
+ q:'Data kelompok: 51–55 (f = 2), 56–60 (4), 61–65 (8), 66–70 (4), 71–75 (2). Kuartil atas (Q3) data tersebut adalah…',
+ opts:['65,5','66,25','66,75','67,25','68'],
+ ans:2,
+ exp:'n = 20; kumulatif: 2, 6, 14, 18, 20.<br>Pos Q3 = 3 × 20 : 4 = 15 → kelas 66–70 (14 &lt; 15 ≤ 18); Tb = 65,5; F = 14; f = 4; c = 5.<br>Q3 = 65,5 + ((15 − 14) : 4) × 5 = 65,5 + 1,25 = <b>66,75</b>.'},
+{lvl:'C6 · Evaluasi',
+ q:'Perhatikan pernyataan berikut. (1) Q2 selalu sama dengan median. (2) Q1 ≤ Q2 ≤ Q3. (3) Q3 − Q2 selalu sama dengan Q2 − Q1. (4) Q1 dan Q3 selalu merupakan salah satu data asli. Pernyataan yang SELALU benar adalah…',
+ opts:['(1) saja','(1) dan (2)','(2) dan (3)','(1), (2), dan (3)','(1), (2), dan (4)'],
+ ans:1,
+ exp:'(1) Benar — Q2 didefinisikan sebagai median. (2) Benar — kuartil memotong data secara berurutan.<br>(3) Salah: data 1, 2, 3, 10 → Q1 = 1,25; Q2 = 2,5; Q3 = 8,25; selisihnya 1,25 vs 5,75 — sama hanya jika data simetris.<br>(4) Salah: letak pecahan menghasilkan interpolasi — Q1 data 2, 3, 4, 5 adalah 2,75, bukan data asli.<br>Jadi yang selalu benar: <b>(1) dan (2)</b>.'}
+]};
+
+QUIZ.desil={title:'Desil',acc:'#059669',qs:[
+{lvl:'C4 · Analisis',
+ q:'Data: 3, 4, 4, 5, 5, 6, 6, 7, 8, 9. Nilai D3 adalah…',
+ opts:['4','4,3','4,5','4,7','5'],
+ ans:1,
+ exp:'n = 10 → letak D3 = 3(11) : 10 = 3,3 → antara data ke-3 (4) dan ke-4 (5).<br>D3 = 4 + 0,3 × (5 − 4) = <b>4,3</b>.<br>Interpretasi: sekitar 30% data bernilai paling besar 4,3.'},
+{lvl:'C5 · Analisis',
+ q:'D7 suatu data adalah 63. Jika setiap data dikali 2 lalu ditambah 5, D7 yang baru adalah…',
+ opts:['126','128','131','136','141'],
+ ans:2,
+ exp:'Transformasi y = 2x + 5 naik-monoton → desil ikut berubah: D7 baru = 2 × 63 + 5 = <b>131</b>.<br>Tidak perlu menghitung ulang data — inilah gunanya sifat transformasi pada ukuran letak.'},
+{lvl:'C4 · Analisis',
+ q:'Data kelompok: 40–49 (f = 3), 50–59 (7), 60–69 (12), 70–79 (10), 80–89 (6), 90–99 (2) dengan n = 40. Nilai D6 adalah…',
+ opts:['70,5','71','71,5','72','72,5'],
+ ans:2,
+ exp:'Kumulatif: 3, 10, 22, 32, 38, 40.<br>Pos D6 = 6 × 40 : 10 = 24 → kelas 70–79 (22 &lt; 24 ≤ 32).<br>D6 = 69,5 + ((24 − 22) : 10) × 10 = 69,5 + 2 = <b>71,5</b>.'},
+{lvl:'C4 · Analisis',
+ q:'Sebuah ujian diikuti 200 peserta. Nilai Andi terletak tepat pada D8. Banyak peserta yang nilainya di bawah Andi adalah…',
+ opts:['40','60','120','160','180'],
+ ans:3,
+ exp:'D8 berarti 80% peserta bernilai di bawah Andi.<br>80% × 200 = <b>160</b> peserta — hanya sekitar 40 yang nilainya di atas/samanya.<br>Soal interpretasi: tidak perlu tabel — cukup terjemahkan desil ke persentase.'},
+{lvl:'C5 · Analisis',
+ q:'Data kelompok: 31–40 (f = 4), 41–50 (9), 51–60 (15), 61–70 (p), 71–80 (2). Jika D4 = 52,5, nilai p adalah…',
+ opts:['8','9','10','11','12'],
+ ans:2,
+ exp:'D4 jatuh di kelas 51–60 (Tb = 50,5; F = 13; f = 15; c = 10) dengan pos = 4n : 10 = 0,4n dan n = 30 + p.<br>52,5 = 50,5 + ((0,4n − 13) : 15) × 10 → 2 = (0,4n − 13) × 2:3 → 0,4n − 13 = 3 → n = 40.<br>p = 40 − (4 + 9 + 15 + 2) = <b>10</b>. Cek: pos = 16 → kelas 51–60 ✓.'},
+{lvl:'C4 · Analisis',
+ q:'Data: 5, 6, 7, 7, 8, 9, 10, 12. Nilai D5 adalah…',
+ opts:['7','7,25','7,5','7,75','8'],
+ ans:2,
+ exp:'Letak D5 = 5(9) : 10 = 4,5 → rata-rata data ke-4 dan ke-5 = (7 + 8) : 2 = <b>7,5</b>.<br>Identitas penting: <b>D5 selalu sama dengan median</b> — cepat sekali untuk mengecek jawaban.'},
+{lvl:'C5 · Analisis',
+ q:'Data: 2, 3, 5, 6, 7, 8, 9, 10, 12, 14. Nilai D9 − D1 (jangkauan antardesil) adalah…',
+ opts:['11,5','11,6','11,7','11,8','12'],
+ ans:2,
+ exp:'Letak D1 = 11 : 10 = 1,1 → D1 = 2 + 0,1 × (3 − 2) = 2,1.<br>Letak D9 = 99 : 10 = 9,9 → D9 = 12 + 0,9 × (14 − 12) = 13,8.<br>D9 − D1 = 13,8 − 2,1 = <b>11,7</b> — merentang 80% data tengah, lebih stabil daripada jangkauan biasa saat ada outlier.'},
+{lvl:'C4 · Analisis',
+ q:'Pengeluaran 50 pengajuan (juta rupiah): 10–19 (f = 8), 20–29 (12), 30–39 (20), 40–49 (10). Sebanyak 10% pengajuan termahal akan diaudit. Batas audit (D9) adalah…',
+ opts:['Rp43,5 juta','Rp44 juta','Rp44,5 juta','Rp45 juta','Rp45,5 juta'],
+ ans:2,
+ exp:'Kumulatif: 8, 20, 40, 50. "10% termahal" → batasnya D9.<br>Pos D9 = 9 × 50 : 10 = 45 → kelas 40–49 (40 &lt; 45 ≤ 50).<br>D9 = 39,5 + ((45 − 40) : 10) × 10 = 39,5 + 5 = <b>44,5</b> juta. Pengajuan bernilai ≥ 44,5 juta masuk daftar audit.'},
+{lvl:'C5 · Analisis',
+ q:'Pada suatu data tunggal, letak D2 adalah data ke-8,4. Banyak data (n) adalah…',
+ opts:['39','40','41','42','43'],
+ ans:2,
+ exp:'Letak D2 = 2(n + 1) : 10 = 8,4 → n + 1 = 42 → n = <b>41</b>.<br>Cek: n = 41 → letak D2 = 2 × 42 : 10 = 8,4 ✓.'},
+{lvl:'C6 · Evaluasi',
+ q:'Perhatikan pernyataan berikut. (1) D1 = P10. (2) D5 = P50. (3) D3 = P30. (4) D9 = P90. Pernyataan yang benar adalah…',
+ opts:['(1) dan (2) saja','(1), (2), dan (3) saja','(1), (2), dan (4) saja','Semuanya benar','Semuanya salah'],
+ ans:3,
+ exp:'Ekuivalensi standar antar-kuantil: D<sub>k</sub> = P<sub>10k</sub>.<br>D1 = P10 ✓, D5 = P50 ✓ (= median), D3 = P30 ✓, D9 = P90 ✓ → <b>semuanya benar</b>.<br>Peta ini membuat satu perhitungan kuartil/median bisa membidik banyak soal persentil sekaligus.'}
+]};
+</script>
+<script>
+QUIZ.persentil={title:'Persentil',acc:'#7c3aed',qs:[
+{lvl:'C4 · Analisis',
+ q:'Data terurut 20 angka: 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 14, 15, 16, 18, 20. Nilai P25 adalah…',
+ opts:['7,75','8','8,25','8,5','9'],
+ ans:1,
+ exp:'Letak P25 = 25(21) : 100 = 5,25 → antara data ke-5 (8) dan ke-6 (8).<br>P25 = 8 + 0,25 × (8 − 8) = <b>8</b>.<br>Sekali cek identitas: P25 = Q1, dan letak Q1 = 21 : 4 = 5,25 — sama persis.'},
+{lvl:'C5 · Analisis',
+ q:'P40 suatu data adalah 45. Jika setiap data dikali 2 lalu dikurangi 4, P40 yang baru adalah…',
+ opts:['82','84','86','88','90'],
+ ans:2,
+ exp:'y = 2x − 4 naik-monoton → persentil ikut: P40 baru = 2 × 45 − 4 = <b>86</b>.<br>Semua ukuran letak (mean, median, kuartil, desil, persentil) tunduk pada aturan transformasi yang sama.'},
+{lvl:'C4 · Analisis',
+ q:'Tinggi badan 40 siswa (cm): 146–150 (f = 2), 151–155 (6), 156–160 (12), 161–165 (10), 166–170 (8), 171–175 (2). Nilai P60 adalah…',
+ opts:['161,5','162','162,5','163','163,5'],
+ ans:2,
+ exp:'Kumulatif: 2, 8, 20, 30, 38, 40.<br>Pos P60 = 60 × 40 : 100 = 24 → kelas 161–165 (20 &lt; 24 ≤ 30).<br>Tb = 160,5; F = 20; f = 10; c = 5.<br>P60 = 160,5 + ((24 − 20) : 10) × 5 = 160,5 + 2 = <b>162,5</b> cm.'},
+{lvl:'C5 · Analisis',
+ q:'Syarat masuk tim voli adalah tinggi badan minimal P60 = 162,5 cm. Seorang siswa bertinggi 163 cm. Pernyataan yang tepat adalah…',
+ opts:['Lolos, karena 163 lebih besar dari P60','Tidak lolos, karena 163 lebih kecil dari P60','Tidak dapat ditentukan tanpa tabel lengkap','Lolos hanya jika tingginya minimal 165 cm','Tidak lolos, karena P60 bukan nilai batas'],
+ ans:0,
+ exp:'P60 = 162,5 cm adalah <b>nilai batas</b>: 60% siswa lebih pendek dari 162,5 cm.<br>Tinggi 163 &gt; 162,5 → <b>lolos</b>.<br>Soal seperti ini menguji makna persentil sebagai ambang, bukan sekadar memasukkan rumus.'},
+{lvl:'C4 · Analisis',
+ q:'Data kelompok: 41–50 (f = 6), 51–60 (12), 61–70 (10), 71–80 (2) dengan n = 30. Nilai P30 adalah…',
+ opts:['52','52,5','53','53,5','54'],
+ ans:2,
+ exp:'Kumulatif: 6, 18, 28, 30.<br>Pos P30 = 30 × 30 : 100 = 9 → kelas 51–60 (6 &lt; 9 ≤ 18).<br>P30 = 50,5 + ((9 − 6) : 12) × 10 = 50,5 + 2,5 = <b>53</b>.'},
+{lvl:'C5 · Analisis',
+ q:'Pada suatu data tunggal, letak P75 adalah data ke-15,75. Banyak data (n) adalah…',
+ opts:['18','19','20','21','22'],
+ ans:2,
+ exp:'Letak P75 = 75(n + 1) : 100 = 15,75 → n + 1 = 21 → n = <b>20</b>.<br>Bonus identitas: P75 = Q3, dan letak Q3 = 3(21) : 4 = 15,75 ✓ konsisten.'},
+{lvl:'C4 · Analisis',
+ q:'Data terurut: 4, 7, 8, 9, 10, 11, 12, 13, 15, 16, 18, 20 (n = 12). Nilai P10 adalah…',
+ opts:['4,3','4,6','4,9','5,2','5,5'],
+ ans:2,
+ exp:'Letak P10 = 10(13) : 100 = 1,3 → antara data ke-1 (4) dan ke-2 (7).<br>P10 = 4 + 0,3 × (7 − 4) = <b>4,9</b>.<br>Letak persentil bisa sangat dekat dengan data pertama — itulah wujud "10% data terbawah".'},
+{lvl:'C6 · Evaluasi',
+ q:'Dina memperoleh nilai 72 yang tepat setara P70 di sekolahnya. Bima memperoleh 85 yang tepat setara P65 di sekolahnya. Kesimpulan yang tepat adalah…',
+ opts:['Kedudukan relatif Dina lebih tinggi','Kedudukan relatif Bima lebih tinggi karena nilainya lebih besar','Kedudukan keduanya sama tinggi','Tidak dapat dibandingkan karena beda sekolah','Bima lebih tinggi karena selisih nilai dan persentilnya lebih besar'],
+ ans:0,
+ exp:'Bandingkan kedudukan lewat <b>persentil</b>, bukan nilai mentah.<br>Dina tepat di P70 (di atas 70% pesertanya); Bima di P65 (di atas 65%).<br>Meskipun 85 &gt; 72, kedudukan relatif <b>Dina lebih tinggi</b> — persentil menormalisasi perbedaan kelompok/tingkat kesulitan.'},
+{lvl:'C4 · Analisis',
+ q:'Tekanan darah 40 pasien: 90–94 (f = 4), 95–99 (8), 100–104 (12), 105–109 (10), 110–114 (6). Sebanyak 25% pasien terendah dirujuk pemeriksaan lanjutan. Nilai batas rujukan (P25) adalah…',
+ opts:['97,5','98','98,25','98,5','99'],
+ ans:2,
+ exp:'Kumulatif: 4, 12, 24, 34, 40. "25% terendah" → batasnya P25; pos = 25 × 40 : 100 = 10 → kelas 95–99 (4 &lt; 10 ≤ 12).<br>Tb = 94,5; F = 4; f = 8; c = 5.<br>P25 = 94,5 + ((10 − 4) : 8) × 5 = 94,5 + 3,75 = <b>98,25</b>.'},
+{lvl:'C6 · Evaluasi',
+ q:'Perhatikan pernyataan berikut. (1) P25 = Q1. (2) P50 = D5 = median. (3) P75 = Q3. (4) P30 = D3. Pernyataan yang benar adalah…',
+ opts:['(1) dan (2) saja','(1), (2), dan (3) saja','(1), (3), dan (4) saja','Semuanya benar','Semuanya salah'],
+ ans:3,
+ exp:'Identitas standar antar-kuantil: P25 = Q1 ✓, P50 = Q2 = D5 = median ✓, P75 = Q3 ✓, dan P30 = D3 (karena D<sub>k</sub> = P<sub>10k</sub>) ✓.<br>Jadi <b>semuanya benar</b> — kuartil, desil, dan persentil hanyalah nama berbeda untuk titik potong yang sama.'}
+]};
+
+QUIZ.jangkauan={title:'Jangkauan',acc:'#e11d48',qs:[
+{lvl:'C4 · Analisis',
+ q:'Data: 8, 5, 9, 7, 6, 10, 4. Jika setiap data dikali 3 lalu ditambah 2, jangkauan data yang baru adalah…',
+ opts:['6','12','18','20','24'],
+ ans:2,
+ exp:'Urutkan: 4, 5, 6, 7, 8, 9, 10 → J = 10 − 4 = 6.<br>y = 3x + 2: faktor skala b = 3 melipatgandakan jangkauan; konstanta +2 menggeser semua data bersama-sama (tak berefek pada sebaran).<br>J baru = 3 × 6 = <b>18</b>.'},
+{lvl:'C4 · Analisis',
+ q:'Data kelompok: 31–40 (f = 5), 41–50 (8), 51–60 (12), 61–70 (9), 71–80 (6). Jangkauan data tersebut adalah…',
+ opts:['40','45','49','50','51'],
+ ans:3,
+ exp:'J (kelompok) = tepi atas kelas terakhir − tepi bawah kelas pertama.<br>J = (80 + 0,5) − (31 − 0,5) = 80,5 − 30,5 = <b>50</b>.<br>Jangan memakai 80 − 31 = 49: kelas ujung "menyimpan" data hingga tepi kelasnya (40,5 dan 80,5) karena data berupa bilangan bulat.'},
+{lvl:'C4 · Analisis',
+ q:'Data: 3, 4, 5, 6, 7, 8, 9, 10. Jangkauan antarkuartil (H = Q3 − Q1) data tersebut adalah…',
+ opts:['4','4,25','4,5','4,75','5'],
+ ans:2,
+ exp:'n = 8: letak Q1 = 9 : 4 = 2,25 → Q1 = 4 + 0,25 × (5 − 4) = 4,25; letak Q3 = 27 : 4 = 6,75 → Q3 = 8 + 0,75 × (9 − 8) = 8,75.<br>H = 8,75 − 4,25 = <b>4,5</b>; bonus: Qd = 4,5 : 2 = 2,25.'},
+{lvl:'C4 · Analisis',
+ q:'Suatu data kelompok memiliki Q1 = 57,5 dan Q3 = 72,5. Simpangan kuartil (Qd) data tersebut adalah…',
+ opts:['5','7,5','10','15','30'],
+ ans:1,
+ exp:'Qd = (Q3 − Q1) : 2 = (72,5 − 57,5) : 2 = 15 : 2 = <b>7,5</b>.<br>Identitas: Qd = H : 2 dengan H = Q3 − Q1 — hafal keduanya, soal bisa memberi salah satunya.'},
+{lvl:'C5 · Analisis',
+ q:'Rata-rata nilai kelas A = 75 dengan jangkauan 30; rata-rata kelas B = 75 dengan jangkauan 10. Kesimpulan yang paling tepat adalah…',
+ opts:['Nilai kelas A lebih tinggi daripada kelas B','Kelas B lebih homogen karena jangkauannya lebih kecil','Kelas A lebih homogen karena jangkauannya lebih besar','Kedua kelas sama homogen karena rata-ratanya sama','Informasi tidak cukup untuk membandingkan kerapian data'],
+ ans:1,
+ exp:'Rata-rata sama (75) → perbandingan sekarang murni soal <b>sebaran</b>.<br>Jangkauan B (10) jauh lebih kecil daripada A (30) → nilai B menggerombol rapat di sekitar 75.<br>Kesimpulan: <b>kelas B lebih homogen/konsisten</b>. Jangkauan kecil berarti rapat — bukan berarti nilainya tinggi.'},
+{lvl:'C5 · Analisis',
+ q:'Data: 6, 9, 8, 7, k, 10 memiliki rata-rata 8,5. Jangkauan data tersebut adalah…',
+ opts:['4','5','6','7','11'],
+ ans:1,
+ exp:'Jumlah data = mean × n = 8,5 × 6 = 51 → k = 51 − (6 + 9 + 8 + 7 + 10) = 51 − 40 = 11.<br>Urutkan: 6, 7, 8, 9, 10, 11 → J = 11 − 6 = <b>5</b>.<br>Dua konsep digabung: identitas total = mean × n untuk menemukan data hilang, lalu jangkauan dari data terurut.'},
+{lvl:'C5 · Analisis',
+ q:'Data: 10, 12, 14, 16, 18 kemudian ditambahkan satu data bernilai 40. Setelah penambahan itu, pasangan (jangkauan, jangkauan antarkuartil) yang baru adalah…',
+ opts:['(28, 12)','(30, 12)','(30, 10)','(32, 12)','(30, 14)'],
+ ans:1,
+ exp:'Awal (n = 5): J = 18 − 10 = 8; letak Q1 = 1,5 → Q1 = 11; letak Q3 = 4,5 → Q3 = 17; H = 6.<br>Sesudah +40 (n = 6): J = 40 − 10 = 30; letak Q1 = 1,75 → Q1 = 11,5; letak Q3 = 5,25 → Q3 = 18 + 0,25 × (40 − 18) = 23,5; H = 12.<br>Pasangan baru = <b>(30, 12)</b>. Jangkauan melompat hampir 4× lipat; H hanya naik 2× — kuartil jauh lebih kebal outlier.'},
+{lvl:'C4 · Analisis',
+ q:'Data kelompok: 40–49 (f = 4), 50–59 (6), 60–69 (10), 70–79 (10), 80–89 (6), 90–99 (4) dengan n = 40. Jangkauan antarkuartil (H) data tersebut adalah…',
+ opts:['15','17,5','20','22,5','25'],
+ ans:2,
+ exp:'Kumulatif: 4, 10, 20, 30, 36, 40.<br>Pos Q1 = 10 → kelas 50–59 (4 &lt; 10 ≤ 10): Q1 = 49,5 + ((10 − 4) : 6) × 10 = 49,5 + 10 = 59,5.<br>Pos Q3 = 30 → kelas 70–79 (20 &lt; 30 ≤ 30): Q3 = 69,5 + ((30 − 20) : 10) × 10 = 69,5 + 10 = 79,5.<br>H = 79,5 − 59,5 = <b>20</b>.'},
+{lvl:'C6 · Evaluasi',
+ q:'Suatu data (yang tidak semuanya sama) memiliki Q3 − Q1 = 0. Pernyataan yang PASTI benar adalah…',
+ opts:['Semua data bernilai sama','Sekurang-kurangnya 50% data di tengah bernilai sama','Jangkauan data pasti nol','Data pasti hanya terdiri dari satu nilai','Median pasti sama dengan rata-rata'],
+ ans:1,
+ exp:'Contoh: data 1, 3, 3, 3, 3, 3, 9 (n = 7) → letak Q1 = 2 → Q1 = 3; letak Q3 = 6 → Q3 = 3; H = 0.<br>Padahal jangkauan = 9 − 1 = 8 dan data tidak seragam.<br>Yang pasti benar: <b>50% data di tengah bernilai sama</b> (di sini data ke-2 sampai ke-6 semuanya 3). H = 0 ≠ semua data sama.'},
+{lvl:'C5 · Analisis',
+ q:'Data kelompok: 50–54 (f = 8), 55–59 (10), 60–64 (12), 65–69 (6), 70–74 (4) dengan n = 40. Kuartil atas (Q3) data tersebut adalah…',
+ opts:['61','62,5','64,5','65,5','66,5'],
+ ans:2,
+ exp:'Kumulatif: 8, 18, 30, 36, 40; c = 5.<br>Pos Q3 = 3 × 40 : 4 = 30. Kelas 60–64 memenuhi 18 &lt; 30 ≤ 30 → <b>kelas Q3 = 60–64</b> (data ke-30 adalah data terakhir kelas itu).<br>Tb = 59,5; F = 18; f = 12 → Q3 = 59,5 + ((30 − 18) : 12) × 5 = 59,5 + 5 = <b>64,5</b>.<br>Hati-hati: jangan memakai kelas 65–69 — kumulatif sebelum kelas itu sudah 30, sehingga syarat F &lt; pos gagal. (Bonus: Q1 = 55,5 via kelas 55–59.)'}
+]};
+</script>
+<script>
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+const LETTERS=['A','B','C','D','E'];
+function fmt(n){
+  if(n===null||n===undefined||!isFinite(n))return'\u2014';
+  const r=Math.round(n*10000)/10000;
+  let s=String(r);
+  if(s.indexOf('e')>-1)s=r.toFixed(4).replace(/0+$/,'').replace(/\.$/,'');
+  return s.replace('.',',');
+}
+function parseData(str){return String(str).split(/[,;\s]+/).filter(s=>s.length).map(Number).filter(x=>!isNaN(x));}
+function sortAsc(a){return[...a].sort((x,y)=>x-y);}
+function sumA(a){return a.reduce((s,v)=>s+v,0);}
+const CQ1='#2563eb',CQ2='#059669',CQ3='#d97706',CD='#059669',CP='#7c3aed';
+
+/* ================= KUANTIL DATA TUNGGAL (letak i(n+1)/d) ================= */
+function qSingle(sorted,i,d){
+  const n=sorted.length,pos=i*(n+1)/d;
+  if(!n)return{ok:false,pos,n,why:'kosong'};
+  if(pos<1)return{ok:false,pos,n,why:'kurang'};
+  if(pos>n)return{ok:false,pos,n,why:'lebih'};
+  const k=Math.floor(pos),t=pos-k;
+  if(t<1e-9)return{ok:true,pos,n,val:sorted[k-1],interp:false,k,t:0};
+  return{ok:true,pos,n,val:sorted[k-1]+t*(sorted[k]-sorted[k-1]),interp:true,k,k2:k+1,t,
+         v1:sorted[k-1],v2:sorted[k]-sorted[k-1]};
+}
+/* langkah HTML satu kuantil tunggal; sym mis. 'Q<sub>1</sub>' */
+function qSingleSteps(r,i,d,sym){
+  if(!r.ok){
+    if(r.why==='kosong')return'<p class="ftwarn">Data masih kosong.</p>';
+    if(r.why==='kurang')return'<p class="ftwarn">Letak '+sym+' = '+fmt(r.pos)+' &lt; 1 — posisi di luar jangkauan data. Perbanyak data atau kecilkan i.</p>';
+    return'<p class="ftwarn">Letak '+sym+' = '+fmt(r.pos)+' melebihi banyak data (n = '+r.n+'). Dengan metode i(n+1) : '+d+', '+sym+' tidak terdefinisi untuk data sebanyak ini — butuh n yang lebih besar atau i yang lebih kecil.</p>';
+  }
+  const letakLine='Letak '+sym+' = '+i+'(n + 1) : '+d+' = '+i+' \u00D7 '+(r.n+1)+' : '+d+' = '+fmt(r.pos);
+  let valLine;
+  if(!r.interp){valLine=sym+' = data ke-'+fmt(r.pos)+' = <b>'+fmt(r.val)+'</b>';}
+  else{
+    valLine=sym+' = data ke-'+r.k+' + '+fmt(r.t)+' &times; (data ke-'+r.k2+' \u2212 data ke-'+r.k+') = '+fmt(r.v1)+' + '+fmt(r.t)+' &times; '+fmt(r.v2)+' = <b>'+fmt(r.val)+'</b>';
+  }
+  return letakLine+'<br>'+valLine;
+}
+
+/* ================= KUANTIL DATA KELOMPOK ================= */
+/* classes = [[lo,hi,f],...] */
+function gQuant(classes,i,d){
+  const n=sumA(classes.map(c=>c[2]));
+  if(!n)return{ok:false,n};
+  const pos=i*n/d;
+  let cum=0,idx=-1,F=0;
+  for(let j=0;j<classes.length;j++){
+    const f=classes[j][2];
+    if(f>0&&cum<pos-1e-9&&pos<=cum+f+1e-9){idx=j;F=cum;break;}
+    cum+=f;
+  }
+  if(idx<0){
+    for(let j=classes.length-1;j>=0;j--){if(classes[j][2]>0){idx=j;break;}}
+    F=sumA(classes.slice(0,idx).map(c=>c[2]));
+  }
+  const cl=classes[idx],Tb=cl[0]-0.5,c=cl[1]-cl[0]+1;
+  const val=Tb+(pos-F)/cl[2]*c;
+  return{ok:true,n,pos,idx,F,f:cl[2],Tb,c,val,lo:cl[0],hi:cl[1]};
+}
+function gQuantSteps(r,i,d,sym){
+  const posFrac=' = '+i+' \u00D7 '+r.n+' : '+d+' = <b>'+fmt(r.pos)+'</b>';
+  let s='Posisi '+sym+': '+i+' \u00D7 n : '+d+posFrac;
+  s+='<br>Kelas '+sym+': <b>'+r.lo+'&ndash;'+r.hi+'</b> &nbsp;(karena '+fmt(r.F)+' &lt; '+fmt(r.pos)+' &le; '+fmt(r.F+r.f)+')';
+  s+='<br>T<sub>b</sub> = '+fmt(r.Tb)+'; F = '+fmt(r.F)+'; f = '+fmt(r.f)+'; c = '+fmt(r.c);
+  s+='<br>'+sym+' = '+fmt(r.Tb)+' + (( '+fmt(r.pos)+' \u2212 '+fmt(r.F)+' ) : '+fmt(r.f)+') \u00D7 '+fmt(r.c)+' = '+fmt(r.Tb)+' + '+fmt((r.pos-r.F)/r.f*r.c)+' = <b>'+fmt(r.val)+'</b>';
+  return s;
+}
+
+/* ================= TIK SUMBU ================= */
+function ticksNice(min,max,cnt){
+  if(min===max)return[min];
+  const span=max-min;
+  let step=Math.pow(10,Math.floor(Math.log10(span/cnt)));
+  const err=span/cnt/step;
+  step*=err>=7.5?10:err>=3.5?5:err>=1.5?2:1;
+  const t=[];
+  for(let v=Math.ceil(min/step)*step;v<=max+1e-9;v+=step)t.push(Math.round(v*1e6)/1e6);
+  return t;
+}
+
+/* ================= SVG: DOT PLOT ================= */
+function svgDotPlot(values,markers){
+  if(!values.length)return'';
+  const w=640,h=196,pl=30,pr=30,pt=46,pb=34;
+  const min=Math.min(...values),max=Math.max(...values),span=(max-min)||1;
+  const X=v=>pl+(v-min)/span*(w-pl-pr);
+  const axisY=h-pb;
+  const run={};
+  let s='<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">';
+  s+='<line x1="'+pl+'" y1="'+axisY+'" x2="'+(w-pr)+'" y2="'+axisY+'" stroke="#cbd5e1" stroke-width="1.5"/>';
+  ticksNice(min,max,6).forEach(t=>{
+    const x=X(t);
+    s+='<line x1="'+x+'" y1="'+axisY+'" x2="'+x+'" y2="'+(axisY+5)+'" stroke="#94a3b8"/>';
+    s+='<text x="'+x+'" y="'+(axisY+18)+'" font-size="10.5" fill="#64748b" text-anchor="middle">'+fmt(t)+'</text>';
+  });
+  values.forEach(v=>{
+    const k=Math.round(v*1e6),r=run[k]||0;run[k]=r+1;
+    const x=X(v),y=axisY-9-r*13;
+    s+='<circle cx="'+x+'" cy="'+y+'" r="4.5" fill="#93c5fd" stroke="#2563eb" stroke-width="1.2" fill-opacity=".85"/>';
+  });
+  (markers||[]).forEach((m,i)=>{
+    if(m==null||!isFinite(m.v))return;
+    const x=X(m.v),col=m.color||CP;
+    const label=m.label,lw=label.length*6.4+14;
+    const ly=pt-26+(i%2)*16;
+    s+='<line x1="'+x+'" y1="'+(pt-8)+'" x2="'+x+'" y2="'+axisY+'" stroke="'+col+'" stroke-width="1.6" stroke-dasharray="5 4"/>';
+    s+='<rect x="'+(x-lw/2)+'" y="'+(ly-12)+'" width="'+lw+'" height="17" rx="8" fill="'+col+'"/>';
+    s+='<text x="'+x+'" y="'+ly+'" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">'+label+'</text>';
+  });
+  s+='</svg>';
+  return s;
+}
+
+/* ================= SVG: OGIF ================= */
+function svgOgive(classes,marks){
+  const pts=[[classes[0][0]-0.5,0]];
+  let cum=0;
+  classes.forEach(c=>{cum+=c[2];pts.push([c[1]+0.5,cum]);});
+  const n=cum;
+  if(!n)return'';
+  const w=640,h=246,pl=44,pr=24,pt=30,pb=42;
+  const xmin=pts[0][0],xmax=pts[pts.length-1][0],spanx=(xmax-xmin)||1;
+  const X=v=>pl+(v-xmin)/spanx*(w-pl-pr);
+  const Y=v=>(h-pb)-(v/n)*(h-pb-pt);
+  let s='<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">';
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const y=Y(n*f);
+    s+='<line x1="'+pl+'" y1="'+y+'" x2="'+(w-pr)+'" y2="'+y+'" stroke="#e2e8f0" stroke-dasharray="3 3"/>';
+    s+='<text x="'+(pl-6)+'" y="'+(y+3.5)+'" font-size="10" fill="#64748b" text-anchor="end">'+fmt(n*f)+'</text>';
+  });
+  s+='<line x1="'+pl+'" y1="'+(h-pb)+'" x2="'+(w-pr)+'" y2="'+(h-pb)+'" stroke="#94a3b8" stroke-width="1.5"/>';
+  s+='<line x1="'+pl+'" y1="'+(pt-4)+'" x2="'+pl+'" y2="'+(h-pb)+'" stroke="#94a3b8" stroke-width="1.5"/>';
+  pts.forEach(p=>{
+    s+='<line x1="'+X(p[0])+'" y1="'+(h-pb)+'" x2="'+X(p[0])+'" y2="'+(h-pb+4)+'" stroke="#94a3b8"/>';
+    s+='<text x="'+X(p[0])+'" y="'+(h-pb+16)+'" font-size="9.5" fill="#64748b" text-anchor="middle">'+fmt(p[0])+'</text>';
+  });
+  const poly=pts.map(p=>X(p[0])+','+Y(p[1])).join(' ');
+  s+='<polyline points="'+poly+'" fill="none" stroke="#2563eb" stroke-width="2.2"/>';
+  pts.forEach(p=>{s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="3" fill="#2563eb"/>';});
+  (marks||[]).forEach((m,i)=>{
+    if(!m||m.pos==null||m.val==null||!isFinite(m.val))return;
+    const x=X(m.val),y=Y(m.pos),col=m.color||CP;
+    s+='<line x1="'+pl+'" y1="'+y+'" x2="'+x+'" y2="'+y+'" stroke="'+col+'" stroke-width="1.4" stroke-dasharray="5 4"/>';
+    s+='<line x1="'+x+'" y1="'+y+'" x2="'+x+'" y2="'+(h-pb)+'" stroke="'+col+'" stroke-width="1.4" stroke-dasharray="5 4"/>';
+    s+='<circle cx="'+x+'" cy="'+y+'" r="4.5" fill="'+col+'" stroke="#fff" stroke-width="1.5"/>';
+    const lx=Math.min(Math.max(x,pl+30),w-pr-30),ly=y-8;
+    s+='<text x="'+lx+'" y="'+ly+'" font-size="10.5" font-weight="800" fill="'+col+'" text-anchor="middle">'+m.label+'</text>';
+  });
+  s+='<text x="'+(w/2)+'" y="'+(h-5)+'" font-size="10" fill="#94a3b8" text-anchor="middle">nilai</text>';
+  s+='<text x="'+(pl-30)+'" y="'+(pt+2)+'" font-size="10" fill="#94a3b8">F</text>';
+  s+='</svg>';
+  return s;
+}
+
+/* ================= SVG: BOXPLOT ================= */
+function fiveStats(arr){
+  const s=sortAsc(arr),n=s.length;
+  const q1=qSingle(s,1,4),q2=qSingle(s,2,4),q3=qSingle(s,3,4);
+  const min=s[0],max=s[n-1];
+  const v1=q1.ok?q1.val:min,v2=q2.ok?q2.val:(min+max)/2,v3=q3.ok?q3.val:max;
+  const H=v3-v1,J=max-min;
+  const f1=v1-1.5*H,f2=v3+1.5*H;
+  const outs=s.filter(v=>v<f1||v>f2);
+  return{sorted:s,n,min,max,q1:v1,me:v2,q3:v3,H,Qd:H/2,J,f1,f2,outs};
+}
+function svgBoxplot(st){
+  const w=640,h=190,pl=36,pr=36;
+  const lo=Math.min(st.min,st.f1!=null?st.f1:st.min);
+  const hi=Math.max(st.max,st.f2!=null?st.f2:st.max);
+  const pad=(hi-lo)*0.07||1;
+  const xmin=lo-pad,xmax=hi+pad,span=(xmax-xmin)||1;
+  const X=v=>pl+(v-xmin)/span*(w-pl-pr);
+  const ax=106,boxT=62,boxB=130;
+  let s='<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">';
+  if(st.f1!=null){
+    [['pagar bawah',st.f1],['pagar atas',st.f2]].forEach(p=>{
+      s+='<line x1="'+X(p[1])+'" y1="'+(boxT-14)+'" x2="'+X(p[1])+'" y2="'+(boxB+18)+'" stroke="#fb7185" stroke-width="1.3" stroke-dasharray="4 4"/>';
+      s+='<text x="'+X(p[1])+'" y="'+(boxT-20)+'" font-size="9.5" fill="#e11d48" text-anchor="middle">'+p[0]+'</text>';
+    });
+  }
+  s+='<line x1="'+X(st.min)+'" y1="'+ax+'" x2="'+X(st.q1)+'" y2="'+ax+'" stroke="#334155" stroke-width="1.6"/>';
+  s+='<line x1="'+X(st.q3)+'" y1="'+ax+'" x2="'+X(st.max)+'" y2="'+ax+'" stroke="#334155" stroke-width="1.6"/>';
+  [st.min,st.max].forEach(v=>{
+    s+='<line x1="'+X(v)+'" y1="'+(ax-13)+'" x2="'+X(v)+'" y2="'+(ax+13)+'" stroke="#334155" stroke-width="1.8"/>';
+  });
+  s+='<rect x="'+X(st.q1)+'" y="'+boxT+'" width="'+Math.max(X(st.q3)-X(st.q1),2)+'" height="'+(boxB-boxT)+'" rx="7" fill="rgba(37,99,235,.14)" stroke="#2563eb" stroke-width="1.8"/>';
+  s+='<line x1="'+X(st.me)+'" y1="'+boxT+'" x2="'+X(st.me)+'" y2="'+boxB+'" stroke="#059669" stroke-width="3"/>';
+  st.outs.forEach(v=>{
+    s+='<circle cx="'+X(v)+'" cy="'+ax+'" r="5" fill="#e11d48" stroke="#fff" stroke-width="1.4"/>';
+  });
+  const lab=[[st.min,'Min',ax+32],[st.q1,'Q1',boxT-8],[st.me,'Me',boxB+18],[st.q3,'Q3',boxT-8],[st.max,'Maks',ax+32]];
+  lab.forEach(p=>{
+    s+='<text x="'+X(p[0])+'" y="'+p[2]+'" font-size="10.5" font-weight="700" fill="#334155" text-anchor="middle">'+p[1]+' '+fmt(p[0])+'</text>';
+  });
+  s+='</svg>';
+  return s;
+}
+</script>
+<script>
+/* ================= LAB 1: PENJELAJAH LETAK KUARTIL ================= */
+function posLab(){
+  const host=$('pos-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="lgrid"><div class="lctl"><label>Banyak data (n)<input type="range" id="pos-n" min="3" max="40" value="12"></label>'+
+   '<div class="lval" id="pos-nval">n = 12</div>'+
+   '<div class="labinfo" id="pos-note"></div></div>'+
+   '<div class="lgrow"><div class="poswrap"><div class="posrow" id="pos-row"></div><div id="pos-marks"></div></div></div></div>';
+  const render=()=>{
+    const n=+$('pos-n').value;
+    $('pos-nval').textContent='n = '+n;
+    let cells='';
+    for(let k=1;k<=n;k++)cells+='<div class="cell">'+k+'</div>';
+    $('pos-row').innerHTML=cells;
+    const cols=[CQ1,CQ2,CQ3];
+    let marks='',note='<b>Letak kuartil pada n = '+n+':</b><br>';
+    for(let i=1;i<=3;i++){
+      const p=i*(n+1)/4;
+      const left=Math.min(Math.max((p-0.5)/n*100,0),100);
+      marks+='<div class="posmark" style="left:'+left+'%;--mc:'+cols[i-1]+'">Q'+i+' &middot; data ke-'+fmt(p)+'</div>';
+      note+='Q'+i+': '+i+'(n+1):4 = '+i+' \u00D7 '+(n+1)+' : 4 = <b>'+fmt(p)+'</b> \u2192 '+(Number.isInteger(p)?'tepat data ke-'+p:'interpolasi antara data ke-'+Math.floor(p)+' dan ke-'+(Math.floor(p)+1))+'<br>';
+    }
+    note+='<span style="color:#64748b;font-size:12.5px">Geser n: letak menjadi bulat tepat saat (n+1) habis dibagi 4, mis. n = 3, 7, 11, 15, &hellip;</span>';
+    $('pos-marks').innerHTML=marks;
+    $('pos-note').innerHTML=note;
+  };
+  $('pos-n').addEventListener('input',render);
+  render();
+}
+
+/* ================= LAB 2: STUDIO KUARTIL TUNGGAL ================= */
+function sqLab(){
+  const host=$('sq-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="ds-top"><input class="ds-input" id="sq-in" value="7, 8, 6, 9, 8, 7, 10, 9, 8" aria-label="Masukkan data">'+
+   '<button class="pbtn" id="sq-p1">Nilai ulangan</button>'+
+   '<button class="pbtn" id="sq-p2">n genap</button>'+
+   '<button class="pbtn" id="sq-p3">Ada outlier</button></div>'+
+   '<div id="sq-out"></div>';
+  const presets={'sq-p1':'7, 8, 6, 9, 8, 7, 10, 9, 8','sq-p2':'4, 5, 6, 7, 8, 9, 10, 12','sq-p3':'3, 5, 5, 6, 7, 7, 8, 50'};
+  Object.keys(presets).forEach(id=>{
+    $(id).addEventListener('click',()=>{$('sq-in').value=presets[id];sqRender();});
+  });
+  $('sq-in').addEventListener('input',sqRender);
+  sqRender();
+}
+function sqRender(){
+  const out=$('sq-out');
+  if(!out)return;
+  const arr=parseData($('sq-in').value);
+  if(arr.length<2){out.innerHTML='<p class="ftwarn">Ketik minimal dua angka (pisahkan dengan koma/spasi).</p>';return;}
+  const s=sortAsc(arr),n=s.length;
+  let chips='';
+  s.forEach((v,k)=>{
+    let cls='';
+    const r1=qSingle(s,1,4),r2=qSingle(s,2,4),r3=qSingle(s,3,4);
+    if(r1.interp&&r1.k===k+1||!r1.interp&&r1.ok&&r1.k===k+1)cls='q1h';
+    if(r2.ok&&(r2.interp?(k===r2.k-1||k===r2.k):r2.k===k+1))cls='q2h';
+    if(r3.interp&&r3.k===k+1||!r3.interp&&r3.ok&&r3.k===k+1)cls='q3h';
+    chips+='<span class="dchip '+cls+'"><i>'+(k+1)+'</i>'+fmt(v)+'</span>';
+  });
+  const r1=qSingle(s,1,4),r2=qSingle(s,2,4),r3=qSingle(s,3,4);
+  let cards='<div class="statrow">'+
+    '<div class="statcard c-blue"><div class="sl">Q1 (25%)</div><div class="sv">'+fmt(r1.ok?r1.val:null)+'</div></div>'+
+    '<div class="statcard c-green"><div class="sl">Q2 = Median</div><div class="sv">'+fmt(r2.ok?r2.val:null)+'</div></div>'+
+    '<div class="statcard c-amber"><div class="sl">Q3 (75%)</div><div class="sv">'+fmt(r3.ok?r3.val:null)+'</div></div>'+
+    '<div class="statcard c-rose"><div class="sl">H = Q3 &minus; Q1</div><div class="sv">'+fmt((r1.ok&&r3.ok)?r3.val-r1.val:null)+'</div></div></div>';
+  let steps='<div class="stepbox c-blue"><b class="t">Langkah Q1</b><br>'+qSingleSteps(r1,1,4,'Q<sub>1</sub>')+'</div>'+
+    '<div class="stepbox c-green"><b class="t">Langkah Q2 (median)</b><br>'+qSingleSteps(r2,2,4,'Q<sub>2</sub>')+'</div>'+
+    '<div class="stepbox c-amber"><b class="t">Langkah Q3</b><br>'+qSingleSteps(r3,3,4,'Q<sub>3</sub>')+'</div>';
+  const svg=svgDotPlot(s,[
+    {v:r1.ok?r1.val:null,label:'Q1 = '+fmt(r1.ok?r1.val:0),color:CQ1},
+    {v:r2.ok?r2.val:null,label:'Q2 = '+fmt(r2.ok?r2.val:0),color:CQ2},
+    {v:r3.ok?r3.val:null,label:'Q3 = '+fmt(r3.ok?r3.val:0),color:CQ3}]);
+  out.innerHTML='<p style="font-size:13px;color:#64748b;margin-bottom:2px">Data terurut (n = '+n+') \u2014 chip berwarna = data yang dilalui kuartil:</p>'+
+    '<div class="dschips">'+chips+'</div>'+cards+steps+
+    '<div class="svgbox">'+svg+'<div class="svgcap">Titik biru = data; garis putus-putus = Q1, Q2, Q3</div></div>';
+}
+
+/* ================= LAB 4: PENJELAJAH DESIL TUNGGAL ================= */
+function sdLab(){
+  const host=$('sd-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="lgrid"><div class="lctl"><label>Data (pisah koma/spasi)<input type="text" class="ds-input" id="sd-in" value="5, 6, 6, 7, 8, 8, 9, 10, 12" style="padding:8px 10px"></label>'+
+   '<label>Desil ke-i (i)<input type="range" id="sd-i" min="1" max="9" value="3"></label>'+
+   '<div class="lval" id="sd-ival">D3</div></div>'+
+   '<div class="lgrow"><div id="sd-out"></div></div></div>';
+  $('sd-i').addEventListener('input',sdRender);
+  $('sd-in').addEventListener('input',sdRender);
+  sdRender();
+}
+function sdRender(){
+  const out=$('sd-out');
+  if(!out)return;
+  const arr=parseData($('sd-in').value),i=+$('sd-i').value;
+  if(arr.length<2){out.innerHTML='<p class="ftwarn">Ketik minimal dua angka.</p>';return;}
+  $('sd-ival').textContent='D'+i;
+  const s=sortAsc(arr),r=qSingle(s,i,10);
+  let body;
+  if(!r.ok&&r.why==='lebih'){
+    body='<p class="ftwarn">Letak D'+i+' = '+i+' \u00D7 '+r.n+' : 10 = '+fmt(r.pos)+' melebihi banyak data (n = '+r.n+'). Desil ini tidak terdefinisi \u2014 butuh data lebih banyak atau i lebih kecil. Contoh: D9 butuh minimal n = 9.</p>';
+  }else{
+    const pct=i*10;
+    body='<div class="statrow">'+
+     '<div class="statcard c-green"><div class="sl">D'+i+'</div><div class="sv">'+fmt(r.ok?r.val:null)+'</div></div>'+
+     '<div class="statcard c-blue"><div class="sl">Interpretasi</div><div class="sv" style="font-size:15px;line-height:1.4">\u2248 '+pct+'% data \u2264 D'+i+'</div></div>'+
+     '<div class="statcard c-amber"><div class="sl">Letak</div><div class="sv" style="font-size:15px;line-height:1.4">data ke-'+fmt(r.pos)+' dari '+r.n+'</div></div>'+
+     '<div class="statcard c-slate"><div class="sl">Sisa di atas</div><div class="sv" style="font-size:15px;line-height:1.4">\u2248 '+(100-pct)+'% data</div></div></div>'+
+     '<div class="stepbox c-green"><b class="t">Langkah D'+i+'</b><br>'+qSingleSteps(r,i,10,'D<sub>'+i+'</sub>')+'</div>';
+  }
+  const svg=svgDotPlot(s,[{v:(r.ok?r.val:null),label:'D'+i+' = '+fmt(r.ok?r.val:0),color:CD}]);
+  out.innerHTML=body+'<div class="svgbox">'+svg+'<div class="svgcap">Titik biru = data terurut; garis hijau = D'+i+'</div></div>';
+}
+
+/* ================= LAB 6: BAR PERSISTIL ================= */
+function pbLab(){
+  const host=$('pb-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="ds-top"><input type="range" id="pb-i" min="1" max="99" value="50" style="flex:1;accent-color:#7c3aed" aria-label="Posisi persentil">'+
+   '<button class="pbtn" data-pb="10">P10</button><button class="pbtn" data-pb="25">P25</button><button class="pbtn" data-pb="50">P50</button><button class="pbtn" data-pb="75">P75</button><button class="pbtn" data-pb="90">P90</button></div>'+
+   '<div class="pbar"><div class="pmark" id="pb-mark">P50</div></div>'+
+   '<div class="pticks"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>'+
+   '<div class="pinfo" id="pb-info"></div><div class="eqchips" id="pb-chips"></div>';
+  const render=()=>{
+    const i=+$('pb-i').value;
+    $('pb-mark').style.left=i+'%';
+    $('pb-mark').textContent='P'+i;
+    let info='P'+i+' = nilai di bawahnya terletak <b>'+i+'% data</b> (dan \u2248 '+(100-i)+'% data berada di atasnya).';
+    let chips='<span class="eqchip hot">P'+i+'</span>';
+    if(i%25===0)chips+='<span class="eqchip">= Q'+(i/25)+'</span>';
+    if(i%10===0)chips+='<span class="eqchip">= D'+(i/10)+'</span>';
+    if(i===50)chips+='<span class="eqchip">= median</span>';
+    $('pb-info').innerHTML=info;
+    $('pb-chips').innerHTML=chips;
+  };
+  $('pb-i').addEventListener('input',render);
+  document.querySelectorAll('[data-pb]').forEach(b=>b.addEventListener('click',()=>{$('pb-i').value=b.dataset.pb;render();}));
+  render();
+}
+
+/* ================= LAB 7: KALKULATOR PERSISTIL TUNGGAL ================= */
+function spLab(){
+  const host=$('sp-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="lgrid"><div class="lctl"><label>Data (pisah koma/spasi)<input type="text" class="ds-input" id="sp-in" value="12, 15, 15, 18, 20, 20, 22, 25, 28, 30" style="padding:8px 10px"></label>'+
+   '<label>Persentil ke-i (i)<input type="range" id="sp-i" min="1" max="99" value="90"></label>'+
+   '<div class="lval" id="sp-ival">P90</div></div>'+
+   '<div class="lgrow"><div id="sp-out"></div></div></div>';
+  $('sp-i').addEventListener('input',spRender);
+  $('sp-in').addEventListener('input',spRender);
+  spRender();
+}
+function spRender(){
+  const out=$('sp-out');
+  if(!out)return;
+  const arr=parseData($('sp-in').value),i=+$('sp-i').value;
+  if(arr.length<2){out.innerHTML='<p class="ftwarn">Ketik minimal dua angka.</p>';return;}
+  $('sp-ival').textContent='P'+i;
+  const s=sortAsc(arr),r=qSingle(s,i,100);
+  let body;
+  if(!r.ok&&r.why==='lebih'){
+    body='<p class="ftwarn">Letak P'+i+' = '+i+' \u00D7 '+(r.n+1)+' : 100 = '+fmt(r.pos)+' melebihi banyak data (n = '+r.n+'). P'+i+' tidak terdefinisi untuk data sebanyak ini. Contoh ekstrem: P99 butuh minimal n = 99 data.</p>';
+  }else{
+    let ekv='';
+    if(i%25===0&&i>0&&i<100)ekv=' &nbsp;(&thinsp;ingat: P'+i+' = Q'+(i/25)+'&thinsp;)';
+    if(i%10===0&&i>0&&i<100)ekv+=' &nbsp;(&thinsp;P'+i+' = D'+(i/10)+'&thinsp;)';
+    body='<div class="statrow">'+
+     '<div class="statcard c-purple"><div class="sl">P'+i+'</div><div class="sv">'+fmt(r.ok?r.val:null)+'</div></div>'+
+     '<div class="statcard c-blue"><div class="sl">Interpretasi</div><div class="sv" style="font-size:15px;line-height:1.4">'+i+'% data \u2264 P'+i+'</div></div>'+
+     '<div class="statcard c-amber"><div class="sl">Letak</div><div class="sv" style="font-size:15px;line-height:1.4">data ke-'+fmt(r.pos)+' dari '+r.n+'</div></div>'+
+     '<div class="statcard c-slate"><div class="sl">Sisa di atas</div><div class="sv" style="font-size:15px;line-height:1.4">\u2248 '+(100-i)+'% data</div></div></div>'+
+     '<div class="stepbox c-purple"><b class="t">Langkah P'+i+'</b><br>'+qSingleSteps(r,i,100,'P<sub>'+i+'</sub>')+ekv+'</div>';
+  }
+  const svg=svgDotPlot(s,[{v:(r.ok?r.val:null),label:'P'+i+' = '+fmt(r.ok?r.val:0),color:CP}]);
+  out.innerHTML=body+'<div class="svgbox">'+svg+'<div class="svgcap">Titik biru = data terurut; garis ungu = P'+i+'</div></div>';
+}
+
+/* ================= MESIN TABEL KELOMPOK (Lab 3, 5, 8, 10) ================= */
+function gLab(hostId,cfg){
+  const host=$(hostId);
+  if(!host)return;
+  const t=(cfg.type||'Q').toUpperCase();
+  const rows=cfg.classes.map((c,j)=>
+    '<tr id="'+hostId+'-r'+j+'"><td>'+c[0]+'&ndash;'+c[1]+'</td>'+
+    '<td><input type="number" min="0" max="999" step="1" value="'+c[2]+'" class="gin" data-j="'+j+'" aria-label="frekuensi kelas '+c[0]+'"></td>'+
+    '<td class="gcum" id="'+hostId+'-c'+j+'"></td></tr>').join('');
+  const slider=(t==='D'||t==='P')?
+    '<div class="lgrid" style="margin-bottom:6px"><div class="lctl" style="flex:0 0 300px"><label>Pilih '+(t==='D'?'desil':'persentil')+' ke-i<input type="range" id="'+hostId+'-i" min="1" max="'+(t==='D'?9:99)+'" value="'+(cfg.i||1)+'"></label><div class="lval" id="'+hostId+'-ival"></div></div></div>':'';
+  host.innerHTML=slider+
+   '<div class="ftwrap"><table class="ftable"><thead><tr><th>Kelas</th><th>Frekuensi (f)</th><th>Kumulatif (F)</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+   '<p class="ftwarn" id="'+hostId+'-warn" style="display:none"></p>'+
+   '<div id="'+hostId+'-stats"></div>'+
+   '<div id="'+hostId+'-steps"></div>'+
+   '<div class="svgbox" id="'+hostId+'-ogive"></div>'+
+   '<div class="svgcap">Ogif: sumbu tegak = frekuensi kumulatif di setiap tepi atas kelas</div>';
+  const render=()=>{
+    const inputs=[...host.querySelectorAll('.gin')];
+    const classes=cfg.classes.map((c,j)=>[c[0],c[1],Math.max(0,Math.floor(+inputs[j].value||0))]);
+    const n=sumA(classes.map(c=>c[2]));
+    classes.forEach((c,j)=>{$(hostId+'-c'+j).textContent=c[2]>0?sumA(classes.slice(0,j+1).map(x=>x[2])):0;});
+    [1,2,3].forEach(k=>{const row=$(hostId+'-r'+k);if(row)row.classList.remove('hiq1','hiq2','hiq3','hid');});
+    const warn=$(hostId+'-warn'),stats=$(hostId+'-stats'),steps=$(hostId+'-steps'),og=$(hostId+'-ogive');
+    if(!n){warn.style.display='block';warn.textContent='Isi minimal satu frekuensi.';stats.innerHTML='';steps.innerHTML='';og.innerHTML='';return;}
+    warn.style.display='none';
+    let is,colors,syms;
+    if(t==='Q'){is=[1,2,3];colors=[CQ1,CQ2,CQ3];syms=['Q<sub>1</sub>','Q<sub>2</sub>','Q<sub>3</sub>'];}
+    else if(t==='D'){is=[+$(hostId+'-i').value];colors=[CD];syms=['D<sub>'+is[0]+'</sub>'];}
+    else if(t==='P'){is=[+$(hostId+'-i').value];colors=[CP];syms=['P<sub>'+is[0]+'</sub>'];}
+    else{is=[1,3];colors=[CQ1,CQ3];syms=['Q<sub>1</sub>','Q<sub>3</sub>'];}
+    if(t==='D'||t==='P')$(hostId+'-ival').textContent=(t==='D'?'D':'P')+is[0];
+    const cls=['hiq1','hiq2','hiq3'];
+    const res=is.map(ii=>gQuant(classes,ii,t==='D'?10:(t==='P'?100:4)));
+    if(t==='Q')res.forEach((r,k)=>{const row=$(hostId+'-r'+r.idx);if(row)row.classList.add(cls[k]);});
+    else if(t==='R')res.forEach((r,k)=>{const row=$(hostId+'-r'+r.idx);if(row)row.classList.add(k?'hiq3':'hiq1');});
+    else res.forEach(r=>{const row=$(hostId+'-r'+r.idx);if(row)row.classList.add('hid');});
+    /* kartu statistik */
+    let cards='';
+    const card=(lab,val,cl)=>'<div class="statcard '+cl+'"><div class="sl">'+lab+'</div><div class="sv">'+val+'</div></div>';
+    if(t==='Q'){
+      cards=card('Q1 (25%)',fmt(res[0].val),'c-blue')+card('Q2 = Median',fmt(res[1].val),'c-green')+card('Q3 (75%)',fmt(res[2].val),'c-amber')+card('H = Q3 &minus; Q1',fmt(res[2].val-res[0].val),'c-rose');
+    }else if(t==='D'){
+      const r=res[0],pct=is[0]*10;
+      cards=card('D'+is[0],fmt(r.ok?r.val:null),'c-green')+card('Interpretasi','\u2248 '+pct+'% \u2264','c-blue')+card('Posisi','data ke-'+fmt(r.pos),'c-amber')+card('n',n,'c-slate');
+    }else if(t==='P'){
+      const r=res[0];
+      cards=card('P'+is[0],fmt(r.ok?r.val:null),'c-purple')+card('Interpretasi','\u2248 '+is[0]+'% \u2264','c-blue')+card('Posisi','data ke-'+fmt(r.pos),'c-amber')+card('n',n,'c-slate');
+    }else{
+      const first=classes.find(c=>c[2]>0),last=[...classes].reverse().find(c=>c[2]>0);
+      const J=(last[1]+0.5)-(first[0]-0.5);
+      const d1=gQuant(classes,1,10),d9=gQuant(classes,9,10);
+      cards=card('J',fmt(J),'c-rose')+card('H = Q3 &minus; Q1',fmt(res[1].val-res[0].val),'c-blue')+card('Qd = H : 2',fmt((res[1].val-res[0].val)/2),'c-amber')+card('D9 &minus; D1',fmt(d9.ok&&d1.ok?d9.val-d1.val:null),'c-green');
+    }
+    stats.innerHTML='<div class="statrow">'+cards+'</div>';
+    /* langkah */
+    let stp='';
+    if(t==='R'){
+      const first=classes.find(c=>c[2]>0),last=[...classes].reverse().find(c=>c[2]>0);
+      const J=(last[1]+0.5)-(first[0]-0.5);
+      const d1=gQuant(classes,1,10),d9=gQuant(classes,9,10);
+      stp+='<div class="stepbox c-rose"><b class="t">Jangkauan</b><br>J = tepi atas kelas terakhir \u2212 tepi bawah kelas pertama = '+fmt(last[1]+0.5)+' \u2212 '+fmt(first[0]-0.5)+' = <b>'+fmt(J)+'</b></div>';
+    }
+    res.forEach((r,k)=>{
+      stp+='<div class="stepbox '+(t==='P'?'c-purple':(t==='D'?'c-green':(t==='R'?(k?'c-amber':'c-blue'):['c-blue','c-green','c-amber'][k])))+'"><b class="t">Langkah '+syms[k].replace(/<[^>]+>/g,'')+'</b><br>'+gQuantSteps(r,is[k],t==='D'?10:(t==='P'?100:4),syms[k])+'</div>';
+    });
+    if(t==='R'){
+      const d1=gQuant(classes,1,10),d9=gQuant(classes,9,10);
+      if(d1.ok)stp+='<div class="stepbox c-green"><b class="t">Langkah D1</b><br>'+gQuantSteps(d1,1,10,'D<sub>1</sub>')+'</div>';
+      if(d9.ok)stp+='<div class="stepbox c-green"><b class="t">Langkah D9</b><br>'+gQuantSteps(d9,9,10,'D<sub>9</sub>')+'</div>';
+      stp+='<div class="note"><b>Jangkauan antardesil</b> = D9 \u2212 D1 = '+fmt(d9.ok?d9.val:null)+' \u2212 '+fmt(d1.ok?d1.val:null)+' = <b>'+fmt(d9.ok&&d1.ok?d9.val-d1.val:null)+'</b> \u2014 merentang 80% data tengah.</div>';
+    }
+    steps.innerHTML=stp;
+    /* ogif */
+    const marks=res.map((r,k)=>({pos:r.ok?r.pos:null,val:r.ok?r.val:null,label:(t==='D'?'D':(t==='P'?'P':'Q'))+is[k]+' = '+fmt(r.ok?r.val:0),color:colors[k]}));
+    og.innerHTML=t==='R'?svgOgive(classes,marks):svgOgive(classes,marks);
+  };
+  host.querySelectorAll('.gin').forEach(inp=>inp.addEventListener('input',render));
+  const sl=$(hostId+'-i');
+  if(sl)sl.addEventListener('input',render);
+  render();
+}
+
+/* ================= LAB 9: STUDIO BOXPLOT & OUTLIER ================= */
+function bxLab(){
+  const host=$('bx-lab');
+  if(!host)return;
+  host.innerHTML=
+   '<div class="ds-top"><input class="ds-input" id="bx-in" value="8, 9, 10, 11, 12, 13, 14, 18" aria-label="Data dasar">'+
+   '<label style="font-size:13px;font-weight:700;color:#475569;display:flex;gap:6px;align-items:center"><input type="checkbox" id="bx-chk" checked> Tambahkan outlier</label>'+
+   '<input type="number" id="bx-out" value="40" step="1" style="width:86px;border:1.5px solid #cbd5e1;border-radius:9px;padding:8px 10px;font-size:14px;font-family:inherit" aria-label="Nilai outlier"></div>'+
+   '<div id="bx-out1"></div><div id="bx-out2"></div><div class="labinfo" id="bx-verdict" style="margin-top:12px"></div>';
+  $('bx-in').addEventListener('input',bxRender);
+  $('bx-chk').addEventListener('change',bxRender);
+  $('bx-out').addEventListener('input',bxRender);
+  bxRender();
+}
+function bPanel(el,st,title,accent){
+  let h='<p style="font-weight:800;font-size:13.5px;color:'+accent+';margin:4px 0 2px">'+title+' <span style="font-weight:600;color:#64748b">(n = '+st.n+')</span></p>';
+  h+='<div class="bgrid">'+
+   '<div class="bstat">Min<b>'+fmt(st.min)+'</b></div>'+
+   '<div class="bstat">Q1<b>'+fmt(st.q1)+'</b></div>'+
+   '<div class="bstat">Median<b>'+fmt(st.me)+'</b></div>'+
+   '<div class="bstat">Q3<b>'+fmt(st.q3)+'</b></div>'+
+   '<div class="bstat hot">J<b>'+fmt(st.J)+'</b></div>'+
+   '<div class="bstat hot">H = Q3 &minus; Q1<b>'+fmt(st.H)+'</b></div>'+
+   '<div class="bstat">Qd = H : 2<b>'+fmt(st.Qd)+'</b></div>'+
+   '<div class="bstat">Outlier di luar pagar<b>'+(st.outs.length?st.outs.map(fmt).join(', '):'tidak ada')+'</b></div></div>';
+  h+='<div class="svgbox">'+svgBoxplot(st)+'<div class="svgcap">Boxplot 5 angka: Min &middot; Q1 &middot; Me &middot; Q3 &middot; Maks</div></div>';
+  el.innerHTML=h;
+}
+function bxRender(){
+  const base=parseData($('bx-in').value);
+  if(base.length<4){$('bx-out1').innerHTML='<p class="ftwarn">Ketik minimal empat angka.</p>';$('bx-out2').innerHTML='';$('bx-verdict').innerHTML='';return;}
+  const st1=fiveStats(base);
+  bPanel($('bx-out1'),st1,'Data dasar','#2563eb');
+  let verdict='';
+  if($('bx-chk').checked){
+    const ov=+$('bx-out').value;
+    if(isFinite(ov)){
+      const st2=fiveStats([...base,ov]);
+      bPanel($('bx-out2'),st2,'Dengan tambahan outlier '+fmt(ov),'#e11d48');
+      verdict='<b>Eksperimen:</b> Jangkauan J: '+fmt(st1.J)+' \u2192 <b>'+fmt(st2.J)+'</b> (\u00D7'+fmt(st2.J/Math.max(st1.J,1e-9))+') &nbsp;\u00B7&nbsp; H: '+fmt(st1.H)+' \u2192 <b>'+fmt(st2.H)+'</b> (\u00D7'+fmt(st2.H/Math.max(st1.H,1e-9))+').<br>Jangkauan melompat jauh lebih agresif daripada jangkauan antarkuartil \u2014 bukti visual bahwa <b>H jauh lebih kebal outlier</b>. Perhatikan pula pagar 1,5&times;H: titik merah di luar pagar otomatis tertangkap sebagai outlier.';
+    }
+  }else{$('bx-out2').innerHTML='';}
+  $('bx-verdict').innerHTML=verdict;
+}
+
+/* ================= INISIALISASI LAB ================= */
+function labsInit(){
+  posLab();sqLab();sdLab();pbLab();spLab();bxLab();
+  gLab('gq-lab',{type:'Q',classes:[[41,50,3],[51,60,7],[61,70,10],[71,80,10],[81,90,7],[91,100,3]]});
+  gLab('gd-lab',{type:'D',classes:[[40,49,3],[50,59,7],[60,69,12],[70,79,10],[80,89,6],[90,99,2]],i:4});
+  gLab('gp-lab',{type:'P',classes:[[146,150,2],[151,155,6],[156,160,12],[161,165,10],[166,170,8],[171,175,2]],i:60});
+  gLab('gr-lab',{type:'R',classes:[[40,49,4],[50,59,6],[60,69,10],[70,79,10],[80,89,6],[90,99,4]]});
+}
+</script>
+<script>
+/* ================= MESIN APLIKASI ================= */
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,k)=>s.classList.toggle('active',k===cur));
+  $('pbar').style.width=((cur+1)/slides.length*100)+'%';
+  $('counter').textContent=(cur+1)+' / '+slides.length;
+  window.scrollTo({top:0,behavior:'auto'});
+  if(slides[cur].id==='s-score')renderScores();
+}
+function goId(id){const k=slides.findIndex(s=>s.id===id);if(k>=0)go(k);}
+
+/* ================= MESIN KUIS ================= */
+const qState={};
+Object.keys(QUIZ).forEach(k=>{qState[k]={i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]};});
+const origBody={};
+
+function qRender(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  st.sel=null;st.checked=false;
+  $('q-'+k+'-num').textContent=st.i+1;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-lvl').textContent=q.lvl;
+  $('q-'+k+'-text').innerHTML=q.q;
+  const box=$('q-'+k+'-opts');box.innerHTML='';
+  q.opts.forEach((t,idx)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='opt';
+    b.innerHTML='<span class="optletter">'+LETTERS[idx]+'</span><span>'+t+'</span>';
+    b.addEventListener('click',()=>{
+      if(st.checked)return;
+      st.sel=idx;
+      [...box.children].forEach((c,j)=>c.classList.toggle('selected',j===idx));
+      $('q-'+k+'-check').disabled=false;
+    });
+    box.appendChild(b);
+  });
+  $('q-'+k+'-exp').style.display='none';
+  $('q-'+k+'-check').disabled=true;
+  $('q-'+k+'-next').disabled=true;
+}
+function qCheck(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  if(st.sel==null||st.checked)return;
+  st.checked=true;
+  const ok=st.sel===q.ans;
+  if(ok)st.score++;
+  st.answered++;
+  st.results.push(ok);
+  [...$('q-'+k+'-opts').children].forEach((b,j)=>{
+    b.classList.add('locked');
+    if(j===q.ans)b.classList.add('correct');
+    else if(j===st.sel)b.classList.add('wrong');
+  });
+  const eb=$('q-'+k+'-exp');
+  eb.style.display='block';
+  eb.className='expbox '+(ok?'good':'bad');
+  eb.innerHTML=(ok?'<b>Benar! </b>':'<b>Belum tepat. Jawaban yang benar: '+LETTERS[q.ans]+'. </b>')+q.exp;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-check').disabled=true;
+  const nx=$('q-'+k+'-next');
+  nx.disabled=false;
+  nx.textContent=(st.i===QUIZ[k].qs.length-1)?'Lihat Hasil \u2192':'Soal Berikutnya \u2192';
+  saveProg();
+}
+function qNext(k){
+  const st=qState[k];
+  if(!st.checked)return;
+  if(st.i<QUIZ[k].qs.length-1){st.i++;qRender(k);}
+  else{st.done=true;qResult(k);saveProg();}
+}
+function qResult(k){
+  const st=qState[k],d=QUIZ[k],tot=QUIZ[k].qs.length;
+  const p=Math.round(st.score/tot*100);
+  const msg=st.score>=9?'Luar biasa! Kamu sangat menguasai materi ini.':st.score>=7?'Bagus! Sedikit lagi menuju sempurna.':st.score>=5?'Cukup. Baca ulang bagian teori, lalu coba lagi.':'Ayo pelajari kembali materinya, lalu ulangi latihan ini.';
+  $('q-'+k+'-body').innerHTML='<div class="qresult"><div class="qscore">'+st.score+'<span>/'+tot+'</span></div><h3>Latihan '+d.title+' selesai</h3><p style="margin-top:6px">'+msg+'</p><p class="qpct">'+p+'% benar</p><button class="btn pri" id="q-'+k+'-retry">Ulangi Latihan</button></div>';
+  $('q-'+k+'-retry').addEventListener('click',()=>qRetry(k));
+}
+function qRetry(k){
+  Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  $('q-'+k+'-body').innerHTML=origBody[k];
+  qRender(k);saveProg();
+}
+
+/* ================= PENYIMPANAN LOKAL ================= */
+function saveProg(){
+  try{
+    const d={};
+    for(const k in qState){const s=qState[k];d[k]={score:s.score,answered:s.answered,done:s.done,i:s.i,results:s.results};}
+    localStorage.setItem('kuantil-tka-v1',JSON.stringify(d));
+  }catch(e){}
+}
+function loadProg(){
+  try{
+    const d=JSON.parse(localStorage.getItem('kuantil-tka-v1')||'{}');
+    for(const k in d){
+      if(!qState[k])continue;
+      Object.assign(qState[k],{
+        i:Math.min(d[k].i||0,QUIZ[k].qs.length-1),
+        score:d[k].score||0,
+        answered:d[k].answered||0,
+        done:!!d[k].done,
+        results:Array.isArray(d[k].results)?d[k].results:[],
+        sel:null,checked:false
+      });
+    }
+  }catch(e){}
+}
+
+/* ================= HALAMAN NILAI ================= */
+function renderScores(){
+  const order=['kuartil','desil','persentil','jangkauan'];
+  let h='<table class="tbl"><tr><th>Bab</th><th>Dijawab</th><th>Benar</th><th>Nilai</th><th>Status</th></tr>';
+  let tc=0;
+  order.forEach(k=>{
+    const s=qState[k],d=QUIZ[k];tc+=s.score;
+    const nilai=Math.round(s.score/QUIZ[k].qs.length*100);
+    h+='<tr><td><b>'+d.title+'</b></td><td>'+s.answered+' / '+QUIZ[k].qs.length+'</td><td>'+s.score+'</td><td><div class="scorebar" style="width:110px;vertical-align:middle"><i style="width:'+nilai+'%;background:'+d.acc+'"></i></div> '+nilai+'</td><td>'+(s.done?'Selesai':'Berjalan')+'</td></tr>';
+  });
+  h+='</table>';
+  $('score-table').innerHTML=h;
+  const pct=Math.round(tc/40*100);
+  const pred=tc>=36?'Istimewa! Kamu siap menghadapi soal kuantil &amp; jangkauan pada TKA.':tc>=28?'Hebat \u2014 tinggal poles soal yang masih keliru.':tc>=20?'Bagus, lanjutkan latihan pada bagian yang lemah.':'Terus semangat: baca ulang teorinya, lalu kerjakan lagi latihannya.';
+  $('score-overall').innerHTML='<div class="scorebig"><div class="big">'+tc+'<span style="font-size:22px;color:#94a3b8">/40</span></div><div><b>Skor total: '+pct+'%</b><br><span style="color:#cbd5e1;font-size:14px">'+pred+'</span></div></div>';
+}
+
+/* ================= INISIALISASI ================= */
+document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goId(el.dataset.goto)));
+$('btn-prev').addEventListener('click',()=>go(cur-1));
+$('btn-next').addEventListener('click',()=>go(cur+1));
+$('btn-menu').addEventListener('click',()=>goId('s-menu'));
+document.addEventListener('keydown',e=>{
+  if(e.target&&/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+for(const k in QUIZ){
+  origBody[k]=$('q-'+k+'-body').innerHTML;
+  $('q-'+k+'-check').addEventListener('click',()=>qCheck(k));
+  $('q-'+k+'-next').addEventListener('click',()=>qNext(k));
+}
+$('btn-reset').addEventListener('click',()=>{
+  try{localStorage.removeItem('kuantil-tka-v1');}catch(e){}
+  for(const k in qState)Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  for(const k in QUIZ){$('q-'+k+'-body').innerHTML=origBody[k];qRender(k);}
+  renderScores();
+});
+labsInit();
+loadProg();
+for(const k in QUIZ){if(qState[k].done)qResult(k);else qRender(k);}
+go(0);
+</script>
+</body>
+</html>
