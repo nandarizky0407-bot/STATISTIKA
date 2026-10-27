@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mean, Median &amp; Modus (Data Tunggal &amp; Kelompok) — TKA SMA | Interaktif &amp; Mendalam</title>
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#0f172a; --muted:#5b6b7f;
+  --blue:#2563eb; --rose:#e11d48; --amber:#d97706; --green:#059669;
+  --purple:#7c3aed; --slate:#475569; --line:#e2e8f0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+sup,sub{font-size:72%}
+body{font-family:'Segoe UI',Tahoma,system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+
+/* ===== Topbar & progress ===== */
+#topbar{position:fixed;top:0;left:0;right:0;background:rgba(11,18,32,.96);color:#fff;z-index:50;box-shadow:0 2px 12px rgba(2,6,23,.35)}
+.tb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:9px 18px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#38bdf8,#2563eb);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:17px;flex:none}
+.brand{font-weight:700;letter-spacing:.3px;font-size:15px;white-space:nowrap}
+.tag{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:2px 10px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:1px;white-space:nowrap}
+.pwrap{margin-left:auto;flex:1;max-width:260px;height:8px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden}
+#pbar{height:100%;width:0;background:linear-gradient(90deg,#38bdf8,#34d399);border-radius:99px;transition:width .3s}
+
+/* ===== Bottom nav ===== */
+#navbar{position:fixed;bottom:0;left:0;right:0;background:rgba(11,18,32,.96);z-index:50;border-top:1px solid rgba(255,255,255,.08)}
+.nb-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:9px 18px}
+.nb-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:8px 15px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13.5px;font-family:inherit;white-space:nowrap}
+.nb-btn:hover{background:rgba(255,255,255,.24)}
+#counter{color:#cbd5e1;font-size:13px;min-width:64px;text-align:center;font-weight:600}
+.spacer{flex:1}
+
+/* ===== Deck & slide ===== */
+#deck{max-width:1000px;margin:0 auto;padding:78px 18px 90px}
+.slide{display:none;background:var(--card);border-radius:20px;padding:36px 42px;min-height:540px;box-shadow:0 10px 34px rgba(15,23,42,.09)}
+.slide.active{display:block;animation:fadein .4s ease}
+.slide:not(.active){display:none!important}
+.slide.active.cover{display:flex}
+.slide.active.divider{display:flex}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.acc-rose{--acc:#e11d48}.acc-blue{--acc:#2563eb}.acc-amber{--acc:#d97706}
+.acc-green{--acc:#059669}.acc-purple{--acc:#7c3aed}.acc-slate{--acc:#475569}
+
+h2{font-size:26px;letter-spacing:-.3px}
+h3{font-size:17px}
+.sub{color:var(--muted);margin:6px 0 18px;font-size:15px}
+.rule{width:64px;height:5px;border-radius:99px;background:var(--acc,var(--blue));margin:10px 0 20px}
+
+/* ===== Boxes ===== */
+.defbox{background:#f8fafc;border:1px solid var(--line);border-left:5px solid var(--acc,var(--blue));padding:15px 20px;border-radius:12px;margin:14px 0;font-size:15.5px}
+.formula{background:linear-gradient(135deg,#eff6ff,#eef2ff);border:1px solid #c7d2fe;border-radius:12px;padding:13px 18px;margin:10px 0;font-size:16.5px;font-weight:600;color:#1e3a8a;line-height:1.7}
+.formula small{display:block;font-weight:400;color:#475569;font-size:12.5px;margin-top:4px}
+.callout{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.note{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px 16px;margin:12px 0;font-size:14.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:12px 0}
+.mini{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.mini h4{font-size:13px;color:var(--acc,var(--blue));margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.mini p{font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}
+.tbl th{background:#0f172a;color:#fff;padding:8px 10px;text-align:left;font-size:12.5px}
+.tbl td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl tr:nth-child(even) td{background:#f8fafc}
+.tbl tr.hi td{background:#fef9c3;font-weight:700}
+
+/* ===== Cover ===== */
+.slide.cover{background:linear-gradient(140deg,#0b1220 0%,#10254d 55%,#16324f 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.cover::after{content:'';position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.25),transparent 65%)}
+.cover::before{content:'';position:absolute;left:-100px;bottom:-140px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.22),transparent 65%)}
+.kicker{font-size:12.5px;letter-spacing:3px;font-weight:800;color:#7dd3fc;margin-bottom:14px}
+.cover h1{font-size:46px;line-height:1.1;letter-spacing:-1px;margin-bottom:14px;position:relative;z-index:1}
+.cover .subtitle{font-size:16px;color:#cbd5e1;max-width:680px;margin-bottom:22px;position:relative;z-index:1}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;position:relative;z-index:1}
+.chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600}
+.cta{background:linear-gradient(135deg,#38bdf8,#2563eb);border:none;color:#fff;font-weight:800;font-size:16px;padding:13px 30px;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(37,99,235,.45);transition:transform .15s;position:relative;z-index:1}
+.cta:hover{transform:translateY(-2px)}
+.hintline{margin-top:18px;font-size:12.5px;color:#94a3b8}
+
+/* ===== Menu ===== */
+.menugrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.menucard{background:#f8fafc;border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;cursor:pointer;transition:.18s}
+.menucard:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,23,42,.1)}
+.mnum{font-size:11.5px;font-weight:800;letter-spacing:2px;color:var(--acc)}
+.menucard h3{margin:4px 0 6px;font-size:17px}
+.menucard p{font-size:13.5px;color:var(--muted)}
+.mtag{display:inline-block;margin-top:10px;background:var(--acc);color:#fff;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px}
+
+/* ===== Divider ===== */
+.slide.divider{background:linear-gradient(140deg,#0f172a,#1e293b);color:#fff;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.dnum{position:absolute;right:20px;bottom:-46px;font-size:190px;font-weight:900;color:rgba(255,255,255,.06);line-height:1}
+.dkicker{color:var(--acc);font-weight:800;letter-spacing:3px;font-size:13px;margin-bottom:10px}
+.divider h1{font-size:40px;margin-bottom:16px;letter-spacing:-.5px}
+.dlist{list-style:none}
+.dlist li{padding:7px 0 7px 28px;position:relative;color:#cbd5e1;font-size:15.5px}
+.dlist li::before{content:'\25B8';position:absolute;left:6px;color:var(--acc);font-weight:700}
+.slide:not(.divider):not(.cover) .dlist li{color:#334155}
+</style>
+<style>
+/* ===== Kartu klik-buka (studi kasus) ===== */
+.condgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.condcard{background:#fff;border:1.5px solid var(--line);border-radius:13px;padding:13px 16px;cursor:pointer;transition:.18s}
+.condcard:hover{border-color:var(--acc,var(--blue));box-shadow:0 6px 18px rgba(15,23,42,.08)}
+.condcard .cname{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14.5px;color:var(--acc,var(--blue))}
+.condcard .cmark{font-size:18px;color:#94a3b8;transition:transform .2s}
+.condcard.open .cmark{transform:rotate(180deg)}
+.why{display:none;border-top:1px dashed var(--line);margin-top:9px;padding-top:9px;font-size:13.5px;color:#334155;line-height:1.6}
+.condcard.open .why{display:block;animation:fadein .25s}
+
+/* ===== Lab umum ===== */
+.labbox{background:#f8fafc;border:1.5px dashed #cbd5e1;border-radius:16px;padding:18px 20px;margin:16px 0}
+.labbox h3{font-size:15.5px;margin-bottom:12px;color:var(--acc,var(--blue))}
+.lgrid{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.lctl{flex:0 0 250px;display:flex;flex-direction:column;gap:12px}
+.lctl label{font-size:11.5px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.4px;display:flex;flex-direction:column;gap:5px}
+.lctl input[type=range]{width:100%;accent-color:var(--acc,var(--blue))}
+.lval{font-size:15px;font-weight:700;color:var(--acc,var(--blue))}
+.labinfo{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.draghint{font-size:12.5px;color:#64748b;text-align:center;margin-top:6px}
+
+/* ===== Kartu statistik (mean/median/modus) ===== */
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:12px 0}
+.statcard{border-radius:13px;padding:12px 15px;border:1.5px solid var(--line);background:#fff}
+.statcard .sl{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.statcard .sv{font-size:23px;font-weight:900;margin-top:2px}
+.statcard.mean .sl,.statcard.mean .sv{color:#2563eb}
+.statcard.med .sl,.statcard.med .sv{color:#059669}
+.statcard.mod .sl,.statcard.mod .sv{color:#d97706}
+.statcard.rng .sl,.statcard.rng .sv{color:#7c3aed}
+.stepbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.75;margin:10px 0}
+.stepbox b.t{text-transform:uppercase;font-size:11.5px;letter-spacing:1px}
+.stepbox.mean b.t{color:#2563eb}.stepbox.med b.t{color:#059669}.stepbox.mod b.t{color:#d97706}
+
+/* ===== Studio data ===== */
+.ds-top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.ds-input{flex:1;min-width:210px;border:1.5px solid #cbd5e1;border-radius:10px;padding:10px 14px;font-size:15px;font-family:inherit}
+.ds-input:focus{outline:2px solid #93c5fd;border-color:#2563eb}
+.pbtn{border:1px solid var(--line);border-radius:9px;padding:8px 13px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;background:#eef2f7;color:#334155}
+.pbtn:hover{background:#e2e8f0}
+.dschips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.dchip{width:36px;height:36px;border-radius:9px;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.dchip.mid{border-color:#059669;background:#ecfdf5;color:#047857;box-shadow:0 0 0 3px rgba(5,150,105,.12)}
+.barwrap{display:flex;align-items:flex-end;gap:7px;height:130px;padding:26px 12px 24px;background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0}
+.bar{flex:1;background:linear-gradient(180deg,#93c5fd,#2563eb);border-radius:6px 6px 0 0;position:relative;min-width:14px;transition:height .3s}
+.bar span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:11px;color:#475569;font-weight:700}
+.bar b{position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:11px;color:#334155}
+.bar.modebar{background:linear-gradient(180deg,#fcd34d,#d97706)}
+
+/* ===== Tabel frekuensi lab ===== */
+.ftwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ftable{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px;min-width:520px}
+.ftable th{background:#0f172a;color:#fff;padding:7px 8px;font-size:12px;text-align:center}
+.ftable td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:center}
+.ftable input{width:58px;border:1.5px solid #cbd5e1;border-radius:8px;padding:6px 4px;font-size:14px;font-family:inherit;text-align:center}
+.ftable tr.medcls td{background:#ecfdf5}
+.ftable tr.modcls td{background:#fffbeb}
+.ftwarn{color:#b91c1c;font-weight:700;font-size:13.5px}
+.histo{display:flex;align-items:stretch;gap:8px;height:170px;padding:10px 12px 6px;border:1px solid var(--line);border-radius:12px;background:#fff;position:relative;margin:10px 0 4px}
+.hcol{flex:1;display:flex;flex-direction:column;height:100%;min-width:0}
+.hbars{flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+.hbar{background:linear-gradient(180deg,#93c5fd,#2563eb);border-radius:6px 6px 0 0;transition:height .3s;font-size:12px;color:#fff;font-weight:800;text-align:center;padding-top:3px}
+.hbar.modcls{background:linear-gradient(180deg,#fcd34d,#d97706)}
+.hlab{height:18px;font-size:10.5px;font-weight:700;color:#475569;text-align:center;margin-top:4px;white-space:nowrap}
+.hline{position:absolute;top:4px;bottom:28px;border-left:3px dashed #059669;z-index:2}
+.hline b{position:absolute;top:-4px;left:-4px;transform:translateX(-50%);background:#059669;color:#fff;font-size:10px;padding:2px 7px;border-radius:99px;white-space:nowrap}
+
+/* ===== Simulator skewness ===== */
+.skwrap{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
+.skwrap svg{width:100%;height:auto;display:block;touch-action:none}
+.skdot{cursor:grab}
+
+/* ===== Kuis ===== */
+.quiz-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lvl{background:#ede9fe;color:#6d28d9;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.5px}
+.qcount{margin-left:auto;color:var(--muted);font-size:13.5px;font-weight:600}
+.qtext{background:#f8fafc;border:1px solid var(--line);border-radius:14px;padding:18px 20px;font-size:15.5px;margin:12px 0 16px;line-height:1.65}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-family:inherit;line-height:1.5;transition:.15s;color:var(--ink)}
+.opt:hover:not(.locked){border-color:#94a3b8;background:#f8fafc}
+.opt.selected{border-color:var(--blue);background:#eff6ff;box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.opt.correct{border-color:#16a34a;background:#f0fdf4;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+.opt.wrong{border-color:#dc2626;background:#fef2f2;box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.opt.locked{cursor:default}
+.optletter{flex:none;width:26px;height:26px;border-radius:8px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#334155;margin-top:1px}
+.opt.selected .optletter{background:var(--blue);color:#fff}
+.opt.correct .optletter{background:#16a34a;color:#fff}
+.opt.wrong .optletter{background:#dc2626;color:#fff}
+.expbox{border-radius:12px;padding:14px 18px;margin-top:14px;font-size:14.5px;line-height:1.65;display:none}
+.expbox.good{background:#f0fdf4;border:1px solid #86efac}
+.expbox.bad{background:#fef2f2;border:1px solid #fca5a5}
+.qctrl{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.btn{border:none;border-radius:11px;padding:11px 22px;font-weight:700;font-size:14.5px;cursor:pointer;font-family:inherit}
+.btn.pri{background:var(--acc,var(--blue));color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.ghost{background:#eef2f7;color:#334155;border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.qresult{text-align:center;padding:30px 10px}
+.qscore{font-size:62px;font-weight:900;color:var(--acc)}
+.qscore span{font-size:26px;color:var(--muted);font-weight:700}
+.qpct{color:var(--muted);margin:8px 0 18px;font-weight:700}
+
+/* ===== Skor ===== */
+.scorebig{display:flex;gap:20px;align-items:center;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;border-radius:18px;padding:20px 26px;margin:14px 0}
+.scorebig .big{font-size:50px;font-weight:900;color:#7dd3fc;line-height:1}
+.scorebar{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;display:inline-block}
+.scorebar i{display:block;height:100%;border-radius:99px}
+
+@media (max-width:760px){
+  .grid2,.grid3,.menugrid,.condgrid{grid-template-columns:1fr}
+  .statrow{grid-template-columns:1fr 1fr}
+  .slide{padding:24px 18px;min-height:auto}
+  .cover h1{font-size:32px}
+  .divider h1{font-size:30px}
+  .brand span.tag{display:none}
+  .lctl{flex:1 1 100%}
+}
+</style>
+</head>
+<body>
+<header id="topbar"><div class="tb-in">
+  <div class="logo">&#931;</div>
+  <div class="brand">Mean, Median &amp; Modus <span class="tag">TKA SMA</span></div>
+  <div class="pwrap"><div id="pbar"></div></div>
+</div></header>
+
+<div id="deck">
+
+<!-- 1. COVER -->
+<section class="slide cover" id="s-cover">
+  <p class="kicker">BANK MATERI TKA SMA &middot; INTERAKTIF &amp; MENDALAM</p>
+  <h1>Mean, Median &amp; Modus</h1>
+  <p class="subtitle">Ukuran pemusatan data dari nol hingga mahir: data tunggal &middot; tabel distribusi frekuensi (data kelompok) &middot; transformasi &amp; rata-rata gabungan &middot; memilih ukuran yang tepat &middot; bentuk distribusi (simetris &amp; menceng) &middot; penerapan dalam kehidupan sehari-hari: rapor, gaji, stok toko, berita, dan klinik.</p>
+  <div class="chips">
+    <span class="chip">3 Materi Inti</span>
+    <span class="chip">30 Soal HOTS</span>
+    <span class="chip">6 Lab Interaktif</span>
+    <span class="chip">Pembahasan Lengkap</span>
+  </div>
+  <button class="cta" data-goto="s-menu">Mulai Belajar</button>
+  <p class="hintline">Tips: gunakan tombol panah &larr; &rarr; pada keyboard untuk berpindah halaman. Skor latihan tersimpan otomatis di perangkatmu.</p>
+</section>
+
+<!-- 2. MENU -->
+<section class="slide" id="s-menu">
+  <h2>Peta Materi</h2>
+  <p class="sub">Klik kartu untuk langsung menuju bab. Alur belajar: data tunggal &rarr; data kelompok &rarr; analisis &amp; penerapan. Setiap bab ditutup 10 soal HOTS berpembahasan.</p>
+  <div class="menugrid">
+    <div class="menucard acc-rose" data-goto="s-d1">
+      <span class="mnum">BAB 01</span>
+      <h3>Data Tunggal</h3>
+      <p>Mean (rata-rata), median (nilai tengah), dan modus (paling sering) untuk daftar data biasa &mdash; plus efek outlier, transformasi data, dan rata-rata gabungan.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-blue" data-goto="s-d2">
+      <span class="mnum">BAB 02</span>
+      <h3>Data Kelompok</h3>
+      <p>Membaca tabel distribusi frekuensi: titik tengah kelas, mean lewat f&middot;x, serta interpolasi median dan modus &mdash; dengan lab tabel yang bisa kamu edit langsung.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-green" data-goto="s-d3">
+      <span class="mnum">BAB 03</span>
+      <h3>Analisis &amp; Penerapan</h3>
+      <p>Kapan pakai mean, median, atau modus? Bentuk distribusi (simetris &amp; menceng), rumus empiris, simulator data yang bisa digeser, dan studi kasus sehari-hari.</p>
+      <span class="mtag">10 Soal HOTS</span>
+    </div>
+    <div class="menucard acc-blue" data-goto="s-score">
+      <span class="mnum">REKAP</span>
+      <h3>Nilai Kamu</h3>
+      <p>Rekapitulasi otomatis 30 soal HOTS dari 3 bab, lengkap dengan predikat &mdash; tersimpan otomatis di perangkatmu.</p>
+      <span class="mtag">Cek Progres</span>
+    </div>
+    <div class="menucard acc-rose" data-goto="s-summary">
+      <span class="mnum">PENUTUP</span>
+      <h3>Rangkuman &amp; Strategi</h3>
+      <p>Kartu rumus inti ketiga bab plus lima strategi menaklukkan soal HOTS statistika pada TKA.</p>
+      <span class="mtag">Baca Sebelum Ujian</span>
+    </div>
+  </div>
+</section>
+
+<!-- 3. DIVIDER BAB 1 -->
+<section class="slide divider acc-rose" id="s-d1">
+  <div class="dnum">01</div>
+  <p class="dkicker">BAB 1</p>
+  <h1>Data Tunggal</h1>
+  <ul class="dlist">
+    <li>Mean: rata-rata = jumlah semua data &divide; banyak data, dan sifat-sifatnya</li>
+    <li>Median: nilai tengah data terurut (ganjil vs genap)</li>
+    <li>Modus: nilai yang paling sering muncul (tunggal, ganda, atau tidak ada)</li>
+    <li>Eksperimen outlier, transformasi data, dan rata-rata gabungan</li>
+    <li>Lab interaktif: Studio Data Live &mdash; hitung tiga ukuran sekaligus</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+
+<!-- 4. BAB1 KONSEP: MEAN -->
+<section class="slide acc-rose" id="s-m1a">
+  <h2>Mean (Rata-rata) Data Tunggal</h2>
+  <p class="sub">Satu angka untuk mewakili sekumpulan data &mdash; inilah ide ukuran pemusatan (central tendency).</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Mean</b> (rata-rata hitung) adalah <b>jumlah semua data dibagi banyak datanya</b>. Ia memperhitungkan <b>setiap nilai</b> dalam data &mdash; inilah kekuatannya, sekaligus kelemahannya: satu nilai ekstrem bisa "menyeret" mean jauh dari mayoritas data.</div>
+  <div class="formula">x&#772; = (x&#8321; + x&#8322; + &hellip; + x&#8345;) : n = &Sigma;x&#7522; : n
+    <small>&Sigma; (sigma) = "jumlahkan semuanya". x&#8345; = data ke-n, dan <b>n</b> = banyak data. Tanda x&#772; dibaca "x batang" &mdash; lambang standar rata-rata.</small>
+  </div>
+  <div class="grid2">
+    <div class="mini"><h4>Langkah menghitung</h4><p><b>1.</b> Jumlahkan seluruh data.<br><b>2.</b> Hitung banyak data (n).<br><b>3.</b> Bagi: mean = jumlah : n.<br><br>Contoh: data 6, 7, 8, 12, 12 &rarr; jumlah = 45, n = 5, maka x&#772; = 45 : 5 = <b>9</b>.</p></div>
+    <div class="mini"><h4>Kekuatan &amp; kelemahan</h4><p><b>+</b> Memakai semua informasi data; cocok untuk perhitungan lanjutan (total = mean &times; n).<br><b>&minus;</b> Sensitif terhadap <b>nilai ekstrem (outlier)</b>: gaji satu direktur bisa menaikkan "rata-rata gaji" jauh di atas gaji mayoritas karyawan.</p></div>
+  </div>
+  <div class="formula">Sifat transformasi &mdash; jika setiap data diubah menjadi <b>b&middot;x + a</b>:
+    <small>mean baru = <b>b &times; mean lama + a</b> &nbsp;(median dan modus berlaku sama). Contoh: mean 15; setiap data dikali 2 lalu ditambah 3 &rarr; mean baru = 2&times;15 + 3 = <b>33</b>.</small>
+  </div>
+  <div class="formula">Rata-rata gabungan dua kelompok data:
+    <small>x&#772;<sub>gab</sub> = (n&#8321;&middot;x&#772;&#8321; + n&#8322;&middot;x&#772;&#8322;) : (n&#8321; + n&#8322;). <b>Wajib ditimbang banyak datanya!</b> Merata-ratakan dua rata-rata tanpa bobot hanya sah jika n&#8321; = n&#8322;.</small>
+  </div>
+  <div class="callout"><b>Trik cepat TKA:</b> total data = mean &times; n. Kalau soal menyebut "rata-rata 8 siswa adalah 72", langsung tulis total = 576 &mdash; dari total, soal nilai hilang, koreksi salah catat, dan data gabungan selesai dalam dua langkah.</div>
+</section>
+<!-- 5. BAB1 KONSEP: MEDIAN & MODUS -->
+<section class="slide acc-rose" id="s-m1b">
+  <h2>Median &amp; Modus Data Tunggal</h2>
+  <p class="sub">Dua sahabat mean: satu mencari posisi tengah, satu mencari nilai terpopuler.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Median</b> adalah <b>nilai tengah</b> dari data yang sudah <b>diurutkan</b> dari kecil ke besar. Median tidak peduli seberapa jauh nilai ekstremnya &mdash; ia hanya melihat posisi. Karena itu median jauh lebih stabil daripada mean ketika data mengandung outlier.</div>
+  <div class="grid2">
+    <div class="mini"><h4>n ganjil &mdash; satu nilai tengah</h4><p>Urutkan data, lalu ambil data ke-<b>(n + 1) : 2</b>.<br>Contoh: 3, 7, 4, 9, 6 &rarr; urutkan &rarr; 3, 4, <b>6</b>, 7, 9. n = 5 &rarr; posisi (5+1):2 = 3 &rarr; <b>median = 6</b>.</p></div>
+    <div class="mini"><h4>n genap &mdash; rata-rata dua nilai tengah</h4><p>Ambil data ke-n/2 dan ke-(n/2 + 1), lalu rata-ratakan.<br>Contoh: 5, 8, 10, 12, 15, 20 &rarr; data ke-3 = 10 dan ke-4 = 12 &rarr; <b>median = (10 + 12) : 2 = 11</b>.</p></div>
+  </div>
+  <div class="defbox"><b>Modus</b> adalah <b>nilai yang paling sering muncul</b> (frekuensinya terbesar). Modus adalah satu-satunya ukuran pemusatan yang bisa dipakai untuk <b>data kualitatif</b>: warna favorit, merek terpopuler, menu paling laku. Data bisa punya <b>dua modus</b> (bimodal) atau bahkan <b>tidak punya modus</b> kalau semua nilai muncul sama sering.</div>
+  <div class="note"><b>Contoh modus.</b> Data 4, 5, 5, 6, 7, 7, 7, 8 &rarr; frekuensi: 5 muncul 2&times;, 7 muncul 3&times;, lainnya 1&times; &rarr; <b>modus = 7</b>.<br>Data 2, 3, 3, 5, 5 &rarr; 3 dan 5 sama-sama muncul 2&times; &rarr; <b>bimodal: 3 dan 5</b>.<br>Data 1, 2, 3, 4 &rarr; tidak ada yang berulang &rarr; <b>tidak ada modus</b>.</div>
+  <div class="callout"><b>Dua jebakan favorit soal HOTS:</b> <b>(1)</b> Lupa mengurutkan &mdash; median selalu dihitung dari data <i>terurut</i>, bukan dari urutan asli soal. <b>(2)</b> Mengira modus pasti ada dan tunggal &mdash; cek frekuensinya dulu: bisa bimodal, bisa tidak ada sama sekali.</div>
+</section>
+
+<!-- 6. BAB1 LAB A: STUDIO DATA + OUTLIER -->
+<section class="slide acc-rose" id="s-m1c">
+  <h2>Lab Interaktif &mdash; Studio Data Live</h2>
+  <p class="sub">Ketik bebas datamu (pisahkan dengan koma/spasi), lalu lihat mean, median, dan modus dihitung langsung beserta langkahnya.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 1: Studio Data</h3>
+    <div class="ds-top">
+      <input type="text" class="ds-input" id="ds-in" value="7, 8, 6, 9, 8, 10, 7, 8, 9" spellcheck="false">
+      <button class="pbtn" data-preset="7, 8, 6, 9, 8, 10, 7, 8, 9">Nilai Ujian</button>
+      <button class="pbtn" data-preset="148, 150, 152, 148, 155, 150, 153, 149, 151, 150">Tinggi (cm)</button>
+      <button class="pbtn" data-preset="0, 1, 2, 1, 0, 3, 1, 2, 1, 1, 0, 2">Jumlah Kakak</button>
+    </div>
+    <div class="statrow" id="ds-stats"></div>
+    <div class="dschips" id="ds-chips"></div>
+    <div class="barwrap" id="ds-bars"></div>
+    <p class="draghint">Batang biru = frekuensi tiap nilai &middot; batang oranye = modus &middot; kartu hijau pada chip terurut = posisi median</p>
+    <div id="ds-steps"></div>
+    <div class="stepbox" id="ds-dev"></div>
+  </div>
+  <div class="labbox">
+    <h3>Lab 2: Eksperimen Outlier &mdash; Siapa yang Terguncang?</h3>
+    <p style="font-size:14.5px">Data awal: <b>7, 8, 8, 9, 10</b>. Tekan tombol untuk menyelundupkan nilai ekstrem <b>100</b> ke dalam data, lalu amati ukuran mana yang paling terdistraksi.</p>
+    <div class="ds-top">
+      <button class="pbtn" id="ol-add">+ Tambah nilai 100</button>
+      <button class="pbtn" id="ol-reset">Reset</button>
+      <span class="lval" id="ol-data"></span>
+    </div>
+    <div class="statrow" id="ol-stats"></div>
+    <div class="stepbox" id="ol-note"></div>
+  </div>
+</section>
+
+<!-- 7. BAB1 LAB B: TRANSFORMASI + GABUNGAN -->
+<section class="slide acc-rose" id="s-m1d">
+  <h2>Lab Interaktif &mdash; Transformasi &amp; Rata-rata Gabungan</h2>
+  <p class="sub">Dua sifat yang paling sering diuji pada soal HOTS data tunggal.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 3: Transformasi Data (y = b&middot;x + a)</h3>
+    <p style="font-size:14.5px">Data dasar: <b>6, 8, 10, 10, 16</b> &rarr; mean = median = modus = 10. Geser slider dan amati ketiganya berubah dengan rumus yang sama persis: <b>nilai baru = b &times; nilai lama + a</b>.</p>
+    <div class="lgrid">
+      <div class="lctl">
+        <label>Dikali b (0,5 &ndash; 3)<input type="range" id="tr-b" min="0.5" max="3" step="0.5" value="1"><span class="lval" id="tr-val-b"></span></label>
+        <label>Ditambah a (&minus;10 &ndash; 20)<input type="range" id="tr-a" min="-10" max="20" step="1" value="0"><span class="lval" id="tr-val-a"></span></label>
+      </div>
+      <div class="labinfo" style="flex:1;min-width:250px" id="tr-out"></div>
+    </div>
+    <div class="dschips" id="tr-chips"></div>
+    <p class="draghint">Coba b = 2, a = 3: semua ukuran berubah dari 10 menjadi 23. Rumus yang sama berlaku untuk mean, median, DAN modus.</p>
+  </div>
+  <div class="labbox">
+    <h3>Lab 4: Kalkulator Rata-rata Gabungan</h3>
+    <div class="lgrid">
+      <div class="lctl">
+        <label>Kelompok 1: banyak data n&#8321;<input type="number" id="gb-n1" value="20" min="1"></label>
+        <label>Kelompok 1: rata-rata x&#772;&#8321;<input type="number" id="gb-x1" value="70" ></label>
+        <label>Kelompok 2: banyak data n&#8322;<input type="number" id="gb-n2" value="30" min="1"></label>
+        <label>Kelompok 2: rata-rata x&#772;&#8322;<input type="number" id="gb-x2" value="80"></label>
+      </div>
+      <div class="labinfo" style="flex:1;min-width:250px" id="gb-out"></div>
+    </div>
+    <p class="draghint">Ubah n&#8321; menjadi 30 dan lihat: gabungan mendekati x&#772;&#8322; &mdash; kelompok dengan data lebih banyak "lebih menang" menarik rata-rata.</p>
+  </div>
+</section>
+
+<!-- 8. BAB1 KUIS -->
+<section class="slide acc-rose" id="s-m1q">
+  <div id="q-tunggal-body">
+    <h2>Latihan HOTS &mdash; Data Tunggal</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-tunggal-lvl"></span><span class="qcount">Soal <b id="q-tunggal-num">1</b>/10 &middot; Skor: <b id="q-tunggal-score">0</b></span></div>
+    <div class="qtext" id="q-tunggal-text"></div>
+    <div class="opts" id="q-tunggal-opts"></div>
+    <div class="expbox" id="q-tunggal-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-tunggal-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-tunggal-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 9. DIVIDER BAB 2 -->
+<section class="slide divider acc-blue" id="s-d2">
+  <div class="dnum">02</div>
+  <p class="dkicker">BAB 2</p>
+  <h1>Data Kelompok</h1>
+  <ul class="dlist">
+    <li>Membaca tabel distribusi frekuensi: kelas, tepat kelas, titik tengah, frekuensi kumulatif</li>
+    <li>Mean data kelompok: x&#772; = &Sigma;(f&middot;x) : &Sigma;f</li>
+    <li>Median lewat interpolasi: Me = T<sub>b</sub> + ((n:2 &minus; F) : f) &times; c</li>
+    <li>Modus lewat d&#8321; dan d&#8322;: Mo = T<sub>b</sub> + (d&#8321; : (d&#8321; + d&#8322;)) &times; c</li>
+    <li>Lab interaktif: tabel frekuensi yang bisa diedit + histogram bertanda</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+<!-- 10. BAB2 KONSEP: TABEL DF & MEAN -->
+<section class="slide acc-blue" id="s-m2a">
+  <h2>Tabel Distribusi Frekuensi &amp; Mean Data Kelompok</h2>
+  <p class="sub">Ketika datanya ratusan, kita tak mungkin menulis semua nilainya &mdash; data "dikemas" ke dalam kelas-kelas.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Data kelompok</b> adalah data yang disajikan dalam <b>tabel distribusi frekuensi</b>: nilai-nilai dikelompokkan ke <b>kelas interval</b> (misal 41&ndash;50) beserta <b>frekuensinya</b> (banyak data di kelas itu). Konsekuensinya: nilai asli per data tidak diketahui lagi, jadi seluruh perhitungan memakai <b>titik tengah kelas</b> sebagai wakil &mdash; hasilnya merupakan <b>pendekatan</b> yang sangat baik.</div>
+  <table class="tbl">
+    <tr><th>Istilah</th><th>Arti</th><th>Contoh pada kelas 41&ndash;50</th></tr>
+    <tr><td><b>Tepat bawah (T<sub>b</sub>)</b></td><td>Batas " pagar" kiri kelas</td><td>41 &minus; 0,5 = <b>40,5</b></td></tr>
+    <tr><td><b>Tepat atas</b></td><td>Batas pagar kanan kelas</td><td>50 + 0,5 = <b>50,5</b></td></tr>
+    <tr><td><b>Panjang kelas (c)</b></td><td>Selisih tepat atas &minus; tepat bawah</td><td>50,5 &minus; 40,5 = <b>10</b></td></tr>
+    <tr><td><b>Titik tengah (x&#7522;)</b></td><td>(tepat bawah + tepat atas) : 2</td><td>(40,5 + 50,5) : 2 = <b>45,5</b></td></tr>
+    <tr><td><b>Frekuensi kumulatif (F)</b></td><td>Jumlah frekuensi sampai kelas itu</td><td>4 + 6 = <b>10</b> (untuk kelas kedua)</td></tr>
+  </table>
+  <div class="formula">x&#772; = &Sigma;(f&#7522; &middot; x&#7522;) : &Sigma;f&#7522;
+    <small>f&#7522; = frekuensi kelas ke-i, x&#7522; = titik tengah kelas ke-i. Langkah: <b>(1)</b> hitung titik tengah tiap kelas &rarr; <b>(2)</b> kalikan dengan frekuensinya &rarr; <b>(3)</b> jumlahkan &rarr; <b>(4)</b> bagi &Sigma;f (banyak seluruh data).</small>
+  </div>
+  <div class="defbox"><b>Contoh.</b> Nilai 20 siswa: kelas 41&ndash;50 (f = 4), 51&ndash;60 (f = 6), 61&ndash;70 (f = 10).<br>Titik tengah: 45,5 &middot; 55,5 &middot; 65,5. Maka &Sigma;(f&middot;x) = 4&times;45,5 + 6&times;55,5 + 10&times;65,5 = 182 + 333 + 655 = <b>1.170</b>, dan &Sigma;f = 20.<br>x&#772; = 1.170 : 20 = <b>58,5</b>.</div>
+  <div class="callout"><b>Awas jebakan titik tengah!</b> Titik tengah kelas 41&ndash;50 adalah <b>45,5</b> (dari tepat kelas), bukan 45 atau 46. Salah titik tengah = seluruh jawaban meleset walau langkahnya benar. Cek juga c: untuk kelas 41&ndash;50, c = <b>10</b>, bukan 9.</div>
+</section>
+
+<!-- 11. BAB2 KONSEP: MEDIAN & MODUS KELOMPOK -->
+<section class="slide acc-blue" id="s-m2b">
+  <h2>Median &amp; Modus Data Kelompok</h2>
+  <p class="sub">Karena nilai asli tak dikenal, posisi median dan modus "diantar" lewat interpolasi garis lurus.</p>
+  <div class="rule"></div>
+  <div class="defbox"><b>Median data kelompok.</b> Data ke-n:2 terletak di <b>kelas median</b> &mdash; kelas pertama yang frekuensi kumulatifnya mencapai atau melebihi n:2. Di dalam kelas itu, median diinterpolasi sebanding dengan posisi (n:2 &minus; F) dari f bagian.</div>
+  <div class="formula">Me = T<sub>b</sub> + ( (n:2 &minus; F) : f ) &times; c
+    <small><b>T<sub>b</sub></b> = tepat bawah kelas median &middot; <b>F</b> = frekuensi kumulatif <i>sebelum</i> kelas median &middot; <b>f</b> = frekuensi kelas median &middot; <b>c</b> = panjang kelas. Pecahan (n:2 &minus; F):f adalah "seberapa jauh" kita masuk ke kelas.</small>
+  </div>
+  <div class="defbox"><b>Contoh.</b> Data 30 siswa: 51&ndash;55 (f = 5), 56&ndash;60 (f = 9), 61&ndash;65 (f = 10), 66&ndash;70 (f = 6).<br>Kumulatif: 5, 14, 24, 30. n:2 = 15 &rarr; kumulatif pertama &ge; 15 adalah 24 &rarr; <b>kelas median 61&ndash;65</b>.<br>T<sub>b</sub> = 60,5; F = 14; f = 10; c = 5. Maka Me = 60,5 + ((15 &minus; 14) : 10) &times; 5 = 60,5 + 0,5 = <b>61</b>.</div>
+  <div class="defbox"><b>Modus data kelompok</b> berada di <b>kelas modus</b> (frekuensinya terbesar). Posisi modus condong ke kelas tetangga yang frekuensinya lebih besar &mdash; itulah fungsi d&#8321; dan d&#8322;.</div>
+  <div class="formula">Mo = T<sub>b</sub> + ( d&#8321; : (d&#8321; + d&#8322;) ) &times; c
+    <small><b>d&#8321;</b> = f<sub>modus</sub> &minus; f kelas <i>sebelumnya</i> &middot; <b>d&#8322;</b> = f<sub>modus</sub> &minus; f kelas <i>sesudahnya</i>. Contoh tabel di atas: kelas modus 61&ndash;65; d&#8321; = 10 &minus; 9 = 1; d&#8322; = 10 &minus; 6 = 4 &rarr; Mo = 60,5 + (1 : 5) &times; 5 = <b>61,5</b>.</small>
+  </div>
+  <div class="callout"><b>Checklist anti-salah:</b> <b>(1)</b> Kelas median dicari lewat <i>frekuensi kumulatif</i>, bukan frekuensi tunggal. <b>(2)</b> F adalah kumulatif <i>sebelum</i> kelas median &mdash; bukan kumulatifnya sendiri. <b>(3)</b> T<sub>b</sub> selalu berakhiran ,5 (misal 60,5), bukan batas tulisannya (61). <b>(4)</b> Untuk modus, d&#8321; dan d&#8322; dihitung terhadap frekuensi kelas modus.</div>
+</section>
+
+<!-- 12. BAB2 LAB: TABEL FREKUENSI -->
+<section class="slide acc-blue" id="s-m2c">
+  <h2>Lab Interaktif &mdash; Laboratorium Tabel Frekuensi</h2>
+  <p class="sub">Edit batas kelas dan frekuensinya: mean, median, modus, histogram, dan interpolasinya dihitung ulang seketika.</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 5: Bangun Tabelmu Sendiri</h3>
+    <div class="ds-top">
+      <button class="pbtn" id="ft-p1">Preset: Nilai Ujian</button>
+      <button class="pbtn" id="ft-p2">Preset: Tinggi Badan</button>
+      <button class="pbtn" id="ft-p3">Preset: Penjualan</button>
+      <button class="pbtn" id="ft-add">+ Baris kelas</button>
+      <button class="pbtn" id="ft-del">&minus; Hapus baris</button>
+    </div>
+    <div class="ftwrap"><table class="ftable" id="ft-table">
+      <thead><tr><th>Kelas<br>tepat bawah</th><th>Kelas<br>tepat atas</th><th>Frekuensi<br>f</th><th>Titik tengah<br>x</th><th>f &middot; x</th><th>Kumulatif<br>F</th></tr></thead>
+      <tbody id="ft-tbody"></tbody>
+    </table></div>
+    <p class="ftwarn" id="ft-warn" style="display:none"></p>
+    <div class="statrow" id="ft-stats"></div>
+    <div class="histo" id="ft-histo"></div>
+    <p class="draghint">Histogram: tinggi batang = frekuensi &middot; garis putus hijau = posisi median &middot; batang oranye = kelas modus</p>
+    <div id="ft-steps"></div>
+    <div class="labinfo" id="ft-modevis"></div>
+  </div>
+</section>
+
+<!-- 13. BAB2 KUIS -->
+<section class="slide acc-blue" id="s-m2q">
+  <div id="q-kelompok-body">
+    <h2>Latihan HOTS &mdash; Data Kelompok</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-kelompok-lvl"></span><span class="qcount">Soal <b id="q-kelompok-num">1</b>/10 &middot; Skor: <b id="q-kelompok-score">0</b></span></div>
+    <div class="qtext" id="q-kelompok-text"></div>
+    <div class="opts" id="q-kelompok-opts"></div>
+    <div class="expbox" id="q-kelompok-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-kelompok-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-kelompok-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 14. DIVIDER BAB 3 -->
+<section class="slide divider acc-green" id="s-d3">
+  <div class="dnum">03</div>
+  <p class="dkicker">BAB 3</p>
+  <h1>Analisis &amp; Penerapan</h1>
+  <ul class="dlist">
+    <li>Memilih senjata yang tepat: mean, median, atau modus?</li>
+    <li>Bentuk distribusi: simetris, menceng kanan, menceng kiri</li>
+    <li>Hubungan empiris: Mo &asymp; 3&middot;Me &minus; 2&middot;x&#772;</li>
+    <li>Lab: simulator bentuk distribusi &mdash; geser titik data langsung!</li>
+    <li>Studi kasus: rapor, gaji, stok toko, berita, klinik</li>
+    <li>10 soal HOTS berpembahasan</li>
+  </ul>
+</section>
+<!-- 15. BAB3 KONSEP: MEMILIH UKURAN & DISTRIBUSI -->
+<section class="slide acc-green" id="s-m3a">
+  <h2>Memilih Ukuran yang Tepat &amp; Bentuk Distribusi</h2>
+  <p class="sub">Tiga ukuran, tiga cerita. Soal HOTS jarang menanyakan "hitunglah" &mdash; ia menanyakan "ukuran mana yang pantas, dan mengapa".</p>
+  <div class="rule"></div>
+  <table class="tbl">
+    <tr><th>Ukuran</th><th>Keunggulan</th><th>Kelemahan</th><th>Paling cocok untuk</th></tr>
+    <tr><td><b style="color:#2563eb">Mean</b></td><td>Memakai semua data; total = mean &times; n</td><td>Trus-tener digeser oleh outlier</td><td>Data simetris: nilai ulangan, tinggi badan, konsumsi</td></tr>
+    <tr><td><b style="color:#059669">Median</b></td><td>Kebal terhadap outlier; hanya perlu posisi</td><td>Tidak bisa dipakai menghitung total</td><td>Data menceng: gaji, harga rumah, waktu tunggu</td></tr>
+    <tr><td><b style="color:#d97706">Modus</b></td><td>Satu-satunya untuk data kualitatif; nilai nyata yang memang ada</td><td>Bisa tidak ada atau ganda; tak peduli nilai lain</td><td>Ukuran sepatu, menu favorit, warna terpopuler</td></tr>
+  </table>
+  <div class="grid3">
+    <div class="mini"><h4>Simetris</h4><p>Ekor kiri-kanan seimbang (lonceng).<br><b style="color:#2563eb">Mean</b> = <b style="color:#059669">Median</b> = <b style="color:#d97706">Modus</b> &mdash; ketiganya berimpit di puncak.</p></div>
+    <div class="mini"><h4>Menceng kanan (+)</h4><p>Ekor kanan panjang karena sedikit nilai sangat besar.<br><b style="color:#d97706">Modus</b> &lt; <b style="color:#059669">Median</b> &lt; <b style="color:#2563eb">Mean</b> &mdash; mean tertarik ke kanan.</p></div>
+    <div class="mini"><h4>Menceng kiri (&minus;)</h4><p>Ekor kiri panjang karena sedikit nilai sangat kecil.<br><b style="color:#2563eb">Mean</b> &lt; <b style="color:#059669">Median</b> &lt; <b style="color:#d97706">Modus</b> &mdash; mean tertarik ke kiri.</p></div>
+  </div>
+  <div class="formula">Hubungan empiris Pearson: &nbsp; Mo &asymp; 3&middot;Me &minus; 2&middot;x&#772;
+    <small>Pakai untuk <b>memperkirakan</b> satu ukuran bila dua lainnya diketahui (distribusi tidak terlalu menceng). Contoh: x&#772; = 26, Me = 28 &rarr; Mo &asymp; 3&times;28 &minus; 2&times;26 = <b>32</b> &mdash; cocok dengan pola menceng kiri: mean &lt; median &lt; modus.</small>
+  </div>
+  <div class="callout"><b>Identitas emas mean:</b> total = mean &times; n. Inilah alasan mean tak tergantikan untuk <i>perencanaan</i> (berapa total konsumsi beras, total gaji, total panen) meski mediannya lebih adil untuk <i>pelaporan</i>.</div>
+</section>
+
+<!-- 16. BAB3 LAB: SIMULATOR + STUDI KASUS -->
+<section class="slide acc-green" id="s-m3b">
+  <h2>Lab Simulator &amp; Studi Kasus Sehari-hari</h2>
+  <p class="sub">Geser titik-titik data pada garis bilangan, lalu saksikan mean, median, dan modus bereaksi &mdash; siapa paling gesit, siapa paling setia?</p>
+  <div class="rule"></div>
+  <div class="labbox">
+    <h3>Lab 6: Simulator Bentuk Distribusi</h3>
+    <div class="skwrap"><div id="sk-svg"></div></div>
+    <div class="ds-top">
+      <button class="pbtn" data-sk="10,15,20,25,30,35,40,45,90">Preset: Menceng Kanan</button>
+      <button class="pbtn" data-sk="5,40,45,50,55,60,65,70,75">Preset: Menceng Kiri</button>
+      <button class="pbtn" data-sk="20,30,30,30,40,50,60,75,90">Preset: Dengan Modus</button>
+      <button class="pbtn" id="sk-reset">Reset</button>
+    </div>
+    <div class="labinfo" id="sk-info"></div>
+    <p class="draghint">Tarik titik ke kiri/kanan (nilai 0&ndash;100). Garis biru = mean &middot; garis hijau = median &middot; bintang oranye = modus (muncul bila ada nilai berulang).</p>
+  </div>
+  <h3 style="margin-top:18px">Studi Kasus &mdash; klik setiap kartu untuk melihat keputusan yang tepat</h3>
+  <div class="condgrid">
+    <div class="condcard"><div class="cname">Rapor &amp; IPK <span class="cmark">&#9662;</span></div><div class="why">Rapor memakai <b>mean</b> (rata-rata nilai), dan IPK adalah <b>mean tertimbang</b> (bobot = jumlah SKS). Tujuannya akumulasi: total capaian = mean &times; banyak mata pelajaran, sehingga perbaikan satu nilai langsung terasa pada rata-rata.</div></div>
+    <div class="condcard"><div class="cname">Gaji di sebuah perusahaan <span class="cmark">&#9662;</span></div><div class="why">Distribusi gaji hampir selalu <b>menceng kanan</b>: gaji beberapa direksi jauh di atas karyawan. Mean terangkat, sedangkan <b>median</b> tetap menggambarkan "karyawan tipikal". Laporan kepegawaian yang jujur memakai median.</div></div>
+    <div class="condcard"><div class="cname">Stok sepatu &amp; produksi pakaian <span class="cmark">&#9662;</span></div><div class="why">Produsen menanyakan "ukuran berapa yang paling banyak dibeli?" &mdash; itu <b>modus</b>. Mean 41,6 tidak bisa diproduksi sebagai ukuran; median pun bukan jaminan permintaan terbesar. Modus = nilai nyata yang paling laku.</div></div>
+    <div class="condcard"><div class="cname">Berita "pendapatan rata-rata" <span class="cmark">&#9662;</span></div><div class="why">Headline "rata-rata pendapatan naik 20%" bisa benar secara hitung namun menyesatkan bila kenaikannya hanya pada segelintir orang sangat kaya (mean naik, median diam). Pembaca kritis meminta <b>median</b> sebagai pembanding.</div></div>
+    <div class="condcard"><div class="cname">Waktu tunggu klinik <span class="cmark">&#9662;</span></div><div class="why">Sedikit pasien menunggu sangat lama &rarr; data <b>menceng kanan</b>. Untuk "berapa lama pasien tipikal menunggu?" pakai <b>median</b>; tetapi <b>mean</b> tetap dibutuhkan untuk kapasitas: mean &times; jumlah pasien = total jam tunggu yang harus ditampung.</div></div>
+    <div class="condcard"><div class="cname">Nilai ujian yang dilaporkan guru <span class="cmark">&#9662;</span></div><div class="why">Guru cerdas melaporkan tiga-tiganya: <b>mean</b> untuk capaian kelas, <b>median</b> untuk posisi siswa tipikal, <b>modus</b> untuk jawaban/nilai yang paling umum. Jika mean jauh di bawah median, ada siswa yang tertinggal jauh &mdash; sinyal untuk remedial.</div></div>
+  </div>
+  <div class="defbox"><b>Strategi 5 langkah menaklukkan soal HOTS statistika:</b>
+    <b>(1)</b> Tulis apa yang diketahui (mean? median? tabel?) dan apa yang ditanya.
+    <b>(2)</b> Untuk data tunggal: <b>urutkan dulu</b> sebelum bicara median/modus.
+    <b>(3)</b> Untuk data kelompok: tandai kelas median/modus lewat kumulatif, lalu tulis T<sub>b</sub>, F, f, c (dan d&#8321;, d&#8322;) satu per satu.
+    <b>(4)</b> Manfaatkan total = mean &times; n dan rumus transformasi b&middot;x + a.
+    <b>(5)</b> Cek kecermengan: bandingkan mean vs median untuk membaca bentuk distribusi &mdash; lalu yakinlah jawabanmu masuk akal.</div>
+</section>
+
+<!-- 17. BAB3 KUIS -->
+<section class="slide acc-green" id="s-m3q">
+  <div id="q-terapan-body">
+    <h2>Latihan HOTS &mdash; Analisis &amp; Penerapan</h2>
+    <p class="sub">10 soal HOTS. Pilih satu jawaban lalu klik <b>Periksa Jawaban</b>; pembahasan muncul otomatis.</p>
+    <div class="quiz-top"><span class="lvl" id="q-terapan-lvl"></span><span class="qcount">Soal <b id="q-terapan-num">1</b>/10 &middot; Skor: <b id="q-terapan-score">0</b></span></div>
+    <div class="qtext" id="q-terapan-text"></div>
+    <div class="opts" id="q-terapan-opts"></div>
+    <div class="expbox" id="q-terapan-exp"></div>
+    <div class="qctrl">
+      <button class="btn pri" id="q-terapan-check" disabled>Periksa Jawaban</button>
+      <button class="btn ghost" id="q-terapan-next" disabled>Soal Berikutnya &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- 18. SKOR -->
+<section class="slide acc-blue" id="s-score">
+  <h2>Nilai Kamu</h2>
+  <p class="sub">Rekapitulasi otomatis seluruh latihan. Skor tersimpan di perangkatmu, walau halaman ditutup.</p>
+  <div class="rule"></div>
+  <div id="score-overall"></div>
+  <div id="score-table"></div>
+  <div class="qctrl">
+    <button class="btn ghost" id="btn-reset">Reset Semua Skor</button>
+    <button class="btn pri" data-goto="s-menu">Kembali ke Peta Materi</button>
+  </div>
+</section>
+
+<!-- 19. RANGKUMAN -->
+<section class="slide acc-amber" id="s-summary">
+  <h2>Rangkuman &amp; Strategi TKA</h2>
+  <p class="sub">Tiga kartu rumus inti dan lima strategi menaklukkan soal HOTS statistika.</p>
+  <div class="rule"></div>
+  <div class="grid2">
+    <div class="mini acc-rose"><h4>Data Tunggal</h4><p><b style="color:#2563eb">Mean</b>: &Sigma;x : n; total = mean &times; n.<br><b style="color:#059669">Median</b>: data terurut; ganjil &rarr; data ke-(n+1):2, genap &rarr; rata-rata dua nilai tengah.<br><b style="color:#d97706">Modus</b>: frekuensi terbesar; bisa bimodal / tidak ada.<br>Transformasi b&middot;x + a &rarr; ketiga ukuran ikut: b&middot;lama + a. Gabungan: (n&#8321;x&#772;&#8321; + n&#8322;x&#772;&#8322;) : (n&#8321; + n&#8322;).</p></div>
+    <div class="mini acc-blue"><h4>Data Kelompok</h4><p>x&#7522; = titik tengah = (T<sub>b</sub> + tepat atas) : 2; c = panjang kelas.<br><b style="color:#2563eb">Mean</b>: &Sigma;(f&middot;x) : &Sigma;f.<br><b style="color:#059669">Me</b> = T<sub>b</sub> + ((n:2 &minus; F):f) &times; c, kelas median via kumulatif.<br><b style="color:#d97706">Mo</b> = T<sub>b</sub> + (d&#8321;:(d&#8321;+d&#8322;)) &times; c, d&#8321; &amp; d&#8322; dari kelas tetangga.</p></div>
+    <div class="mini acc-green"><h4>Analisis</h4><p>Simetris: mean = median = modus.<br>Menceng kanan: modus &lt; median &lt; mean.<br>Menceng kiri: mean &lt; median &lt; modus.<br>Empiris: Mo &asymp; 3&middot;Me &minus; 2&middot;x&#772;. Mean untuk total, median untuk pelaporan data menceng, modus untuk data kualitatif.</p></div>
+    <div class="mini acc-amber"><h4>Jebakan yang Harus Kamu Waspadai</h4><p>Median tanpa mengurutkan data.<br>Titik tengah 45 (harusnya 45,5) dan c = 9 (harusnya 10) pada kelas 41&ndash;50.<br>F dianggap kumulatif kelas median (harusnya sebelum).<br>Rata-rata rata-rata tanpa bobot banyak data.<br>Memilih mean untuk data yang jelas-jelas menceng.</p></div>
+  </div>
+  <div class="defbox"><b>Lima strategi soal HOTS:</b></div>
+  <ul class="dlist" style="margin-top:0">
+    <li><b>Kenali jenis datanya dulu.</b> Daftar nilai = data tunggal; tabel kelas = data kelompok &mdash; keduanya punya alat berbeda.</li>
+    <li><b>Urutkan, lalu baru hitung.</b> Median dan modus data tunggal baru boleh diotak-atik setelah data tersusun rapi.</li>
+    <li><b>Manfaatkan total = mean &times; n.</b> Hampir semua soal "nilai hilang", "koreksi salah catat", dan "gabungan" selesai lewat identitas ini.</li>
+    <li><b>Untuk data kelompok, tulis variabelnya satu per satu.</b> T<sub>b</sub>, F, f, c (atau d&#8321;, d&#8322;) sebelum dimasukkan ke rumus &mdash; kesalahan paling umum adalah salah mengambil kelas.</li>
+    <li><b>Baca bentuk distribusinya.</b> Bandingkan mean dan median: yang lebih besar menunjuk arah kemencengan, lalu putuskan ukuran yang paling mewakili.</li>
+  </ul>
+  <div class="callout" style="margin-top:16px"><b>Langkah terakhir:</b> kerjakan ulang soal yang salah pada tiap bab lewat Peta Materi, lalu pantau halaman Nilai hingga ketiga bab hijau. Selamat berlatih!</div>
+</section>
+
+</div><!-- /deck -->
+
+<nav id="navbar"><div class="nb-in">
+  <button class="nb-btn" id="btn-menu">&#8801; Peta</button>
+  <button class="nb-btn" id="btn-prev">&larr; Sebelumnya</button>
+  <span id="counter">1 / 19</span>
+  <span class="spacer"></span>
+  <button class="nb-btn" id="btn-next">Berikutnya &rarr;</button>
+</div></nav>
+<script>
+/* ================= HELPERS ================= */
+const $=id=>document.getElementById(id);
+const LETTERS=['A','B','C','D'];
+function fmt(n){const r=Math.round(n*100)/100;return String(r).replace('.',',');}
+function parseData(str){return str.split(/[,;\s]+/).filter(s=>s.length).map(Number).filter(x=>!isNaN(x));}
+function statsOf(arr){
+  const sorted=[...arr].sort((a,b)=>a-b),n=arr.length;
+  const sum=arr.reduce((a,b)=>a+b,0),mean=n?sum/n:0;
+  let median=null;
+  if(n)median=n%2?sorted[(n-1)/2]:(sorted[n/2-1]+sorted[n/2])/2;
+  const freq={};arr.forEach(x=>{freq[x]=(freq[x]||0)+1;});
+  const keys=Object.keys(freq).map(Number).sort((a,b)=>a-b);
+  let maxf=0;keys.forEach(k=>{if(freq[k]>maxf)maxf=freq[k];});
+  const modes=maxf>1?keys.filter(k=>freq[k]===maxf):[];
+  return{sorted,n,sum,mean,median,freq,keys,maxf,modes,min:n?sorted[0]:0,max:n?sorted[n-1]:0,range:n?sorted[n-1]-sorted[0]:0};
+}
+const C_MEAN='#2563eb',C_MED='#059669',C_MOD='#d97706',C_RNG='#7c3aed';
+
+/* ================= LAB 1: STUDIO DATA ================= */
+function dsRender(){
+  const raw=$('ds-in').value,arr=parseData(raw);
+  if(!arr.length){
+    $('ds-stats').innerHTML='<p class="ftwarn">Ketik minimal satu angka.</p>';
+    $('ds-chips').innerHTML='';$('ds-bars').innerHTML='';$('ds-steps').innerHTML='';$('ds-dev').innerHTML='';
+    return;
+  }
+  const s=statsOf(arr);
+  $('ds-stats').innerHTML=
+    '<div class="statcard mean"><div class="sl">Mean (Rata-rata)</div><div class="sv">'+fmt(s.mean)+'</div></div>'
+   +'<div class="statcard med"><div class="sl">Median</div><div class="sv">'+fmt(s.median)+'</div></div>'
+   +'<div class="statcard mod"><div class="sl">Modus</div><div class="sv">'+(s.modes.length?fmt(s.modes[0])+(s.modes.length>1?' &amp; '+fmt(s.modes[1]):''):'&mdash;')+'</div></div>'
+   +'<div class="statcard rng"><div class="sl">Range (Max &minus; Min)</div><div class="sv">'+fmt(s.range)+'</div></div>';
+  /* chips terurut dengan highlight median */
+  const midIdx=[];
+  if(s.n%2)midIdx.push((s.n-1)/2);else{midIdx.push(s.n/2-1,s.n/2);}
+  $('ds-chips').innerHTML='<span style="font-size:12px;font-weight:700;color:#475569;align-self:center;margin-right:4px">TERURUT:</span>'
+    +s.sorted.map((v,i)=>'<span class="dchip'+(midIdx.includes(i)?' mid':'')+'">'+v+'</span>').join('');
+  /* bar chart frekuensi */
+  $('ds-bars').innerHTML=s.keys.map(k=>{
+    const h=Math.round(s.freq[k]/s.maxf*100);
+    const isMode=s.modes.length&&s.modes.indexOf(k)>=0;
+    return '<div class="bar'+(isMode?' modebar':'')+'" style="height:'+h+'%"><b>'+s.freq[k]+'&times;</b><span>'+k+'</span></div>';
+  }).join('');
+  /* langkah */
+  let h='';
+  h+='<div class="stepbox mean"><b class="t">Langkah Mean</b><br>'
+    +'Jumlahkan semua data: '+s.sorted.join(' + ')+' = <b>'+fmt(s.sum)+'</b><br>'
+    +'Banyak data n = '+s.n+'. Maka x&#772; = '+fmt(s.sum)+' : '+s.n+' = <b>'+fmt(s.mean)+'</b></div>';
+  h+='<div class="stepbox med"><b class="t">Langkah Median</b><br>';
+  if(s.n%2){
+    h+='n = '+s.n+' (ganjil) &rarr; posisi tengah = ('+s.n+' + 1) : 2 = '+((s.n+1)/2)+' &rarr; data ke-'+((s.n+1)/2)+' dari urutan di atas = <b>'+fmt(s.median)+'</b>';
+  }else{
+    h+='n = '+s.n+' (genap) &rarr; ambil data ke-'+(s.n/2)+' dan ke-'+(s.n/2+1)+', lalu rata-ratakan: ('+fmt(s.sorted[s.n/2-1])+' + '+fmt(s.sorted[s.n/2])+') : 2 = <b>'+fmt(s.median)+'</b>';
+  }
+  h+='</div>';
+  h+='<div class="stepbox mod"><b class="t">Langkah Modus</b><br>'
+    +s.keys.map(k=>k+' muncul '+s.freq[k]+'&times;').join(' &middot; ')+'<br>'
+    +(s.modes.length?'Frekuensi terbesar = '+s.maxf+' &rarr; <b>modus = '+s.modes.map(fmt).join(' dan ')+'</b>'+(s.modes.length>1?' (bimodal!)':''):'Tidak ada nilai yang berulang &rarr; <b>data ini tidak punya modus</b>')
+    +'</div>';
+  $('ds-steps').innerHTML=h;
+  /* deviasi dari mean: sigma(x - mean) = 0 */
+  const devs=s.sorted.map(v=>{
+    const d=v-s.mean,sg=d>0?'+':(d<0?'\u2212':'\u00B1');
+    return '<span class="dchip" title="x \u2212 mean">'+(Math.abs(d)<1e-9?'0':sg+' '+fmt(Math.abs(d)))+'</span>';
+  }).join('');
+  $('ds-dev').innerHTML='<b style="color:'+C_MEAN+'">Rahasia mean sebagai titik keseimbangan:</b> selisih tiap data terhadap mean (di atas = tambah, di bawah = kurang) selalu saling menghapus.<br>'+devs
+    +'<br>&Sigma;(x&#7522; &minus; x&#772;) = <b>0</b> &mdash; inilah mengapa mean disebut "titik tumpu" data: banyaknya jarak di kiri dan kanan mean selalu setara.';
+}
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{$('ds-in').value=b.dataset.preset;dsRender();}));
+$('ds-in').addEventListener('input',dsRender);
+
+/* ================= LAB 2: OUTLIER ================= */
+const OL_BASE=[7,8,8,9,10];let olExtra=[];
+function olRender(){
+  const arr=[...OL_BASE,...olExtra],s=statsOf(arr);
+  $('ol-data').textContent='Data sekarang: '+arr.join(', ');
+  $('ol-stats').innerHTML=
+    '<div class="statcard mean"><div class="sl">Mean</div><div class="sv">'+fmt(s.mean)+'</div></div>'
+   +'<div class="statcard med"><div class="sl">Median</div><div class="sv">'+fmt(s.median)+'</div></div>'
+   +'<div class="statcard mod"><div class="sl">Modus</div><div class="sv">'+(s.modes.length?fmt(s.modes[0]):'&mdash;')+'</div></div>'
+   +'<div class="statcard rng"><div class="sl">Range</div><div class="sv">'+fmt(s.range)+'</div></div>';
+  let nb='Tanpa outlier: mean 8,4 &middot; median 8 &middot; modus 8.<br>';
+  if(!olExtra.length)nb='Data masih bersih. Tekan tombol untuk menyelundupkan outlier!';
+  else if(olExtra.length===1)nb='<b>Amati!</b> Mean melonjak 8,4 &rarr; '+fmt(s.mean)+' (naik drastis), median hanya bergeser tipis 8 &rarr; '+fmt(s.median)+', modus tidak bergeser sama sekali. Satu nilai ekstrem menguasai mean, tetapi hampir tak berdaya terhadap median dan modus.';
+  else nb='<b>Semakin banyak outlier:</b> mean terus merangkak ke '+fmt(s.mean)+', sementara median dan modus hampir diam di tempat. Kesimpulan eksperimen: pada data yang rentan nilai ekstrem, <b>median adalah ukuran pemusatan paling andal</b>.';
+  $('ol-note').innerHTML=nb;
+}
+$('ol-add').addEventListener('click',()=>{if(olExtra.length<5)olExtra.push(100);olRender();});
+$('ol-reset').addEventListener('click',()=>{olExtra=[];olRender();});
+
+/* ================= LAB 3: TRANSFORMASI ================= */
+const TR_BASE=[6,8,10,10,16];
+function trRender(){
+  const a=parseFloat($('tr-a').value),b=parseFloat($('tr-b').value);
+  $('tr-val-a').textContent='a = '+fmt(a);
+  $('tr-val-b').textContent='b = '+fmt(b);
+  const arr=TR_BASE.map(x=>b*x+a),s=statsOf(arr);
+  $('tr-chips').innerHTML='<span style="font-size:12px;font-weight:700;color:#475569;align-self:center;margin-right:4px">DATA BARU:</span>'+arr.map(v=>'<span class="dchip">'+fmt(v)+'</span>').join('');
+  $('tr-out').innerHTML='<table class="tbl" style="margin:0">'
+    +'<tr><th>Ukuran</th><th>Rumus</th><th>Nilai</th></tr>'
+    +'<tr><td>Mean</td><td>b&times;10 + a</td><td><b style="color:'+C_MEAN+'">'+fmt(b*10+a)+'</b></td></tr>'
+    +'<tr><td>Median</td><td>b&times;10 + a</td><td><b style="color:'+C_MED+'">'+fmt(b*10+a)+'</b></td></tr>'
+    +'<tr><td>Modus</td><td>b&times;10 + a</td><td><b style="color:'+C_MOD+'">'+fmt(b*10+a)+'</b></td></tr>'
+    +'</table><p style="font-size:12.5px;color:#64748b;margin:8px 0 0">Hitungan langsung dari data baru cocok persis dengan rumus transformasi &mdash; cek sendiri di kartu bawah.</p>';
+  $('tr-out').innerHTML+='<div class="dschips" style="margin-top:10px">'
+    +'<div class="statcard mean" style="flex:1"><div class="sl">Mean baru</div><div class="sv">'+fmt(s.mean)+'</div></div>'
+    +'<div class="statcard med" style="flex:1"><div class="sl">Median baru</div><div class="sv">'+fmt(s.median)+'</div></div>'
+    +'<div class="statcard mod" style="flex:1"><div class="sl">Modus baru</div><div class="sv">'+(s.modes.length?fmt(s.modes[0]):'&mdash;')+'</div></div>'
+    +'</div>';
+}
+$('tr-a').addEventListener('input',trRender);
+$('tr-b').addEventListener('input',trRender);
+
+/* ================= LAB 4: RATA-RATA GABUNGAN ================= */
+function gbRender(){
+  const n1=parseFloat($('gb-n1').value),x1=parseFloat($('gb-x1').value);
+  const n2=parseFloat($('gb-n2').value),x2=parseFloat($('gb-x2').value);
+  const out=$('gb-out');
+  if(!(n1>0&&n2>0)||isNaN(x1)||isNaN(x2)){out.innerHTML='<b style="color:#b91c1c">Isi semua kotak: n harus lebih besar dari 0.</b>';return;}
+  const t1=n1*x1,t2=n2*x2,tot=t1+t2,nn=n1+n2,g=tot/nn;
+  out.innerHTML='<table class="tbl" style="margin:0">'
+    +'<tr><th>Kelompok</th><th>n</th><th>Mean</th><th>Total (n &times; mean)</th></tr>'
+    +'<tr><td>1</td><td>'+fmt(n1)+'</td><td>'+fmt(x1)+'</td><td>'+fmt(t1)+'</td></tr>'
+    +'<tr><td>2</td><td>'+fmt(n2)+'</td><td>'+fmt(x2)+'</td><td>'+fmt(t2)+'</td></tr>'
+    +'<tr class="hi"><td>Gabungan</td><td>'+fmt(nn)+'</td><td>'+fmt(g)+'</td><td>'+fmt(tot)+'</td></tr>'
+    +'</table>'
+    +'<p style="font-size:13.5px;margin:8px 0 0">x&#772;<sub>gab</sub> = ('+fmt(t1)+' + '+fmt(t2)+') : ('+fmt(n1)+' + '+fmt(n2)+') = '+fmt(tot)+' : '+fmt(nn)+' = <b style="color:'+C_MEAN+';font-size:17px">'+fmt(g)+'</b></p>'
+    +'<p style="font-size:12.5px;color:#64748b;margin:6px 0 0">Bandingkan dengan (x&#772;&#8321;+x&#772;&#8322;):2 = '+fmt((x1+x2)/2)+' &mdash; merata-ratakan rata-rata tanpa bobot hampir selalu salah!</p>';
+}
+['gb-n1','gb-x1','gb-n2','gb-x2'].forEach(id=>$(id).addEventListener('input',gbRender));
+</script>
+<script>
+/* ================= LAB 5: TABEL DISTRIBUSI FREKUENSI ================= */
+const FT_PRESETS={
+  p1:[[41,50,6],[51,60,10],[61,70,14],[71,80,8],[81,90,2]],
+  p2:[[146,150,4],[151,155,7],[156,160,12],[161,165,9],[166,170,5],[171,175,3]],
+  p3:[[20,29,5],[30,39,9],[40,49,14],[50,59,11],[60,69,6],[70,79,3]]
+};
+let FT={rows:FT_PRESETS.p1.map(r=>[...r])};
+
+function ftRenderTable(){
+  $('ft-tbody').innerHTML=FT.rows.map((r,i)=>
+    '<tr id="ft-row-'+i+'">'
+   +'<td><input type="number" data-r="'+i+'" data-c="0" value="'+r[0]+'"></td>'
+   +'<td><input type="number" data-r="'+i+'" data-c="1" value="'+r[1]+'"></td>'
+   +'<td><input type="number" data-r="'+i+'" data-c="2" value="'+r[2]+'"></td>'
+   +'<td class="ftmid">-</td><td class="ftfx">-</td><td class="ftcum">-</td></tr>'
+  ).join('');
+  document.querySelectorAll('#ft-tbody input').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      FT.rows[+inp.dataset.r][+inp.dataset.c]=parseFloat(inp.value);
+      ftCompute();
+    });
+  });
+  ftCompute();
+}
+
+function ftCompute(){
+  const warn=$('ft-warn');let msg='';
+  const N=FT.rows.length;
+  const rows=FT.rows.map(r=>({lo:r[0],hi:r[1],f:r[2]}));
+  let ok=rows.every(r=>!isNaN(r.lo)&&!isNaN(r.hi)&&!isNaN(r.f)&&r.hi>=r.lo&&r.f>=0);
+  if(!ok){warn.style.display='block';warn.textContent='Isi semua kotak dengan bilangan yang sah: tepat bawah \u2264 tepat atas, frekuensi \u2265 0.';return;}
+  rows.forEach(r=>{r.x=(r.lo+r.hi)/2;r.c=r.hi-r.lo+1;r.fx=r.f*r.x;});
+  const clens=rows.map(r=>r.c);
+  if(new Set(clens).size>1)msg='Perhatian: panjang kelas tidak seragam ('+clens.map(fmt).join(', ')+'). Hitungan tetap jalan memakai panjang kelas masing-masing.';
+  let cum=0;rows.forEach(r=>{cum+=r.f;r.cum=cum;});
+  const n=cum, sumfx=rows.reduce((a,r)=>a+r.fx,0);
+  const mean=n>0?sumfx/n:0;
+
+  /* median */
+  let mi=-1;
+  if(n>0){const pos=n/2;for(let i=0;i<N;i++){if(rows[i].cum>=pos){mi=i;break;}}}
+  let Me=null,Tb=null,F=null,fm=null,cm=null,frac=0;
+  if(mi>=0){
+    Tb=rows[mi].lo-0.5;fm=rows[mi].f;cm=rows[mi].c;
+    F=mi>0?rows[mi-1].cum:0;
+    frac=(n/2-F)/fm;Me=Tb+frac*cm;
+  }
+  /* modus */
+  let oi=0;rows.forEach((r,i)=>{if(r.f>rows[oi].f)oi=i;});
+  const allEq=rows.every(r=>r.f===rows[0].f);
+  let Mo=null,d1=0,d2=0;
+  if(!allEq&&rows[oi].f>0){
+    const o=rows[oi];
+    d1=o.f-(oi>0?rows[oi-1].f:0);
+    d2=o.f-(oi<N-1?rows[oi+1].f:0);
+    const oTb=o.lo-0.5;
+    if(d1+d2>0)Mo=oTb+(d1/(d1+d2))*o.c;
+  }
+
+  /* tabel: kolom x, fx, cum + highlight */
+  for(let i=0;i<N;i++){
+    const tr=$('ft-row-'+i);if(!tr)continue;
+    tr.className=(i===mi?'medcls':(i===oi&&!allEq?'modcls':''));
+    tr.querySelector('.ftmid').textContent=fmt(rows[i].x);
+    tr.querySelector('.ftfx').textContent=fmt(rows[i].fx);
+    tr.querySelector('.ftcum').textContent=fmt(rows[i].cum);
+  }
+  warn.style.display=msg?'block':'none';warn.textContent=msg;
+
+  $('ft-stats').innerHTML=
+    '<div class="statcard mean"><div class="sl">Mean</div><div class="sv">'+fmt(mean)+'</div></div>'
+   +'<div class="statcard med"><div class="sl">Median</div><div class="sv">'+(Me!=null?fmt(Me):'&mdash;')+'</div></div>'
+   +'<div class="statcard mod"><div class="sl">Modus</div><div class="sv">'+(Mo!=null?fmt(Mo):'&mdash;')+'</div></div>'
+   +'<div class="statcard rng"><div class="sl">Banyak Data (&Sigma;f)</div><div class="sv">'+fmt(n)+'</div></div>';
+
+  /* histogram + garis median */
+  const maxf=Math.max(...rows.map(r=>r.f),1);
+  let hi='';
+  rows.forEach((r,i)=>{
+    const h=Math.round(r.f/maxf*100);
+    hi+='<div class="hcol"><div class="hbars"><div class="hbar'+(i===oi&&!allEq?' modcls':'')+'" style="height:'+h+'%">'+r.f+'</div></div><div class="hlab">'+r.lo+'&ndash;'+r.hi+'</div></div>';
+  });
+  if(mi>=0){
+    const leftPct=((mi+Math.min(Math.max(frac,0),1))/N*100);
+    hi+='<div class="hline" style="left:'+leftPct+'%"><b>Me = '+fmt(Me)+'</b></div>';
+  }
+  $('ft-histo').innerHTML=hi;
+
+  /* langkah */
+  let st='';
+  st+='<div class="stepbox mean"><b class="t">Langkah Mean</b><br>'
+    +'&Sigma;(f&middot;x) = '+rows.map(r=>fmt(r.fx)).join(' + ')+' = <b>'+fmt(sumfx)+'</b><br>'
+    +'&Sigma;f = '+rows.map(r=>fmt(r.f)).join(' + ')+' = <b>'+fmt(n)+'</b><br>'
+    +'x&#772; = '+fmt(sumfx)+' : '+fmt(n)+' = <b>'+fmt(mean)+'</b></div>';
+  if(mi>=0){
+    st+='<div class="stepbox med"><b class="t">Langkah Median</b><br>'
+      +'Kumulatif: '+rows.map((r,i)=>(i===mi?'<b>'+fmt(r.cum)+'</b>':fmt(r.cum))).join(' &rarr; ')
+      +'. n:2 = '+fmt(n/2)+' &rarr; kelas median = <b>'+rows[mi].lo+'&ndash;'+rows[mi].hi+'</b><br>'
+      +'T<sub>b</sub> = '+fmt(Tb)+'; F = '+fmt(F)+'; f = '+fmt(fm)+'; c = '+fmt(cm)+'<br>'
+      +'Me = '+fmt(Tb)+' + ((' +fmt(n/2)+' &minus; '+fmt(F)+') : '+fmt(fm)+') &times; '+fmt(cm)
+      +' = '+fmt(Tb)+' + ('+fmt(frac)+' &times; '+fmt(cm)+') = <b>'+fmt(Me)+'</b></div>';
+  }
+  if(Mo!=null){
+    st+='<div class="stepbox mod"><b class="t">Langkah Modus</b><br>'
+      +'Kelas modus = <b>'+rows[oi].lo+'&ndash;'+rows[oi].hi+'</b> (f = '+fmt(rows[oi].f)+' terbesar); T<sub>b</sub> = '+fmt(rows[oi].lo-0.5)+'<br>'
+      +'d&#8321; = '+fmt(rows[oi].f)+' &minus; '+fmt(oi>0?rows[oi-1].f:0)+' = '+fmt(d1)+'; d&#8322; = '+fmt(rows[oi].f)+' &minus; '+fmt(oi<N-1?rows[oi+1].f:0)+' = '+fmt(d2)+'<br>'
+      +'Mo = '+fmt(rows[oi].lo-0.5)+' + ('+fmt(d1)+' : ('+fmt(d1)+' + '+fmt(d2)+')) &times; '+fmt(rows[oi].c)
+      +' = '+fmt(rows[oi].lo-0.5)+' + ('+fmt(d1/(d1+d2))+' &times; '+fmt(rows[oi].c)+') = <b>'+fmt(Mo)+'</b></div>';
+  }else if(allEq){
+    st+='<div class="stepbox mod"><b class="t">Langkah Modus</b><br>Semua frekuensi sama besar &rarr; <b>tidak ada kelas modus</b>.</div>';
+  }
+  $('ft-steps').innerHTML=st;
+
+  /* visual d1 d2 */
+  const mv=$('ft-modevis');
+  if(Mo!=null){
+    const o=rows[oi],oTb=o.lo-0.5;
+    const sc=95/Math.max(o.f,oi>0?rows[oi-1].f:0,oi<N-1?rows[oi+1].f:0,1);
+    const bw=72,gap=34,x0=48,base=150;
+    function bar(x,f,fill){const h=f*sc;return '<rect x="'+x+'" y="'+(base-h)+'" width="'+bw+'" height="'+h+'" fill="'+fill+'" stroke="#334155" stroke-width="1.2" rx="3"/>'+'<text x="'+(x+bw/2)+'" y="'+(base-h-6)+'" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">'+fmt(f)+'</text>';}
+    let svg='<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width:400px;display:block;margin:6px auto">';
+    svg+='<line x1="20" y1="'+base+'" x2="385" y2="'+base+'" stroke="#94a3b8" stroke-width="1.5"/>';
+    if(oi>0)svg+=bar(x0,rows[oi-1].f,'#bfdbfe');
+    const mx=x0+bw+gap;
+    svg+=bar(mx,o.f,'#fcd34d');
+    if(oi<N-1)svg+=bar(mx+bw+gap,rows[oi+1].f,'#bfdbfe');
+    svg+='<line x1="'+(mx+bw*d1/(d1+d2))+'" y1="'+(base-o.f*sc)+'" x2="'+(mx+bw*d1/(d1+d2))+'" y2="'+base+'" stroke="#b45309" stroke-width="2" stroke-dasharray="5 4"/>';
+    svg+='<text x="'+(mx+bw*d1/(d1+d2))+'" y="'+(base+34)+'" font-size="12.5" font-weight="800" fill="#b45309" text-anchor="middle">Mo = '+fmt(Mo)+'</text>';
+    svg+='<text x="'+(x0+bw/2)+'" y="'+(base+16)+'" font-size="11.5" fill="#475569" text-anchor="middle">sebelum</text>';
+    svg+='<text x="'+(mx+bw/2)+'" y="'+(base+16)+'" font-size="11.5" fill="#475569" text-anchor="middle" font-weight="700">kelas modus</text>';
+    svg+='<text x="'+(mx+bw+gap+bw/2)+'" y="'+(base+16)+'" font-size="11.5" fill="#475569" text-anchor="middle">sesudah</text>';
+    svg+='<text x="'+(mx-18)+'" y="'+(base-o.f*sc+16)+'" font-size="11.5" font-weight="700" fill="#b45309" text-anchor="middle">d&#8321;='+fmt(d1)+'</text>';
+    svg+='<text x="'+(mx+bw+18)+'" y="'+(base-o.f*sc+16)+'" font-size="11.5" font-weight="700" fill="#b45309" text-anchor="middle">d&#8322;='+fmt(d2)+'</text>';
+    svg+='</svg>';
+    mv.innerHTML='<b style="color:'+C_MOD+'">Interpolasi modus:</b> modus condong ke tetangga yang frekuensinya lebih besar &mdash; di sini d&#8321; = '+fmt(d1)+' dan d&#8322; = '+fmt(d2)+', sehingga Mo = '+fmt(oTb)+' + ('+fmt(d1)+' : '+fmt(d1+d2)+') &times; '+fmt(o.c)+' = <b>'+fmt(Mo)+'</b>.'+svg;
+  }else{
+    mv.innerHTML='<b style="color:'+C_MOD+'">Modus:</b> tidak ada kelas modus tunggal (semua frekuensi sama) &mdash; coba ubah salah satu frekuensi agar lebih besar dari yang lain.';
+  }
+}
+$('ft-p1').addEventListener('click',()=>{FT.rows=FT_PRESETS.p1.map(r=>[...r]);ftRenderTable();});
+$('ft-p2').addEventListener('click',()=>{FT.rows=FT_PRESETS.p2.map(r=>[...r]);ftRenderTable();});
+$('ft-p3').addEventListener('click',()=>{FT.rows=FT_PRESETS.p3.map(r=>[...r]);ftRenderTable();});
+$('ft-add').addEventListener('click',()=>{if(FT.rows.length<7){const last=FT.rows[FT.rows.length-1];FT.rows.push([last[1]+1,last[1]+(last[1]-last[0]+1),3]);ftRenderTable();}});
+$('ft-del').addEventListener('click',()=>{if(FT.rows.length>3){FT.rows.pop();ftRenderTable();}});
+
+/* ================= LAB 6: SIMULATOR SKEWNESS ================= */
+const SK0=[12,18,25,25,32,45,58,70,82];
+let SK={pts:[...SK0]};
+const SK_X0=40,SK_W=5.6;
+function skRender(){
+  const s=statsOf(SK.pts);
+  const tick=v=>SK_X0+v*SK_W;
+  let svg='<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">';
+  svg+='<line x1="30" y1="150" x2="615" y2="150" stroke="#94a3b8" stroke-width="2"/>';
+  for(let v=0;v<=100;v+=10){
+    svg+='<line x1="'+tick(v)+'" y1="150" x2="'+tick(v)+'" y2="156" stroke="#94a3b8" stroke-width="1.5"/>';
+    svg+='<text x="'+tick(v)+'" y="172" font-size="11" fill="#64748b" text-anchor="middle">'+v+'</text>';
+  }
+  /* garis mean & median */
+  const mx=tick(s.mean),mdx=tick(s.median);
+  svg+='<line x1="'+mx+'" y1="58" x2="'+mx+'" y2="150" stroke="'+C_MEAN+'" stroke-width="3"/>';
+  svg+='<text x="'+mx+'" y="50" font-size="12" font-weight="800" fill="'+C_MEAN+'" text-anchor="middle">mean '+fmt(s.mean)+'</text>';
+  svg+='<line x1="'+mdx+'" y1="74" x2="'+mdx+'" y2="150" stroke="'+C_MED+'" stroke-width="3" stroke-dasharray="7 5"/>';
+  svg+='<text x="'+mdx+'" y="66" font-size="12" font-weight="800" fill="'+C_MED+'" text-anchor="middle">median '+fmt(s.median)+'</text>';
+  if(s.modes.length){
+    const mox=tick(s.modes[0]);
+    svg+='<text x="'+mox+'" y="118" font-size="24" fill="'+C_MOD+'" text-anchor="middle">\u2605</text>';
+    svg+='<text x="'+mox+'" y="104" font-size="12" font-weight="800" fill="'+C_MOD+'" text-anchor="middle">modus '+fmt(s.modes[0])+'</text>';
+  }
+  /* titik data (duplikat ditumpuk ke atas) */
+  const seen={};
+  SK.pts.forEach((v,i)=>{
+    const k=seen[v]||0;seen[v]=k+1;
+    const cx=tick(v),cy=150-k*15;
+    svg+='<circle class="skdot" data-i="'+i+'" cx="'+cx+'" cy="'+cy+'" r="9" fill="#475569" stroke="#fff" stroke-width="2"/>';
+  });
+  svg+='</svg>';
+  $('sk-svg').innerHTML=svg;
+  document.querySelectorAll('.skdot').forEach(c=>{
+    c.addEventListener('pointerdown',ev=>{
+      ev.preventDefault();c.setPointerCapture(ev.pointerId);
+      const move=e2=>{
+        const r=$('sk-svg').firstChild.getBoundingClientRect();
+        const x=(e2.clientX-r.left)*(640/r.width);
+        let v=Math.round((x-SK_X0)/SK_W);
+        v=Math.max(0,Math.min(100,v));
+        SK.pts[+c.dataset.i]=v;skRender();
+      };
+      const up=()=>{c.removeEventListener('pointermove',move);c.removeEventListener('pointerup',up);};
+      c.addEventListener('pointermove',move);c.addEventListener('pointerup',up);
+    });
+  });
+  const diff=s.mean-s.median;
+  let bentuk,blank;
+  if(Math.abs(diff)<1){bentuk='<b style="color:#059669">Hampir Simetris</b> (mean &asymp; median)';}
+  else if(diff>0){bentuk='<b style="color:#e11d48">Menceng Kanan</b> (mean &gt; median: ekor kanan panjang)';}
+  else{bentuk='<b style="color:#d97706">Menceng Kiri</b> (mean &lt; median: ekor kiri panjang)';}
+  const mod=s.modes.length?'<b style="color:'+C_MOD+'">'+s.modes.map(fmt).join(' dan ')+'</b>'+(s.modes.length>1?' (bimodal)':''):'<b>&mdash;</b> (tidak ada nilai berulang)';
+  $('sk-info').innerHTML='<b style="color:'+C_MEAN+'">Mean = '+fmt(s.mean)+'</b> &nbsp;&middot;&nbsp; <b style="color:'+C_MED+'">Median = '+fmt(s.median)+'</b> &nbsp;&middot;&nbsp; Modus = '+mod
+    +'<br>Bentuk distribusi: '+bentuk+'<br><span style="font-size:13px;color:#64748b">Tarik satu titik jauh ke kanan lalu lepas: mean lari mengejarnya, median hanya bergeser seperlunya, modus tidak peduli sama sekali.</span>';
+}
+document.querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>{SK.pts=parseData(b.dataset.sk);skRender();}));
+$('sk-reset').addEventListener('click',()=>{SK.pts=[...SK0];skRender();});
+</script>
+<script>
+/* ================= DATA LATIHAN BAB 1-2 ================= */
+const QUIZ={};
+
+QUIZ.tunggal={title:'Data Tunggal',acc:'#e11d48',qs:[
+{lvl:'C4 \u00B7 Analisis',
+ q:'Rata-rata 6 nilai ujian adalah 75. Ternyata satu nilai salah tercatat 58, padahal seharusnya 76. Rata-rata yang benar adalah\u2026',
+ opts:['76','77','78','79'],
+ ans:2,
+ exp:'Total (salah) = 6 \u00D7 75 = 450.<br>Total (benar) = 450 \u2212 58 + 76 = 468.<br>Rata-rata benar = 468 : 6 = <b>78</b>.<br>Kunci: koreksi satu nilai berarti mengoreksi <b>total</b>, bukan langsung meraba-raba rata-ratanya. Identitas total = mean \u00D7 n selalu menjadi pintu masuk soal seperti ini.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Data terurut 5, 6, 8, 9, x, 13, 14, 16 memiliki median 10. Nilai x adalah\u2026',
+ opts:['10','11','12','13'],
+ ans:1,
+ exp:'n = 8 (genap) \u2192 median = rata-rata data ke-4 dan ke-5 = (9 + x) : 2.<br>(9 + x) : 2 = 10 \u2192 9 + x = 20 \u2192 <b>x = 11</b>.<br>Cek urutan: 11 memang terletak di antara 9 dan 13 \u2713. Ingat: data harus terurut dulu \u2014 di soal ini posisinya sudah diberikan terurut, jadi tinggal pasangkan posisi tengahnya.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Mean, median, dan modus suatu data berturut-turut 20, 22, dan 24. Jika setiap data dikurangi 4 lalu dibagi 2, mean, median, dan modus yang baru adalah\u2026',
+ opts:['16, 18, dan 20','12, 13, dan 14','8, 9, dan 10','6, 9, dan 12'],
+ ans:2,
+ exp:'Transformasi y = (x \u2212 4) : 2 = 0,5\u00B7x \u2212 2 berlaku <b>seragam ke ketiga ukuran</b>: mean baru = 0,5\u00B7mean + (\u22122), dan berlaku sama untuk median dan modus.<br>Mean = (20 \u2212 4) : 2 = 8; median = (22 \u2212 4) : 2 = 9; modus = (24 \u2212 4) : 2 = 10.<br>Jadi <b>8, 9, dan 10</b> \u2014 urutan relatif ketiganya tidak berubah karena transformasinya linear dan meningkat.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Sebuah kelompok belajar beranggotakan 20 siswa memiliki rata-rata nilai 70. Agar rata-rata gabungan menjadi tepat 80, berapa banyak siswa berprestasi tinggi (rata-rata nilai 90) yang harus ditambahkan?',
+ opts:['10 siswa','15 siswa','20 siswa','25 siswa'],
+ ans:2,
+ exp:'Total awal = 20 \u00D7 70 = 1.400.<br>Misalkan n siswa ditambahkan: (1.400 + 90n) : (20 + n) = 80.<br>1.400 + 90n = 1.600 + 80n \u2192 10n = 200 \u2192 <b>n = 20</b>.<br>Cek: (1.400 + 1.800) : 40 = 3.200 : 40 = 80 \u2713. Soal gabungan ala persamaan \u2014 tulis total dulu, sisanya aljabar biasa.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Data 4, 5, 6, 7, 8, 9, 10 kemudian diubah: nilai 4 diganti menjadi 100. Pernyataan yang tepat tentang ketiga ukurannya adalah\u2026',
+ opts:['Semua ukuran berubah besar','Hanya mean yang berubah \u2014 median tetap 7 dan modus tetap tidak ada','Mean dan median tetap, hanya modus yang berubah','Hanya median yang berubah'],
+ ans:1,
+ exp:'Awal: mean = 49 : 7 = 7, median = 7 (data ke-4), tidak ada modus (semua unik).<br>Sesudah: data 5, 6, 7, 8, 9, 10, 100 \u2192 mean = 145 : 7 \u2248 20,7 (melonjak drastis), median tetap data ke-4 = <b>7</b>, dan tetap <b>tidak ada modus</b>.<br>Inilah demonstrasi klasik: mean paling rentan terhadap outlier, median hampir kebal.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Gaji bulanan di sebuah kantor: 1 direktur Rp50 juta, 1 manajer Rp15 juta, dan 8 karyawan masing-masing Rp4 juta. Pernyataan yang paling tepat adalah\u2026',
+ opts:['Mean Rp9,7 juta paling mewakili gaji "orang di kantor itu"','Modus kantor itu Rp15 juta','Mean (Rp9,7 jt) lebih besar dari median (Rp4 jt) \u2014 data menceng kanan, sehingga median lebih mewakili mayoritas','Median kantor itu Rp9,7 juta'],
+ ans:2,
+ exp:'Mean = (50 + 15 + 8\u00D74) : 10 = 97 : 10 = 9,7 juta. Data terurut: delapan angka 4, lalu 15, lalu 50 \u2192 median = data ke-5 = <b>4 juta</b>; modus juga 4 juta.<br>Mean 9,7 &gt; median 4 \u2192 pola menceng kanan akibat gaji direktur (outlier).<br>Mayoritas (8 dari 10 orang) bergaji 4 juta \u2014 median/modus yang menggambarkan mereka, bukan mean.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Data terurut: 5, 6, 6, 7, 7, 7, 8, 8, 9, 40. Median dan modus data tersebut adalah\u2026',
+ opts:['Median 7,5 dan modus 7','Median 7 dan modus 7','Median 7 dan modus 40','Median 7,5 dan modus 8'],
+ ans:1,
+ exp:'n = 10 (genap) \u2192 median = rata-rata data ke-5 dan ke-6 = (7 + 7) : 2 = <b>7</b>.<br>Frekuensi terbesar: 7 muncul 3\u00D7 \u2192 modus = <b>7</b>.<br>Nilai ekstrem 40 sama sekali tidak menggeser keduanya \u2014 sementara mean-nya menjadi 103 : 10 = 10,3, terkangkang jauh di atas 9 dari 10 data.'},
+{lvl:'C6 \u00B7 Mencipta',
+ q:'Tentukan himpunan data yang memiliki mean 10, median 9, dan modus 8.',
+ opts:['7, 8, 8, 9, 10, 18','8, 8, 8, 10, 12, 14','6, 8, 9, 10, 12, 15','8, 9, 9, 10, 12, 12'],
+ ans:1,
+ exp:'Semua opsi berjumlah 60, sehingga mean 6 data = 60 : 6 = 10 \u2713 untuk semuanya \u2014 penentuannya ada di median dan modus.<br><b>8, 8, 8, 10, 12, 14</b>: median = (8 + 10) : 2 = 9 \u2713; modus = 8 (muncul 3\u00D7) \u2713.<br>Opsi lain gagal: opsi 1 median 8,5; opsi 3 tidak punya modus; opsi 4 median 9,5 dan bimodal (9 dan 12).'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Penjual sepatu mencatat ukuran yang terjual hari ini: 39, 41, 41, 41, 42, 43, 44, 45, 47. Ia hanya punya modal menstok SATU ukuran. Keputusan paling bijak adalah menstok ukuran\u2026',
+ opts:['39 \u2014 ukuran terkecil, paling aman','42 \u2014 nilai tengah (median)','42,6 \u2014 rata-rata (mean) permintaan','41 \u2014 ukuran yang paling banyak dicari'],
+ ans:3,
+ exp:'Median = 42 dan mean = 383 : 9 \u2248 42,6 \u2014 keduanya bukan ukuran yang paling diminati.<br>Modus = <b>41</b> (muncul 3\u00D7) = permintaan terbanyak. Untuk keputusan stok, ukuran yang menjamin penjualan terbesar adalah modus.<br>Inilah alasan modus menjadi raja pada data kategori: ukuran sepatu, menu favorit, merek terpopuler \u2014 mean bahkan bisa bernilai desimal yang tidak wujud sebagai produk.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Data terurut 2, 3, x, 9, 10 memiliki rata-rata yang sama dengan mediannya. Nilai x adalah\u2026',
+ opts:['4','5','6','7'],
+ ans:2,
+ exp:'Median 5 data terurut = data ke-3 = <b>x</b>.<br>Mean = (2 + 3 + x + 9 + 10) : 5 = (24 + x) : 5.<br>(24 + x) : 5 = x \u2192 24 + x = 5x \u2192 4x = 24 \u2192 <b>x = 6</b>.<br>Cek: data 2, 3, 6, 9, 10 \u2192 mean = 30 : 5 = 6 dan median = 6 \u2713. Soal perpaduan statistik + aljabar yang sangat umum di TKA.'}
+]};
+
+QUIZ.kelompok={title:'Data Kelompok',acc:'#2563eb',qs:[
+{lvl:'C4 \u00B7 Analisis',
+ q:'Nilai ulangan sekelompok siswa dikelompokkan: 41\u201350 (f = 6), 51\u201360 (f = 10), 61\u201370 (f = x), 71\u201380 (f = 8), 81\u201390 (f = 2). Jika rata-ratanya 63, nilai x adalah\u2026',
+ opts:['10','12','14','16'],
+ ans:2,
+ exp:'Titik tengah: 45,5 \u00B7 55,5 \u00B7 65,5 \u00B7 75,5 \u00B7 85,5.<br>\u03A3(f\u00B7x) = 6\u00D745,5 + 10\u00D755,5 + 65,5x + 8\u00D775,5 + 2\u00D785,5 = 273 + 555 + 65,5x + 604 + 171 = 1.603 + 65,5x.<br>\u03A3f = 26 + x, maka (1.603 + 65,5x) : (26 + x) = 63 \u2192 1.603 + 65,5x = 1.638 + 63x \u2192 2,5x = 35 \u2192 <b>x = 14</b>.<br>Cek: \u03A3f = 26 + 14 = 40 siswa \u2713.'},
+{lvl:'C3 \u00B7 Aplikasi',
+ q:'Tabel nilai: 31\u201335 (3), 36\u201340 (5), 41\u201345 (10), 46\u201350 (6), 51\u201355 (4), 56\u201360 (2). Median data tersebut adalah\u2026',
+ opts:['40,5','43','44','45'],
+ ans:2,
+ exp:'n = 30 \u2192 posisi 15. Kumulatif: 3, 8, 18, 24, 28, 30 \u2192 kelas pertama yang kumulatifnya \u2265 15 adalah <b>41\u201345</b>.<br>T<sub>b</sub> = 40,5; F = 8; f = 10; c = 5.<br>Me = 40,5 + ((15 \u2212 8) : 10) \u00D7 5 = 40,5 + 3,5 = <b>44</b>.<br>Jebakan: 43 hanyalah titik tengah kelas median, dan 45 adalah tepat atasnya \u2014 keduanya bukan hasil interpolasi.'},
+{lvl:'C3 \u00B7 Aplikasi',
+ q:'Tabel nilai: 31\u201335 (4), 36\u201340 (6), 41\u201345 (12), 46\u201350 (6), 51\u201355 (2). Modus data tersebut adalah\u2026',
+ opts:['41','42,5','43','44'],
+ ans:2,
+ exp:'Kelas modus = 41\u201345 (f = 12 terbesar); T<sub>b</sub> = 40,5; c = 5.<br>d\u2081 = 12 \u2212 6 = 6 dan d\u2082 = 12 \u2212 6 = 6 (kedua tetangga sama-sama berfrekuensi 6).<br>Mo = 40,5 + (6 : (6 + 6)) \u00D7 5 = 40,5 + 2,5 = <b>43</b>.<br>Jebakan: 41 hanyalah batas tulisan kelas \u2014 modus yang benar datang dari interpolasi d\u2081 dan d\u2082.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Rata-rata suatu data kelompok adalah 66,5. Jika setiap data asli ditambah 3 lalu dibagi 5, rata-rata yang baru adalah\u2026',
+ opts:['13,3','13,9','63,5','69,5'],
+ ans:1,
+ exp:'Transformasi y = (x + 3) : 5 bersifat linear, dan sifat linear berlaku juga untuk mean data kelompok \u2014 rumus \u03A3(f\u00B7x) : \u03A3f hanyalah cara menghitungnya.<br>Mean baru = (66,5 + 3) : 5 = 69,5 : 5 = <b>13,9</b>.<br>Perhatikan pola jawaban pengecoh: 69,5 (belum dibagi) dan 63,5 (salah urutan operasi) \u2014 kerjakan bertahap: tambah dulu, baru bagi.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Tabel: 40\u201344 (5), 45\u201349 (9), 50\u201354 (10), 55\u201359 (10), 60\u201364 (6). Seorang siswa mengklaim median = 52 "karena titik tengah kelas median adalah 52". Penilaian yang tepat adalah\u2026',
+ opts:['Benar \u2014 median memang titik tengah kelas median','Salah \u2014 median = 49,5 + ((20 \u2212 14) : 10) \u00D7 5 = 52,5; titik tengah kelas hanyalah tebakan tanpa interpolasi','Salah \u2014 median seharusnya 54,5 (tepat atas kelas median)','Benar, asalkan ditulis 52,0'],
+ ans:1,
+ exp:'n = 40 \u2192 posisi 20. Kumulatif: 5, 14, 24, 34, 40 \u2192 kelas median = 50\u201354; T<sub>b</sub> = 49,5; F = 14; f = 10; c = 5.<br>Me = 49,5 + ((20 \u2212 14) : 10) \u00D7 5 = 49,5 + 3 = <b>52,5</b>.<br>Titik tengah kelas (52) mengabaikan di mana persisnya data ke-20 berada di dalam kelas \u2014 interpolasilah yang menempatkannya dengan tepat.'},
+{lvl:'C6 \u00B7 Mencipta',
+ q:'Pada tabel 40\u201344 (5), 45\u201349 (9), 50\u201354 (10), 55\u201359 (10), 60\u201364 (6), median berada di kelas 50\u201354. Berapa banyak data yang harus ditambahkan ke kelas 60\u201364 agar kelas median berpindah ke 55\u201359?',
+ opts:['5','8','9','10'],
+ ans:2,
+ exp:'Menambah data di kelas terakhir tidak mengubah kumulatif sampai kelas 50\u201354 (tetap 24) maupun sampai 55\u201359 (tetap 34).<br>Kelas median pindah ke 55\u201359 jika posisi n : 2 melebihi 24, artinya n \u2265 49.<br>n sekarang 40 \u2192 butuh <b>9</b> data tambahan.<br>Cek: n = 49 \u2192 n : 2 = 24,5 \u2192 kumulatif pertama \u2265 24,5 adalah 34 (kelas 55\u201359) \u2713.'},
+{lvl:'C3 \u00B7 Aplikasi',
+ q:'Kelas modus suatu tabel adalah 61\u201370 dengan frekuensi 18; frekuensi kelas sebelumnya 12 dan kelas sesudahnya 14; panjang kelas 10; tepat bawah 60,5. Modus data tersebut adalah\u2026',
+ opts:['65,5','66,5','67,5','70,5'],
+ ans:1,
+ exp:'d\u2081 = 18 \u2212 12 = 6 dan d\u2082 = 18 \u2212 14 = 4.<br>Mo = 60,5 + (6 : (6 + 4)) \u00D7 10 = 60,5 + 6 = <b>66,5</b>.<br>Masuk akal: kelas sesudahnya lebih ramai (14 &gt; 12), jadi modus condong ke kanan kelas \u2014 tepat di 66,5, bukan di tengah 65,5.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Rata-rata data kelompok dihitung memakai titik tengah kelas. Manakah pernyataan paling tepat tentang hasilnya dibandingkan rata-rata data aslinya?',
+ opts:['Selalu lebih kecil dari rata-rata aslinya','Selalu sama persis dengan rata-rata aslinya','Merupakan pendekatan yang bisa sedikit berbeda \u2014 karena mengasumsikan data menumpuk di titik tengah, padahal tersebar di seluruh kelas','Tidak boleh digunakan karena tidak akurat'],
+ ans:2,
+ exp:'Setelah dikelompokkan, nilai asli per data hilang; titik tengah dipakai sebagai wakil dengan asumsi sebaran yang merata di dalam kelas.<br>Hasilnya adalah <b>pendekatan (approksimasi)</b>: biasanya sangat dekat dengan mean asli, tetapi bisa sedikit lebih besar atau lebih kecil, tergantung sebaran nyata.<br>Meski begitu metode ini standar dan sah \u2014 itulah harga yang dibayar untuk keringkasan penyajian data yang besar.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Data penghasilan 50 pekerja (dikelompokkan) menghasilkan: mean Rp4,2 juta, median Rp3,6 juta, modus Rp3,3 juta. Untuk laporan "penghasilan tipikal pekerja", ukuran paling tepat adalah\u2026',
+ opts:['Mean, karena memperhitungkan semua pekerja','Modus, karena paling sering muncul','Median, karena data menceng kanan \u2014 mean tertarik oleh sebagian kecil penghasilan sangat tinggi','Ketiganya sama saja, pilih yang mudah dihitung'],
+ ans:2,
+ exp:'Urutan mean (4,2) &gt; median (3,6) &gt; modus (3,3) adalah tanda khas distribusi <b>menceng kanan</b>: sedikit pekerja berpenghasilan sangat besar menarik mean ke atas.<br>Mean 4,2 juta terbukti di atas penghasilan mayoritas (modus 3,3 juta).<br>Pada data menceng, ukuran paling mewakili "tipikal" adalah <b>median</b> \u2014 tepat memisahkan 25 pekerja terbawah dan teratas.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Frekuensi kumulatif "kurang dari" suatu data: &lt;45 \u2192 8; &lt;50 \u2192 18; &lt;55 \u2192 26; &lt;60 \u2192 38; &lt;65 \u2192 44. Median data tersebut adalah\u2026',
+ opts:['50','52','52,5','54,5'],
+ ans:1,
+ exp:'Ubah dulu ke tabel biasa: 40\u201344 (8), 45\u201349 (10), 50\u201354 (8), 55\u201359 (12), 60\u201364 (6); n = 44 \u2192 posisi 22.<br>Kumulatif: 8, 18, 26, 38, 44 \u2192 kelas median = 50\u201354; T<sub>b</sub> = 49,5; F = 18; f = 8; c = 5.<br>Me = 49,5 + ((22 \u2212 18) : 8) \u00D7 5 = 49,5 + 2,5 = <b>52</b>.<br>Pola favorit HOTS: membaca tabel kumulatif terlebih dahulu, baru memakai rumus \u2014 dua keterampilan dalam satu soal.'}
+]};
+</script>
+<script>
+/* ================= DATA LATIHAN BAB 3 ================= */
+
+QUIZ.terapan={title:'Analisis & Penerapan',acc:'#059669',qs:[
+{lvl:'C4 \u00B7 Analisis',
+ q:'Sebuah data memiliki mean 42,5; median 40; dan modus 36. Bentuk distribusinya adalah\u2026',
+ opts:['Simetris \u2014 ketiganya harus sama','Menceng kiri (negatif)','Menceng kanan (positif)','Bimodal \u2014 karena ada tiga ukuran berbeda'],
+ ans:2,
+ exp:'Urutannya modus (36) &lt; median (40) &lt; mean (42,5) \u2014 pola khas <b>menceng kanan</b>: sedikit nilai yang sangat besar menarik mean melewati median lalu modus.<br>Makna praktisnya: mayoritas data berkumpul di kiri, ekor panjang membentang ke kanan.'},
+{lvl:'C3 \u00B7 Aplikasi',
+ q:'Diketahui mean 26 dan median 28. Dengan hubungan empiris Pearson, perkiraan modusnya adalah\u2026',
+ opts:['24','27','30','32'],
+ ans:3,
+ exp:'Mo \u2248 3\u00B7Me \u2212 2\u00B7x\u0304 = 3\u00D728 \u2212 2\u00D726 = 84 \u2212 52 = <b>32</b>.<br>Cek konsistensi: mean (26) &lt; median (28) &lt; modus (32) \u2192 distribusi menceng kiri \u2014 dan rumus empirisnya meramalkan persis pola itu.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Kasus manakah yang paling tepat diselesaikan dengan MEDIAN?',
+ opts:['Menentukan ukuran sepatu yang paling laku dijual','Menyimpulkan harga rumah tipikal di kawasan yang berisi beberapa mansion super mahal','Menghitung rata-rata nilai ulangan untuk rapor','Menghitung total konsumsi beras 200 keluarga'],
+ ans:1,
+ exp:'Harga rumah dengan beberapa mansion = data menceng kanan \u2192 <b>median</b> memberi gambaran "rumah tipikal" yang tidak goyah oleh harga ekstrem.<br>Opsi lain: sepatu terlaku \u2192 modus; rapor dan total beras \u2192 mean (total = mean \u00D7 n).<br>Kata kunci yang menunjuk median: "tipikal" + ada nilai ekstrem.'},
+{lvl:'C4 \u00B7 Analisis',
+ q:'Data 7, 8, 9, 10, 11 memiliki mean 9 dan median 9. Jika ditambahkan satu data bernilai 100, pernyataan yang tepat adalah\u2026',
+ opts:['Mean dan median naik sama besar','Mean melonjak ke \u2248 24,2; median hanya bergeser ke 9,5','Median melonjak lebih tinggi daripada mean','Keduanya tidak berubah'],
+ ans:1,
+ exp:'Mean baru = (45 + 100) : 6 = 145 : 6 \u2248 <b>24,2</b> \u2014 melompat lebih dari 15 poin!<br>Median baru = (9 + 10) : 2 = <b>9,5</b> \u2014 hanya naik 0,5.<br>Demo terbaik bahwa median jauh lebih kebal outlier daripada mean: satu nilai 100 dikuasai penuh oleh mean, tetapi hanya menggeser median sepersekian posisi.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Kelas A: mean 75, median 74, data rapat di kisaran 70\u201380. Kelas B: mean 75, median 65, banyak nilai sangat rendah dan beberapa sangat tinggi. Kesimpulan paling tepat adalah\u2026',
+ opts:['Kinerja kedua kelas identik karena mean sama','Mean saja tidak cukup: kelas B menceng kanan (median &lt; mean), sedangkan kelas A hampir simetris','Kelas B lebih baik karena memiliki nilai sangat tinggi','Median tidak relevan untuk membandingkan dua kelas'],
+ ans:1,
+ exp:'Mean sama \u2260 kelas sama. Di kelas B, segelintir nilai sangat tinggi menopang mean, sementara siswa tipikal (median 65) jauh di bawahnya \u2014 pola menceng kanan.<br>Kelas A: median \u2248 mean \u2192 hampir simetris; mayoritas siswa benar-benar berada di sekitar 75.<br>Pelajaran HOTS: sebelum menyimpulkan dari mean, selalu tanyakan mediannya.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Berita: "Desa X makmur \u2014 rata-rata penghasilan warga Rp20 juta/bulan." Data pendukung: median Rp3 juta; 90% warga berpenghasilan di bawah Rp5 juta. Evaluasi yang tepat adalah\u2026',
+ opts:['Klaim benar, karena mean adalah ukuran resmi','Klaim menyesatkan: mean ditarik segelintir pengusaha sangat kaya; median Rp3 juta lebih menggambarkan warga tipikal','Klaim benar asal ditambahkan modusnya','Data belum cukup untuk menilai klaim'],
+ ans:1,
+ exp:'Jurang raksasa mean (20 jt) vs median (3 jt) adalah sinyal menceng kanan ekstrem: sedikit orang sangat kaya mengangkat mean.<br>Fakta 90% warga &lt; 5 juta membuktikan "warga tipikal" jauh dari 20 juta \u2014 klaim makmur tidak mewakili mayoritas.<br>Pelajaran literasi data: mean bisa benar secara hitung namun keliru secara cerita; laporan yang jujur menyertakan median.'},
+{lvl:'C6 \u00B7 Mencipta',
+ q:'Tentukan himpunan 5 data yang memiliki mean 12, median 12, dan modus 11.',
+ opts:['10, 11, 11, 12, 16','10, 11, 12, 13, 14','11, 11, 11, 12, 15','10, 11, 12, 12, 15'],
+ ans:0,
+ exp:'Semua opsi berjumlah 60, jadi mean = 60 : 5 = 12 \u2713 untuk semuanya \u2014 penentuannya ada di median dan modus.<br><b>10, 11, 11, 12, 16</b>: terurut, data ke-3 = 12 \u2192 median 12 \u2713; 11 muncul 2\u00D7 \u2192 modus 11 \u2713.<br>Opsi lain gagal: opsi 2 tidak punya modus; opsi 3 mediannya 11; opsi 4 modusnya 12, bukan 11.'},
+{lvl:'C5 \u00B7 Evaluasi',
+ q:'Rata-rata nilai: kelas A 20 siswa \u2192 75; kelas B 30 siswa \u2192 78; kelas C 10 siswa \u2192 90. Guru menyimpulkan rata-rata gabungan = (75 + 78 + 90) : 3 = 81. Penilaian yang tepat adalah\u2026',
+ opts:['Benar \u2014 rata-rata dari rata-rata memang dihitung begitu','Salah \u2014 gabungan = (20\u00D775 + 30\u00D778 + 10\u00D790) : 60 = 79; merata-ratakan rata-rata hanya sah bila banyak datanya sama','Salah \u2014 gabungan seharusnya 84','Benar, tetapi lebih baik memakai median gabungan'],
+ ans:1,
+ exp:'Total nilai = 1.500 + 2.340 + 900 = 4.740; banyak siswa = 60.<br>Gabungan = 4.740 : 60 = <b>79</b>, bukan 81.<br>Kesalahan guru: mengabaikan bobot jumlah siswa. Kelas C yang meannya tinggi (90) hanya berisi 10 siswa \u2014 pengaruhnya kecil; kelas B (30 siswa) yang paling menentukan arah gabungan.'},
+{lvl:'C3 \u00B7 Aplikasi',
+ q:'Histogram nilai berbentuk lonceng yang simetris sempurna. Jika mean-nya 50, maka median dan modusnya adalah\u2026',
+ opts:['Median 50 dan modus 50','Median 48 dan modus 52','Median di atas 50 dan modus di bawah 50','Modus tidak ada karena simetris'],
+ ans:0,
+ exp:'Simetri sempurna memaksa ketiga ukuran berimpit tepat di puncak lonceng: mean = median = modus = <b>50</b>.<br>Ciri visualnya: ekor kiri dan kanan sejajar, puncak di tengah.<br>Ingat arah sebaliknya tidak otomatis: mean = median = modus adalah ciri distribusi simetris yang umum, tetapi bentuk lonceng sempurna menjaminnya mutlak.'},
+{lvl:'C6 \u00B7 Mencipta',
+ q:'Waktu tunggu pasien sebuah klinik terdistribusi menceng kanan. Manajer harus melaporkan ke pimpinan DAN merencanakan kapasitas ruang tunggu. Strategi terbaik adalah\u2026',
+ opts:['Laporkan mean saja karena paling umum dipakai','Laporkan modus saja karena paling sering muncul','Laporkan median sebagai "waktu tunggu tipikal" (kebal outlier) dan gunakan mean untuk menghitung total jam tunggu (mean \u00D7 n)','Laporkan waktu tunggu terlama sebagai skenario utama'],
+ ans:2,
+ exp:'Dua kebutuhan, dua alat: <b>median</b> menjawab "pasien tipikal menunggu berapa lama?" tanpa terganggu pasien yang menunggu ekstrem; <b>mean</b> menjawab "berapa total jam tunggu?" lewat identitas total = mean \u00D7 n \u2014 dasar perencanaan kursi, petugas, dan jadwal dokter.<br>Soal HOTS level mencipta memang sering menuntut pemakaian dua ukuran sekaligus dengan tujuan yang berbeda.'}
+]};
+</script>
+<script>
+/* ================= MESIN APLIKASI ================= */
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+function go(i){
+  cur=Math.max(0,Math.min(slides.length-1,i));
+  slides.forEach((s,k)=>s.classList.toggle('active',k===cur));
+  $('pbar').style.width=((cur+1)/slides.length*100)+'%';
+  $('counter').textContent=(cur+1)+' / '+slides.length;
+  window.scrollTo({top:0,behavior:'auto'});
+  if(slides[cur].id==='s-score')renderScores();
+}
+function goId(id){const k=slides.findIndex(s=>s.id===id);if(k>=0)go(k);}
+
+/* ================= MESIN KUIS ================= */
+const qState={};
+Object.keys(QUIZ).forEach(k=>{qState[k]={i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]};});
+const origBody={};
+
+function qRender(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  st.sel=null;st.checked=false;
+  $('q-'+k+'-num').textContent=st.i+1;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-lvl').textContent=q.lvl;
+  $('q-'+k+'-text').innerHTML=q.q;
+  const box=$('q-'+k+'-opts');box.innerHTML='';
+  q.opts.forEach((t,idx)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='opt';
+    b.innerHTML='<span class="optletter">'+LETTERS[idx]+'</span><span>'+t+'</span>';
+    b.addEventListener('click',()=>{
+      if(st.checked)return;
+      st.sel=idx;
+      [...box.children].forEach((c,j)=>c.classList.toggle('selected',j===idx));
+      $('q-'+k+'-check').disabled=false;
+    });
+    box.appendChild(b);
+  });
+  $('q-'+k+'-exp').style.display='none';
+  $('q-'+k+'-check').disabled=true;
+  $('q-'+k+'-next').disabled=true;
+}
+function qCheck(k){
+  const st=qState[k],q=QUIZ[k].qs[st.i];
+  if(st.sel==null||st.checked)return;
+  st.checked=true;
+  const ok=st.sel===q.ans;
+  if(ok)st.score++;
+  st.answered++;
+  st.results.push(ok);
+  [...$('q-'+k+'-opts').children].forEach((b,j)=>{
+    b.classList.add('locked');
+    if(j===q.ans)b.classList.add('correct');
+    else if(j===st.sel)b.classList.add('wrong');
+  });
+  const eb=$('q-'+k+'-exp');
+  eb.style.display='block';
+  eb.className='expbox '+(ok?'good':'bad');
+  eb.innerHTML=(ok?'<b>Benar! </b>':'<b>Belum tepat. Jawaban yang benar: '+LETTERS[q.ans]+'. </b>')+q.exp;
+  $('q-'+k+'-score').textContent=st.score;
+  $('q-'+k+'-check').disabled=true;
+  const nx=$('q-'+k+'-next');
+  nx.disabled=false;
+  nx.textContent=(st.i===QUIZ[k].qs.length-1)?'Lihat Hasil \u2192':'Soal Berikutnya \u2192';
+  saveProg();
+}
+function qNext(k){
+  const st=qState[k];
+  if(!st.checked)return;
+  if(st.i<QUIZ[k].qs.length-1){st.i++;qRender(k);}
+  else{st.done=true;qResult(k);saveProg();}
+}
+function qResult(k){
+  const st=qState[k],d=QUIZ[k],tot=QUIZ[k].qs.length;
+  const p=Math.round(st.score/tot*100);
+  const msg=st.score>=9?'Luar biasa! Kamu sangat menguasai materi ini.':st.score>=7?'Bagus! Sedikit lagi menuju sempurna.':st.score>=5?'Cukup. Baca ulang bagian teori, lalu coba lagi.':'Ayo pelajari kembali materinya, lalu ulangi latihan ini.';
+  $('q-'+k+'-body').innerHTML='<div class="qresult"><div class="qscore">'+st.score+'<span>/'+tot+'</span></div><h3>Latihan '+d.title+' selesai</h3><p style="margin-top:6px">'+msg+'</p><p class="qpct">'+p+'% benar</p><button class="btn pri" id="q-'+k+'-retry">Ulangi Latihan</button></div>';
+  $('q-'+k+'-retry').addEventListener('click',()=>qRetry(k));
+}
+function qRetry(k){
+  Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  $('q-'+k+'-body').innerHTML=origBody[k];
+  qRender(k);saveProg();
+}
+
+/* ================= PENYIMPANAN LOKAL ================= */
+function saveProg(){
+  try{
+    const d={};
+    for(const k in qState){const s=qState[k];d[k]={score:s.score,answered:s.answered,done:s.done,i:s.i,results:s.results};}
+    localStorage.setItem('stat-tka-v1',JSON.stringify(d));
+  }catch(e){}
+}
+function loadProg(){
+  try{
+    const d=JSON.parse(localStorage.getItem('stat-tka-v1')||'{}');
+    for(const k in d){
+      if(!qState[k])continue;
+      Object.assign(qState[k],{
+        i:Math.min(d[k].i||0,QUIZ[k].qs.length-1),
+        score:d[k].score||0,
+        answered:d[k].answered||0,
+        done:!!d[k].done,
+        results:Array.isArray(d[k].results)?d[k].results:[],
+        sel:null,checked:false
+      });
+    }
+  }catch(e){}
+}
+
+/* ================= HALAMAN NILAI ================= */
+function renderScores(){
+  const order=['tunggal','kelompok','terapan'];
+  let h='<table class="tbl"><tr><th>Bab</th><th>Dijawab</th><th>Benar</th><th>Nilai</th><th>Status</th></tr>';
+  let tc=0;
+  order.forEach(k=>{
+    const s=qState[k],d=QUIZ[k];tc+=s.score;
+    const nilai=Math.round(s.score/QUIZ[k].qs.length*100);
+    h+='<tr><td><b>'+d.title+'</b></td><td>'+s.answered+' / '+QUIZ[k].qs.length+'</td><td>'+s.score+'</td><td><div class="scorebar" style="width:110px;vertical-align:middle"><i style="width:'+nilai+'%;background:'+d.acc+'"></i></div> '+nilai+'</td><td>'+(s.done?'Selesai':'Berjalan')+'</td></tr>';
+  });
+  h+='</table>';
+  $('score-table').innerHTML=h;
+  const pct=Math.round(tc/30*100);
+  const pred=tc>=27?'Istimewa! Kamu siap menghadapi soal statistika pada TKA.':tc>=21?'Hebat \u2014 tinggal poles soal yang masih keliru.':tc>=15?'Bagus, lanjutkan latihan pada bagian yang lemah.':'Terus semangat: baca ulang teorinya, lalu kerjakan lagi latihannya.';
+  $('score-overall').innerHTML='<div class="scorebig"><div class="big">'+tc+'<span style="font-size:22px;color:#94a3b8">/30</span></div><div><b>Skor total: '+pct+'%</b><br><span style="color:#cbd5e1;font-size:14px">'+pred+'</span></div></div>';
+}
+
+/* ================= INISIALISASI ================= */
+document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goId(el.dataset.goto)));
+$('btn-prev').addEventListener('click',()=>go(cur-1));
+$('btn-next').addEventListener('click',()=>go(cur+1));
+$('btn-menu').addEventListener('click',()=>goId('s-menu'));
+document.addEventListener('keydown',e=>{
+  if(e.target&&/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+  if(e.key==='ArrowRight')go(cur+1);
+  if(e.key==='ArrowLeft')go(cur-1);
+});
+for(const k in QUIZ){
+  origBody[k]=$('q-'+k+'-body').innerHTML;
+  $('q-'+k+'-check').addEventListener('click',()=>qCheck(k));
+  $('q-'+k+'-next').addEventListener('click',()=>qNext(k));
+}
+document.querySelectorAll('.condcard').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('open')));
+$('btn-reset').addEventListener('click',()=>{
+  try{localStorage.removeItem('stat-tka-v1');}catch(e){}
+  for(const k in qState)Object.assign(qState[k],{i:0,score:0,answered:0,done:false,sel:null,checked:false,results:[]});
+  for(const k in QUIZ){$('q-'+k+'-body').innerHTML=origBody[k];qRender(k);}
+  renderScores();
+});
+dsRender();olRender();trRender();gbRender();ftRenderTable();skRender();
+loadProg();
+for(const k in QUIZ){if(qState[k].done)qResult(k);else qRender(k);}
+go(0);
+</script>
+</body>
+</html>
